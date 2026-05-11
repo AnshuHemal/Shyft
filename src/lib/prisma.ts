@@ -10,6 +10,9 @@ if (typeof WebSocket === "undefined") {
   neonConfig.webSocketConstructor = require("ws");
 }
 
+// Configure Neon connection settings to prevent timeouts
+neonConfig.fetchConnectionCache = true;
+
 function createPrismaClient() {
   const connectionString = process.env.DATABASE_URL;
 
@@ -20,17 +23,32 @@ function createPrismaClient() {
     );
   }
 
-  // PrismaNeon is a SqlDriverAdapterFactory — Prisma 7 accepts it directly
-  // in the `adapter` constructor option (no `previewFeatures` needed).
+  // Warn if not using pooled connection (Neon pooled URLs contain '-pooler')
+  if (!connectionString.includes("-pooler") && process.env.NODE_ENV === "development") {
+    console.warn(
+      "[Prisma] Warning: DATABASE_URL does not appear to be a pooled connection.\n" +
+        "For serverless environments, use the pooled connection string from Neon (ends with -pooler)."
+    );
+  }
+
+  // PrismaNeon with connection string
   const adapter = new PrismaNeon({ connectionString });
 
-  return new PrismaClient({
+  const client = new PrismaClient({
     adapter,
     log:
       process.env.NODE_ENV === "development"
         ? ["query", "error", "warn"]
         : ["error"],
   });
+
+  // Add connection error handler
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (client as any).$on("error", (e: Error) => {
+    console.error("[Prisma] Connection error:", e.message);
+  });
+
+  return client;
 }
 
 // ── Global singleton ──────────────────────────────────────────────────────────

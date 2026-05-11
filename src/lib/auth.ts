@@ -25,13 +25,17 @@ export function generateAlphanumericOTP(length: number = 8): string {
     .join("");
 }
 
+const baseURL = process.env.BETTER_AUTH_URL ?? process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
+
 // ── Auth instance ─────────────────────────────────────────────────────────────
 // Exported directly — toNextJsHandler and auth.api.* both need the real object,
 // not a Proxy. Next.js marks all /api routes as dynamic so this never runs
 // during static build.
 export const auth = betterAuth({
   secret: process.env.BETTER_AUTH_SECRET ?? "dev-secret-change-in-production",
-  baseURL: process.env.BETTER_AUTH_URL ?? "http://localhost:3000",
+  baseURL,
+  // Required for social login to work in production/Vercel
+  trustedOrigins: [baseURL],
 
   // ── Database ───────────────────────────────────────────────────────────────
   database: prismaAdapter(prisma, {
@@ -51,6 +55,8 @@ export const auth = betterAuth({
           google: {
             clientId: process.env.GOOGLE_CLIENT_ID,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+            // Match the redirect URI registered in Google Cloud Console
+            redirectURI: `${baseURL}/api/auth/callback/google`,
           },
         }
       : {}),
@@ -59,6 +65,8 @@ export const auth = betterAuth({
           github: {
             clientId: process.env.GITHUB_CLIENT_ID,
             clientSecret: process.env.GITHUB_CLIENT_SECRET,
+            // Match the redirect URI registered in GitHub OAuth App settings
+            redirectURI: `${baseURL}/api/auth/callback/github`,
           },
         }
       : {}),

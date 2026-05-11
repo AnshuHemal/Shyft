@@ -18,12 +18,29 @@ export function SocialButtons({ mode }: SocialButtonsProps) {
   async function handleSocialLogin(provider: "google" | "github") {
     setLoadingProvider(provider);
     try {
-      await authClient.signIn.social({
+      // better-auth returns a URL to redirect to for OAuth flow
+      const result = await authClient.signIn.social({
         provider,
         callbackURL: "/dashboard",
       });
-    } catch {
-      toast.error(`Failed to sign in with ${provider}. Please try again.`);
+
+      // If there's a URL to redirect to, navigate to it
+      if (result?.data?.url) {
+        window.location.href = result.data.url;
+      } else if (result?.error) {
+        throw new Error(result.error.message || "Authentication failed");
+      }
+    } catch (error) {
+      let message = error instanceof Error ? error.message : `Failed to sign in with ${provider}`;
+
+      // Handle specific error cases
+      if (message.includes("timeout") || message.includes("ETIMEDOUT")) {
+        message = "Connection timeout. Please check your internet and try again.";
+      } else if (message.includes("Database")) {
+        message = "Database connection issue. Please try again in a moment.";
+      }
+
+      toast.error(message);
       setLoadingProvider(null);
     }
   }
