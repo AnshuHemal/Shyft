@@ -104,7 +104,7 @@ export function UnderReviewScreen({ user }: UnderReviewScreenProps) {
           {/* Card */}
           <div className="rounded-2xl border border-border/60 bg-card shadow-lg overflow-hidden">
             {/* Top accent bar */}
-            <div className="h-1.5 bg-gradient-to-r from-primary/60 via-primary to-primary/60" />
+            <div className="h-1.5 bg-linear-to-r from-primary/60 via-primary to-primary/60" />
 
             <div className="p-8">
               {/* Icon */}
@@ -138,7 +138,7 @@ export function UnderReviewScreen({ user }: UnderReviewScreenProps) {
                 <p className="text-muted-foreground leading-relaxed">
                   The Shyft team will review your account within{" "}
                   <span className="font-medium text-foreground">24 hours</span>.
-                  You'll receive an email once your account is approved.
+                  You&apos;ll receive an email once your account is approved.
                 </p>
               </div>
 
