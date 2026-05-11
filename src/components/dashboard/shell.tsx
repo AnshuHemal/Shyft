@@ -48,6 +48,7 @@ import {
   UserIcon,
   ChevronsUpDownIcon,
   BellIcon,
+  BuildingIcon,
 } from "lucide-react";
 
 const NAV_MAIN = [
@@ -56,6 +57,11 @@ const NAV_MAIN = [
     href: "/dashboard",
     icon: LayoutDashboardIcon,
     exact: true,
+  },
+  {
+    label: "Employees",
+    href: "/dashboard/employees",
+    icon: UsersIcon,
   },
   {
     label: "Time Tracker",
@@ -72,14 +78,14 @@ const NAV_MAIN = [
     href: "/dashboard/reports",
     icon: BarChart3Icon,
   },
-  {
-    label: "Team",
-    href: "/dashboard/team",
-    icon: UsersIcon,
-  },
 ];
 
 const NAV_SECONDARY = [
+  {
+    label: "Organisation",
+    href: "/dashboard/settings/organisation",
+    icon: BuildingIcon,
+  },
   {
     label: "Settings",
     href: "/dashboard/settings",
@@ -99,9 +105,10 @@ function getInitials(name: string) {
 interface DashboardShellProps {
   children: React.ReactNode;
   user: User;
+  org?: { id: string; name: string; logo: string | null; slug: string } | null;
 }
 
-export function DashboardShell({ children, user }: DashboardShellProps) {
+export function DashboardShell({ children, user, org }: DashboardShellProps) {
   const pathname = usePathname();
   const router = useRouter();
   const [signingOut, setSigningOut] = React.useState(false);
@@ -138,9 +145,9 @@ export function DashboardShell({ children, user }: DashboardShellProps) {
                   <ZapIcon className="size-4" />
                 </div>
                 <div className="flex flex-col leading-none">
-                  <span className="font-semibold text-sm">Shyft</span>
-                  <span className="text-sm text-muted-foreground">
-                    Work tracked.
+                  <span className="font-semibold text-sm">{org?.name ?? "Shyft"}</span>
+                  <span className="text-xs text-muted-foreground truncate">
+                    {org ? "Workspace" : "Work tracked."}
                   </span>
                 </div>
               </SidebarMenuButton>

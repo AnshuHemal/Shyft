@@ -24,3 +24,35 @@ export const AccountStatus = {
 } as const
 
 export type AccountStatus = (typeof AccountStatus)[keyof typeof AccountStatus]
+
+
+export const CompanySize = {
+  SIZE_1_10: 'SIZE_1_10',
+  SIZE_11_50: 'SIZE_11_50',
+  SIZE_51_200: 'SIZE_51_200',
+  SIZE_201_500: 'SIZE_201_500',
+  SIZE_500_PLUS: 'SIZE_500_PLUS'
+} as const
+
+export type CompanySize = (typeof CompanySize)[keyof typeof CompanySize]
+
+
+export const EmploymentType = {
+  FULL_TIME: 'FULL_TIME',
+  PART_TIME: 'PART_TIME',
+  CONTRACT: 'CONTRACT',
+  INTERN: 'INTERN',
+  FREELANCE: 'FREELANCE'
+} as const
+
+export type EmploymentType = (typeof EmploymentType)[keyof typeof EmploymentType]
+
+
+export const EmployeeStatus = {
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE',
+  ON_LEAVE: 'ON_LEAVE',
+  TERMINATED: 'TERMINATED'
+} as const
+
+export type EmployeeStatus = (typeof EmployeeStatus)[keyof typeof EmployeeStatus]

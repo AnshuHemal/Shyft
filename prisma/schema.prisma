@@ -20,9 +20,136 @@ enum UserRole {
 }
 
 enum AccountStatus {
-  PENDING_REVIEW  // newly registered — awaiting SuperAdmin approval
-  APPROVED        // approved, can access the dashboard
-  REJECTED        // rejected by SuperAdmin
+  PENDING_REVIEW
+  APPROVED
+  REJECTED
+}
+
+enum CompanySize {
+  SIZE_1_10
+  SIZE_11_50
+  SIZE_51_200
+  SIZE_201_500
+  SIZE_500_PLUS
+}
+
+enum EmploymentType {
+  FULL_TIME
+  PART_TIME
+  CONTRACT
+  INTERN
+  FREELANCE
+}
+
+enum EmployeeStatus {
+  ACTIVE
+  INACTIVE
+  ON_LEAVE
+  TERMINATED
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Organization — created by Admin during onboarding
+// ─────────────────────────────────────────────────────────────────────────────
+
+model Organization {
+  id          String      @id @default(cuid())
+  name        String
+  slug        String      @unique
+  logo        String?
+  website     String?
+  industry    String?
+  size        CompanySize?
+  description String?
+  address     String?
+  city        String?
+  country     String?
+  phone       String?
+
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  ownerId     String      @unique
+  owner       User        @relation("OrgOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+
+  employees   Employee[]
+  departments Department[]
+
+  @@map("organization")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Department — managed by Admin, used as dropdown in employee form
+// ─────────────────────────────────────────────────────────────────────────────
+
+model Department {
+  id             String       @id @default(cuid())
+  name           String
+  description    String?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([name, organizationId])
+  @@map("department")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Employee — created by Admin within their organization
+// ─────────────────────────────────────────────────────────────────────────────
+
+model Employee {
+  id             String         @id @default(cuid())
+
+  // ── Personal info ──────────────────────────────────────────────────────────
+  firstName      String
+  lastName       String
+  email          String
+  phone          String?
+  avatar         String?
+  dateOfBirth    DateTime?
+  gender         String?
+  address        String?
+
+  // ── Professional info ──────────────────────────────────────────────────────
+  employeeId     String?        // company's internal ID e.g. "EMP-001"
+  designation    String         // job title e.g. "Senior Developer"
+  department     String?        // e.g. "Engineering"
+  position       String?        // e.g. "Team Lead"
+  employmentType EmploymentType @default(FULL_TIME)
+  status         EmployeeStatus @default(ACTIVE)
+
+  // ── Employment dates ───────────────────────────────────────────────────────
+  joiningDate    DateTime?
+  leavingDate    DateTime?
+
+  // ── Compensation ───────────────────────────────────────────────────────────
+  salary         Float?
+  currency       String?        @default("USD")
+
+  // ── Emergency contact ──────────────────────────────────────────────────────
+  emergencyName  String?
+  emergencyPhone String?
+  emergencyRel   String?        // relationship
+
+  // ── Access ─────────────────────────────────────────────────────────────────
+  password       String?        // set by Admin, hashed before storage (scrypt)
+  passwordCheck  String?        // SHA-256 of plaintext — used only for org-level uniqueness check
+
+  // ── Notes ──────────────────────────────────────────────────────────────────
+  notes          String?
+
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  // ── Relations ──────────────────────────────────────────────────────────────
+  organizationId String
+  organization   Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([email, organizationId])
+  @@map("employee")
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -39,12 +166,13 @@ model User {
   updatedAt            DateTime      @updatedAt
   onboardingCompleted  Boolean       @default(false)
 
-  // ── Review system ──────────────────────────────────────────────────────────
   role                 UserRole      @default(USER)
   accountStatus        AccountStatus @default(PENDING_REVIEW)
-  reviewNotes          String?       // SuperAdmin's message to the user
-  reviewedAt           DateTime?     // when the account was last reviewed
-  reviewedBy           String?       // SuperAdmin user id who reviewed
+  reviewNotes          String?
+  reviewedAt           DateTime?
+  reviewedBy           String?
+
+  organization         Organization? @relation("OrgOwner")
 
   sessions             Session[]
   accounts             Account[]

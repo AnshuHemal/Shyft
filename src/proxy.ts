@@ -39,9 +39,12 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(loginUrl);
   }
 
-  // /under-review is accessible to any authenticated user
-  // (the page itself handles role/status checks)
-  if (pathname.startsWith("/under-review")) {
+  // /under-review and /onboarding are accessible to any authenticated user
+  // (the pages themselves handle role/status checks)
+  if (
+    pathname.startsWith("/under-review") ||
+    pathname.startsWith("/onboarding")
+  ) {
     return NextResponse.next();
   }
 
