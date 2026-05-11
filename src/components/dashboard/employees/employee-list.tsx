@@ -5,9 +5,9 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
+import { RevealPasswordDialog } from "@/components/dashboard/employees/reveal-password-dialog";
 import {
   SearchIcon,
   PlusIcon,
@@ -18,6 +18,7 @@ import {
   UserCheckIcon,
   UserXIcon,
   ClockIcon,
+  EyeIcon,
 } from "lucide-react";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -41,6 +42,7 @@ interface Employee {
 interface EmployeeListProps {
   initialEmployees: Employee[];
   departments: string[];
+  adminEmail: string;
 }
 
 // ── Status config ─────────────────────────────────────────────────────────────
@@ -86,11 +88,17 @@ function getInitials(first: string, last: string) {
 
 // ── Component ─────────────────────────────────────────────────────────────────
 
-export function EmployeeList({ initialEmployees, departments }: EmployeeListProps) {
+export function EmployeeList({ initialEmployees, departments, adminEmail }: EmployeeListProps) {
   const [search, setSearch] = React.useState("");
   const [statusFilter, setStatusFilter] = React.useState("ALL");
   const [deptFilter, setDeptFilter] = React.useState("ALL");
   const [mounted, setMounted] = React.useState(false);
+
+  // Reveal password dialog state
+  const [revealTarget, setRevealTarget] = React.useState<{
+    id: string;
+    name: string;
+  } | null>(null);
 
   React.useEffect(() => {
     const t = setTimeout(() => setMounted(true), 50);
@@ -217,17 +225,17 @@ export function EmployeeList({ initialEmployees, departments }: EmployeeListProp
             const statusCfg = STATUS_CONFIG[employee.status as keyof typeof STATUS_CONFIG] ?? STATUS_CONFIG.INACTIVE;
 
             return (
-              <Link
+              <div
                 key={employee.id}
-                href={`/dashboard/employees/${employee.id}`}
                 className={cn(
-                  "block transition-all duration-300",
+                  "transition-all duration-300",
                   mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                 )}
                 style={{ transitionDelay: `${i * 30}ms` }}
               >
-                <Card className="hover:shadow-md hover:border-border transition-all duration-200 cursor-pointer group">
+                <Card className="hover:shadow-md hover:border-border transition-all duration-200 group">
                   <CardContent className="pt-5">
+                    {/* Header row */}
                     <div className="flex items-start gap-3 mb-4">
                       <div className="relative">
                         <Avatar>
@@ -243,23 +251,48 @@ export function EmployeeList({ initialEmployees, departments }: EmployeeListProp
                         />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="font-medium text-sm truncate group-hover:text-primary transition-colors">
+                        <Link
+                          href={`/dashboard/employees/${employee.id}`}
+                          className="font-medium text-sm truncate block hover:text-primary transition-colors"
+                        >
                           {employee.firstName} {employee.lastName}
-                        </p>
+                        </Link>
                         <p className="text-xs text-muted-foreground truncate">
                           {employee.designation}
                         </p>
                       </div>
-                      <span
-                        className={cn(
-                          "inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-xs font-medium shrink-0",
-                          statusCfg.className
-                        )}
-                      >
-                        {statusCfg.label}
-                      </span>
+                      {/* Right column: status badge + eye button stacked */}
+                      <div className="flex flex-col items-end gap-2 shrink-0">
+                        <span
+                          className={cn(
+                            "inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-xs font-medium",
+                            statusCfg.className
+                          )}
+                        >
+                          {statusCfg.label}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setRevealTarget({
+                              id: employee.id,
+                              name: `${employee.firstName} ${employee.lastName}`,
+                            })
+                          }
+                          className={cn(
+                            "flex items-center gap-1 rounded-lg px-2 py-1 text-xs font-medium",
+                            "text-muted-foreground border border-border/60 bg-transparent",
+                            "hover:bg-muted/60 hover:text-foreground hover:border-border",
+                            "transition-all duration-200"
+                          )}
+                          title="View employee password"
+                        >
+                          <EyeIcon className="size-4" />
+                        </button>
+                      </div>
                     </div>
 
+                    {/* Contact info */}
                     <div className="space-y-1.5">
                       <p className="text-xs text-muted-foreground flex items-center gap-1.5 truncate">
                         <MailIcon className="size-3 shrink-0" />
@@ -273,6 +306,7 @@ export function EmployeeList({ initialEmployees, departments }: EmployeeListProp
                       )}
                     </div>
 
+                    {/* Footer row */}
                     <div className="mt-3 pt-3 border-t border-border/60 flex items-center justify-between gap-2">
                       <div className="flex gap-1.5 flex-wrap">
                         {employee.department && (
@@ -292,11 +326,20 @@ export function EmployeeList({ initialEmployees, departments }: EmployeeListProp
                     </div>
                   </CardContent>
                 </Card>
-              </Link>
+              </div>
             );
           })}
         </div>
       )}
+
+      {/* Reveal password dialog */}
+      <RevealPasswordDialog
+        open={!!revealTarget}
+        onClose={() => setRevealTarget(null)}
+        employeeId={revealTarget?.id ?? ""}
+        employeeName={revealTarget?.name ?? ""}
+        adminEmail={adminEmail}
+      />
     </div>
   );
 }

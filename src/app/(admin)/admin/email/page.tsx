@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
 import { AdminEmailCompose } from "@/components/admin/admin-email-compose";
 
-export const metadata: Metadata = { title: "Send Email | Shyft Admin" };
+export const metadata: Metadata = { title: "Send Email" };
 
 export default async function AdminEmailPage() {
   const users = await prisma.user.findMany({

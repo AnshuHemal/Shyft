@@ -6,7 +6,7 @@ import { OnboardingWizard } from "@/components/onboarding/onboarding-wizard";
 
 export const metadata: Metadata = {
   title: "Set up your organisation",
-  description: "Tell us about your company to get started with Shyft.",
+  description: "Tell us about your company to get started with SHYFT.",
 };
 
 export default async function OnboardingPage() {

@@ -11,11 +11,11 @@ export default function AuthLayout({
     <div className="min-h-screen flex flex-col bg-background">
       {/* Auth header */}
       <header className="flex items-center justify-between px-6 py-4 border-b border-border/40">
-        <Link href="/" className="flex items-center gap-2 group" aria-label="Shyft home">
+        <Link href="/" className="flex items-center gap-2 group" aria-label="SHYFT home">
           <div className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-sm transition-transform group-hover:scale-105">
             <ZapIcon className="size-4" />
           </div>
-          <span className="text-base font-semibold tracking-tight">Shyft</span>
+          <span className="text-base font-semibold tracking-tight">SHYFT</span>
         </Link>
         <ThemeToggle />
       </header>
@@ -28,7 +28,7 @@ export default function AuthLayout({
       {/* Auth footer */}
       <footer className="px-6 py-4 text-center">
         <p className="text-sm text-muted-foreground">
-          © {new Date().getFullYear()} Shyft ·{" "}
+          © {new Date().getFullYear()} SHYFT ·{" "}
           <a href="#" className="hover:text-foreground transition-colors underline underline-offset-4">
             Privacy
           </a>{" "}

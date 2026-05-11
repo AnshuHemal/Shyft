@@ -5,7 +5,7 @@ import { SignupForm } from "@/components/auth/signup-form";
 
 export const metadata: Metadata = {
   title: "Create account",
-  description: "Create your free Shyft account.",
+  description: "Create your free SHYFT account.",
 };
 
 export default async function SignupPage() {

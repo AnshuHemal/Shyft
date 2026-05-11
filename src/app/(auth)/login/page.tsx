@@ -5,7 +5,7 @@ import { LoginForm } from "@/components/auth/login-form";
 
 export const metadata: Metadata = {
   title: "Sign in",
-  description: "Sign in to your Shyft account.",
+  description: "Sign in to your SHYFT account.",
 };
 
 export default async function LoginPage() {

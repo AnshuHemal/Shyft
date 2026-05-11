@@ -271,7 +271,7 @@ export function OnboardingWizard({ user, existingOrg }: OnboardingWizardProps) {
           <div className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
             <ZapIcon className="size-4" />
           </div>
-          <span className="text-base font-semibold tracking-tight">Shyft</span>
+          <span className="text-base font-semibold tracking-tight">SHYFT</span>
         </div>
         <div className="flex items-center gap-2">
           <ThemeToggle />
@@ -314,7 +314,7 @@ export function OnboardingWizard({ user, existingOrg }: OnboardingWizardProps) {
 
           {/* Card */}
           <div className="rounded-2xl border border-border/60 bg-card shadow-lg overflow-hidden">
-            <div className="h-1 bg-gradient-to-r from-primary/40 via-primary to-primary/40" />
+            <div className="h-1 bg-linear-to-r from-primary/40 via-primary to-primary/40" />
 
             <form onSubmit={handleSubmit} noValidate>
               {/* ── Step 1: Basic info ─────────────────────────────────────── */}

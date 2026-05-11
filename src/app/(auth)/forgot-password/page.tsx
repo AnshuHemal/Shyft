@@ -5,7 +5,7 @@ import { ForgotPasswordForm } from "@/components/auth/forgot-password-form";
 
 export const metadata: Metadata = {
   title: "Forgot password",
-  description: "Reset your Shyft account password.",
+  description: "Reset your SHYFT account password.",
 };
 
 export default async function ForgotPasswordPage() {

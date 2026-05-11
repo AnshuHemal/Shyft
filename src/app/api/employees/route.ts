@@ -2,7 +2,29 @@ import { NextResponse } from "next/server";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { scrypt, randomBytes, createHash } from "node:crypto";
+import { scrypt, randomBytes, createHash, createCipheriv } from "node:crypto";
+
+// ── Encryption helpers ────────────────────────────────────────────────────────
+
+function deriveKey(): Buffer {
+  return createHash("sha256")
+    .update(process.env.BETTER_AUTH_SECRET ?? "dev-secret")
+    .digest();
+}
+
+// Encrypt plaintext with AES-256-GCM
+// Returns: "iv_hex:authTag_hex:ciphertext_hex"
+function encryptPassword(plaintext: string): string {
+  const key = deriveKey();
+  const iv = randomBytes(12); // 96-bit IV for GCM
+  const cipher = createCipheriv("aes-256-gcm", key, iv);
+  const encrypted = Buffer.concat([
+    cipher.update(plaintext, "utf8"),
+    cipher.final(),
+  ]);
+  const authTag = cipher.getAuthTag();
+  return `${iv.toString("hex")}:${authTag.toString("hex")}:${encrypted.toString("hex")}`;
+}
 
 async function requireAdminWithOrg() {
   const headersList = await headers();
@@ -196,6 +218,7 @@ export async function POST(request: Request) {
         currency: body.currency || "INR",
         password: hashedPassword,
         passwordCheck,
+        passwordEncrypted: encryptPassword(password.trim()),
         notes: body.notes?.trim() || null,
         organizationId: ctx.orgId,
       },

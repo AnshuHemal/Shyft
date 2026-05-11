@@ -19,28 +19,28 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Shyft — Work tracked. Time respected.",
-    template: "%s | Shyft",
+    default: "SHYFT — Work tracked. Time respected.",
+    template: "%s | SHYFT",
   },
   description:
-    "Shyft is a modern work-tracking platform that helps teams stay productive while respecting their time.",
+    "SHYFT is a modern work-tracking platform that helps teams stay productive while respecting their time.",
   keywords: ["time tracking", "work tracking", "productivity", "team management"],
-  authors: [{ name: "Shyft" }],
-  creator: "Shyft",
+  authors: [{ name: "SHYFT" }],
+  creator: "SHYFT",
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"
   ),
   openGraph: {
     type: "website",
     locale: "en_US",
-    title: "Shyft — Work tracked. Time respected.",
+    title: "SHYFT — Work tracked. Time respected.",
     description:
       "A modern work-tracking platform that helps teams stay productive while respecting their time.",
-    siteName: "Shyft",
+    siteName: "SHYFT",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Shyft — Work tracked. Time respected.",
+    title: "SHYFT — Work tracked. Time respected.",
     description:
       "A modern work-tracking platform that helps teams stay productive while respecting their time.",
   },

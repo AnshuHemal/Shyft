@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 export const metadata: Metadata = { title: "Projects" };
 
 const PROJECTS = [
-  { name: "Shyft Web App", client: "Internal", hours: "124h", budget: "200h", status: "active", color: "bg-primary" },
+  { name: "SHYFT Web App", client: "Internal", hours: "124h", budget: "200h", status: "active", color: "bg-primary" },
   { name: "Client Portal", client: "Acme Corp", hours: "87h", budget: "100h", status: "active", color: "bg-blue-500" },
   { name: "Design System", client: "Internal", hours: "45h", budget: "80h", status: "active", color: "bg-purple-500" },
   { name: "Mobile App v2", client: "TechStart", hours: "200h", budget: "200h", status: "completed", color: "bg-green-500" },

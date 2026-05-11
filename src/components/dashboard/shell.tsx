@@ -145,7 +145,7 @@ export function DashboardShell({ children, user, org }: DashboardShellProps) {
                   <ZapIcon className="size-4" />
                 </div>
                 <div className="flex flex-col leading-none">
-                  <span className="font-semibold text-sm">{org?.name ?? "Shyft"}</span>
+                  <span className="font-semibold text-sm">{org?.name ?? "SHYFT"}</span>
                   <span className="text-xs text-muted-foreground truncate">
                     {org ? "Workspace" : "Work tracked."}
                   </span>

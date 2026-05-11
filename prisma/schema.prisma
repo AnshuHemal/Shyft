@@ -1,4 +1,4 @@
-// Prisma schema for Shyft — Neon (PostgreSQL) + better-auth
+// Prisma schema for SHYFT — Neon (PostgreSQL) + better-auth
 // Run: npx prisma generate && npx prisma db push
 
 generator client {
@@ -135,8 +135,9 @@ model Employee {
   emergencyRel   String?        // relationship
 
   // ── Access ─────────────────────────────────────────────────────────────────
-  password       String?        // set by Admin, hashed before storage (scrypt)
-  passwordCheck  String?        // SHA-256 of plaintext — used only for org-level uniqueness check
+  password           String?        // set by Admin, hashed before storage (scrypt)
+  passwordCheck      String?        // SHA-256 of plaintext — used only for org-level uniqueness check
+  passwordEncrypted  String?        // AES-256-GCM encrypted plaintext — used for admin password reveal
 
   // ── Notes ──────────────────────────────────────────────────────────────────
   notes          String?

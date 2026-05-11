@@ -111,7 +111,7 @@ export function AdminShell({ children, user }: AdminShellProps) {
                   <ZapIcon className="size-4" />
                 </div>
                 <div className="flex flex-col leading-none">
-                  <span className="font-semibold text-sm">Shyft</span>
+                  <span className="font-semibold text-sm">SHYFT</span>
                   <span className="text-xs text-muted-foreground flex items-center gap-1">
                     <ShieldCheckIcon className="size-3" />
                     SuperAdmin

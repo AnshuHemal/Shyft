@@ -72,7 +72,7 @@ export function Hero() {
             mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
           )}
         >
-          Shyft gives your team a clear view of where time goes — without the
+          SHYFT gives your team a clear view of where time goes — without the
           micromanagement. Smart tracking, honest insights, and workflows that
           actually fit how you work.
         </p>

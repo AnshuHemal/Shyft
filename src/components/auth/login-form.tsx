@@ -222,7 +222,7 @@ export function LoginForm() {
     <AuthCard className={cardClass}>
       <AuthCardHeader
         title="Welcome back"
-        description="Sign in to your Shyft account"
+        description="Sign in to your SHYFT account"
       />
 
       <SocialButtons mode="login" />

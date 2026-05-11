@@ -23,25 +23,25 @@ export interface SendOTPEmailParams {
 }
 
 const subjectMap: Record<OTPEmailType, string> = {
-  "sign-in": "Your Shyft sign-in code",
-  "email-verification": "Verify your Shyft account",
-  "forget-password": "Reset your Shyft password",
+  "sign-in": "Your SHYFT sign-in code",
+  "email-verification": "Verify your SHYFT account",
+  "forget-password": "Reset your SHYFT password",
   "change-email": "Confirm your new email address",
 };
 
 const headingMap: Record<OTPEmailType, string> = {
-  "sign-in": "Sign in to Shyft",
+  "sign-in": "Sign in to SHYFT",
   "email-verification": "Verify your email",
   "forget-password": "Reset your password",
   "change-email": "Confirm email change",
 };
 
 const bodyMap: Record<OTPEmailType, string> = {
-  "sign-in": "Use the code below to sign in to your Shyft account.",
+  "sign-in": "Use the code below to sign in to your SHYFT account.",
   "email-verification":
     "Use the code below to verify your email address and activate your account.",
   "forget-password":
-    "Use the code below to reset your Shyft account password.",
+    "Use the code below to reset your SHYFT account password.",
   "change-email":
     "Use the code below to confirm your new email address.",
 };
@@ -66,7 +66,7 @@ export async function sendOTPEmail({ email, otp, type }: SendOTPEmailParams) {
         <table width="480" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.1);">
           <tr>
             <td style="background:#e8620a;padding:28px 40px;">
-              <p style="margin:0;font-size:22px;font-weight:700;color:#ffffff;letter-spacing:-0.5px;">Shyft</p>
+              <p style="margin:0;font-size:22px;font-weight:700;color:#ffffff;letter-spacing:-0.5px;">SHYFT</p>
               <p style="margin:4px 0 0;font-size:12px;color:rgba(255,255,255,0.75);">Work tracked. Time respected.</p>
             </td>
           </tr>
@@ -84,7 +84,7 @@ export async function sendOTPEmail({ email, otp, type }: SendOTPEmailParams) {
           </tr>
           <tr>
             <td style="padding:20px 40px;border-top:1px solid #f3f4f6;">
-              <p style="margin:0;font-size:12px;color:#d1d5db;text-align:center;">© ${new Date().getFullYear()} Shyft. All rights reserved.</p>
+              <p style="margin:0;font-size:12px;color:#d1d5db;text-align:center;">© ${new Date().getFullYear()} SHYFT. All rights reserved.</p>
             </td>
           </tr>
         </table>
@@ -96,7 +96,7 @@ export async function sendOTPEmail({ email, otp, type }: SendOTPEmailParams) {
   `.trim();
 
   await transporter.sendMail({
-    from: `"Shyft" <${process.env.BREVO_FROM_EMAIL ?? "noreply@shyft.app"}>`,
+    from: `"SHYFT" <${process.env.BREVO_FROM_EMAIL ?? "noreply@shyft.app"}>`,
     to: email,
     subject,
     html,
@@ -120,22 +120,22 @@ export async function sendReviewEmail({
 }: SendReviewEmailParams) {
   const isApproved = status === "APPROVED";
   const subject = isApproved
-    ? "Your Shyft account has been approved 🎉"
-    : "Update on your Shyft account review";
+    ? "Your SHYFT account has been approved 🎉"
+    : "Update on your SHYFT account review";
 
   const heading = isApproved ? "You're in!" : "Account review update";
 
   const bodyText = isApproved
-    ? `Great news, ${name}! Your Shyft account has been reviewed and approved. You can now sign in and start using Shyft.`
-    : `Hi ${name}, we've reviewed your Shyft account and unfortunately we're unable to approve it at this time.`;
+    ? `Great news, ${name}! Your SHYFT account has been reviewed and approved. You can now sign in and start using SHYFT.`
+    : `Hi ${name}, we've reviewed your SHYFT account and unfortunately we're unable to approve it at this time.`;
 
   const ctaHtml = isApproved
-    ? `<a href="${process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"}/login" style="display:inline-block;background:#e8620a;color:#ffffff;font-weight:600;font-size:14px;padding:12px 28px;border-radius:8px;text-decoration:none;margin-top:8px;">Sign in to Shyft</a>`
+    ? `<a href="${process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"}/login" style="display:inline-block;background:#e8620a;color:#ffffff;font-weight:600;font-size:14px;padding:12px 28px;border-radius:8px;text-decoration:none;margin-top:8px;">Sign in to SHYFT</a>`
     : `<p style="margin:16px 0 0;font-size:13px;color:#6b7280;">If you believe this is a mistake, please contact our support team.</p>`;
 
   const notesHtml = notes
     ? `<div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:16px;margin:24px 0;">
-        <p style="margin:0 0 4px;font-size:11px;color:#9ca3af;text-transform:uppercase;letter-spacing:1px;font-weight:600;">Message from the Shyft team</p>
+        <p style="margin:0 0 4px;font-size:11px;color:#9ca3af;text-transform:uppercase;letter-spacing:1px;font-weight:600;">Message from the SHYFT team</p>
         <p style="margin:0;font-size:14px;color:#374151;line-height:1.6;">${notes}</p>
        </div>`
     : "";
@@ -155,7 +155,7 @@ export async function sendReviewEmail({
         <table width="480" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.1);">
           <tr>
             <td style="background:${isApproved ? "#e8620a" : "#6b7280"};padding:28px 40px;">
-              <p style="margin:0;font-size:22px;font-weight:700;color:#ffffff;letter-spacing:-0.5px;">Shyft</p>
+              <p style="margin:0;font-size:22px;font-weight:700;color:#ffffff;letter-spacing:-0.5px;">SHYFT</p>
               <p style="margin:4px 0 0;font-size:12px;color:rgba(255,255,255,0.75);">Work tracked. Time respected.</p>
             </td>
           </tr>
@@ -169,7 +169,7 @@ export async function sendReviewEmail({
           </tr>
           <tr>
             <td style="padding:20px 40px;border-top:1px solid #f3f4f6;">
-              <p style="margin:0;font-size:12px;color:#d1d5db;text-align:center;">© ${new Date().getFullYear()} Shyft. All rights reserved.</p>
+              <p style="margin:0;font-size:12px;color:#d1d5db;text-align:center;">© ${new Date().getFullYear()} SHYFT. All rights reserved.</p>
             </td>
           </tr>
         </table>
@@ -181,7 +181,7 @@ export async function sendReviewEmail({
   `.trim();
 
   await transporter.sendMail({
-    from: `"Shyft" <${process.env.BREVO_FROM_EMAIL ?? "noreply@shyft.app"}>`,
+    from: `"SHYFT" <${process.env.BREVO_FROM_EMAIL ?? "noreply@shyft.app"}>`,
     to,
     subject,
     html,
@@ -216,7 +216,7 @@ export async function sendCustomEmail({
         <table width="480" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.1);">
           <tr>
             <td style="background:#e8620a;padding:28px 40px;">
-              <p style="margin:0;font-size:22px;font-weight:700;color:#ffffff;letter-spacing:-0.5px;">Shyft</p>
+              <p style="margin:0;font-size:22px;font-weight:700;color:#ffffff;letter-spacing:-0.5px;">SHYFT</p>
               <p style="margin:4px 0 0;font-size:12px;color:rgba(255,255,255,0.75);">Work tracked. Time respected.</p>
             </td>
           </tr>
@@ -228,7 +228,7 @@ export async function sendCustomEmail({
           </tr>
           <tr>
             <td style="padding:20px 40px;border-top:1px solid #f3f4f6;">
-              <p style="margin:0;font-size:12px;color:#d1d5db;text-align:center;">© ${new Date().getFullYear()} Shyft. All rights reserved.</p>
+              <p style="margin:0;font-size:12px;color:#d1d5db;text-align:center;">© ${new Date().getFullYear()} SHYFT. All rights reserved.</p>
             </td>
           </tr>
         </table>
@@ -240,7 +240,7 @@ export async function sendCustomEmail({
   `.trim();
 
   await transporter.sendMail({
-    from: `"Shyft Team" <${process.env.BREVO_FROM_EMAIL ?? "noreply@shyft.app"}>`,
+    from: `"SHYFT Team" <${process.env.BREVO_FROM_EMAIL ?? "noreply@shyft.app"}>`,
     to,
     subject,
     html,

@@ -59,6 +59,7 @@ export type EmployeeMinAggregateOutputType = {
   emergencyRel: string | null
   password: string | null
   passwordCheck: string | null
+  passwordEncrypted: string | null
   notes: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -90,6 +91,7 @@ export type EmployeeMaxAggregateOutputType = {
   emergencyRel: string | null
   password: string | null
   passwordCheck: string | null
+  passwordEncrypted: string | null
   notes: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -121,6 +123,7 @@ export type EmployeeCountAggregateOutputType = {
   emergencyRel: number
   password: number
   passwordCheck: number
+  passwordEncrypted: number
   notes: number
   createdAt: number
   updatedAt: number
@@ -162,6 +165,7 @@ export type EmployeeMinAggregateInputType = {
   emergencyRel?: true
   password?: true
   passwordCheck?: true
+  passwordEncrypted?: true
   notes?: true
   createdAt?: true
   updatedAt?: true
@@ -193,6 +197,7 @@ export type EmployeeMaxAggregateInputType = {
   emergencyRel?: true
   password?: true
   passwordCheck?: true
+  passwordEncrypted?: true
   notes?: true
   createdAt?: true
   updatedAt?: true
@@ -224,6 +229,7 @@ export type EmployeeCountAggregateInputType = {
   emergencyRel?: true
   password?: true
   passwordCheck?: true
+  passwordEncrypted?: true
   notes?: true
   createdAt?: true
   updatedAt?: true
@@ -342,6 +348,7 @@ export type EmployeeGroupByOutputType = {
   emergencyRel: string | null
   password: string | null
   passwordCheck: string | null
+  passwordEncrypted: string | null
   notes: string | null
   createdAt: Date
   updatedAt: Date
@@ -396,6 +403,7 @@ export type EmployeeWhereInput = {
   emergencyRel?: Prisma.StringNullableFilter<"Employee"> | string | null
   password?: Prisma.StringNullableFilter<"Employee"> | string | null
   passwordCheck?: Prisma.StringNullableFilter<"Employee"> | string | null
+  passwordEncrypted?: Prisma.StringNullableFilter<"Employee"> | string | null
   notes?: Prisma.StringNullableFilter<"Employee"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Employee"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Employee"> | Date | string
@@ -428,6 +436,7 @@ export type EmployeeOrderByWithRelationInput = {
   emergencyRel?: Prisma.SortOrderInput | Prisma.SortOrder
   password?: Prisma.SortOrderInput | Prisma.SortOrder
   passwordCheck?: Prisma.SortOrderInput | Prisma.SortOrder
+  passwordEncrypted?: Prisma.SortOrderInput | Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -464,6 +473,7 @@ export type EmployeeWhereUniqueInput = Prisma.AtLeast<{
   emergencyRel?: Prisma.StringNullableFilter<"Employee"> | string | null
   password?: Prisma.StringNullableFilter<"Employee"> | string | null
   passwordCheck?: Prisma.StringNullableFilter<"Employee"> | string | null
+  passwordEncrypted?: Prisma.StringNullableFilter<"Employee"> | string | null
   notes?: Prisma.StringNullableFilter<"Employee"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Employee"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Employee"> | Date | string
@@ -496,6 +506,7 @@ export type EmployeeOrderByWithAggregationInput = {
   emergencyRel?: Prisma.SortOrderInput | Prisma.SortOrder
   password?: Prisma.SortOrderInput | Prisma.SortOrder
   passwordCheck?: Prisma.SortOrderInput | Prisma.SortOrder
+  passwordEncrypted?: Prisma.SortOrderInput | Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -535,6 +546,7 @@ export type EmployeeScalarWhereWithAggregatesInput = {
   emergencyRel?: Prisma.StringNullableWithAggregatesFilter<"Employee"> | string | null
   password?: Prisma.StringNullableWithAggregatesFilter<"Employee"> | string | null
   passwordCheck?: Prisma.StringNullableWithAggregatesFilter<"Employee"> | string | null
+  passwordEncrypted?: Prisma.StringNullableWithAggregatesFilter<"Employee"> | string | null
   notes?: Prisma.StringNullableWithAggregatesFilter<"Employee"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Employee"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Employee"> | Date | string
@@ -566,6 +578,7 @@ export type EmployeeCreateInput = {
   emergencyRel?: string | null
   password?: string | null
   passwordCheck?: string | null
+  passwordEncrypted?: string | null
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -597,6 +610,7 @@ export type EmployeeUncheckedCreateInput = {
   emergencyRel?: string | null
   password?: string | null
   passwordCheck?: string | null
+  passwordEncrypted?: string | null
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -628,6 +642,7 @@ export type EmployeeUpdateInput = {
   emergencyRel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordCheck?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -659,6 +674,7 @@ export type EmployeeUncheckedUpdateInput = {
   emergencyRel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordCheck?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -690,6 +706,7 @@ export type EmployeeCreateManyInput = {
   emergencyRel?: string | null
   password?: string | null
   passwordCheck?: string | null
+  passwordEncrypted?: string | null
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -721,6 +738,7 @@ export type EmployeeUpdateManyMutationInput = {
   emergencyRel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordCheck?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -751,6 +769,7 @@ export type EmployeeUncheckedUpdateManyInput = {
   emergencyRel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordCheck?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -797,6 +816,7 @@ export type EmployeeCountOrderByAggregateInput = {
   emergencyRel?: Prisma.SortOrder
   password?: Prisma.SortOrder
   passwordCheck?: Prisma.SortOrder
+  passwordEncrypted?: Prisma.SortOrder
   notes?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -832,6 +852,7 @@ export type EmployeeMaxOrderByAggregateInput = {
   emergencyRel?: Prisma.SortOrder
   password?: Prisma.SortOrder
   passwordCheck?: Prisma.SortOrder
+  passwordEncrypted?: Prisma.SortOrder
   notes?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -863,6 +884,7 @@ export type EmployeeMinOrderByAggregateInput = {
   emergencyRel?: Prisma.SortOrder
   password?: Prisma.SortOrder
   passwordCheck?: Prisma.SortOrder
+  passwordEncrypted?: Prisma.SortOrder
   notes?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -960,6 +982,7 @@ export type EmployeeCreateWithoutOrganizationInput = {
   emergencyRel?: string | null
   password?: string | null
   passwordCheck?: string | null
+  passwordEncrypted?: string | null
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -990,6 +1013,7 @@ export type EmployeeUncheckedCreateWithoutOrganizationInput = {
   emergencyRel?: string | null
   password?: string | null
   passwordCheck?: string | null
+  passwordEncrypted?: string | null
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1049,6 +1073,7 @@ export type EmployeeScalarWhereInput = {
   emergencyRel?: Prisma.StringNullableFilter<"Employee"> | string | null
   password?: Prisma.StringNullableFilter<"Employee"> | string | null
   passwordCheck?: Prisma.StringNullableFilter<"Employee"> | string | null
+  passwordEncrypted?: Prisma.StringNullableFilter<"Employee"> | string | null
   notes?: Prisma.StringNullableFilter<"Employee"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Employee"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Employee"> | Date | string
@@ -1080,6 +1105,7 @@ export type EmployeeCreateManyOrganizationInput = {
   emergencyRel?: string | null
   password?: string | null
   passwordCheck?: string | null
+  passwordEncrypted?: string | null
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1110,6 +1136,7 @@ export type EmployeeUpdateWithoutOrganizationInput = {
   emergencyRel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordCheck?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1140,6 +1167,7 @@ export type EmployeeUncheckedUpdateWithoutOrganizationInput = {
   emergencyRel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordCheck?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1170,6 +1198,7 @@ export type EmployeeUncheckedUpdateManyWithoutOrganizationInput = {
   emergencyRel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordCheck?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1202,6 +1231,7 @@ export type EmployeeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   emergencyRel?: boolean
   password?: boolean
   passwordCheck?: boolean
+  passwordEncrypted?: boolean
   notes?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1234,6 +1264,7 @@ export type EmployeeSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   emergencyRel?: boolean
   password?: boolean
   passwordCheck?: boolean
+  passwordEncrypted?: boolean
   notes?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1266,6 +1297,7 @@ export type EmployeeSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   emergencyRel?: boolean
   password?: boolean
   passwordCheck?: boolean
+  passwordEncrypted?: boolean
   notes?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1298,13 +1330,14 @@ export type EmployeeSelectScalar = {
   emergencyRel?: boolean
   password?: boolean
   passwordCheck?: boolean
+  passwordEncrypted?: boolean
   notes?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   organizationId?: boolean
 }
 
-export type EmployeeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "firstName" | "lastName" | "email" | "phone" | "avatar" | "dateOfBirth" | "gender" | "address" | "employeeId" | "designation" | "department" | "position" | "employmentType" | "status" | "joiningDate" | "leavingDate" | "salary" | "currency" | "emergencyName" | "emergencyPhone" | "emergencyRel" | "password" | "passwordCheck" | "notes" | "createdAt" | "updatedAt" | "organizationId", ExtArgs["result"]["employee"]>
+export type EmployeeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "firstName" | "lastName" | "email" | "phone" | "avatar" | "dateOfBirth" | "gender" | "address" | "employeeId" | "designation" | "department" | "position" | "employmentType" | "status" | "joiningDate" | "leavingDate" | "salary" | "currency" | "emergencyName" | "emergencyPhone" | "emergencyRel" | "password" | "passwordCheck" | "passwordEncrypted" | "notes" | "createdAt" | "updatedAt" | "organizationId", ExtArgs["result"]["employee"]>
 export type EmployeeInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
 }
@@ -1345,6 +1378,7 @@ export type $EmployeePayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     emergencyRel: string | null
     password: string | null
     passwordCheck: string | null
+    passwordEncrypted: string | null
     notes: string | null
     createdAt: Date
     updatedAt: Date
@@ -1797,6 +1831,7 @@ export interface EmployeeFieldRefs {
   readonly emergencyRel: Prisma.FieldRef<"Employee", 'String'>
   readonly password: Prisma.FieldRef<"Employee", 'String'>
   readonly passwordCheck: Prisma.FieldRef<"Employee", 'String'>
+  readonly passwordEncrypted: Prisma.FieldRef<"Employee", 'String'>
   readonly notes: Prisma.FieldRef<"Employee", 'String'>
   readonly createdAt: Prisma.FieldRef<"Employee", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Employee", 'DateTime'>

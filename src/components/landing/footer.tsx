@@ -33,7 +33,7 @@ export function Footer() {
               <div className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
                 <ZapIcon className="size-4" />
               </div>
-              <span className="text-base font-semibold">Shyft</span>
+              <span className="text-base font-semibold">SHYFT</span>
             </Link>
             <p className="text-sm text-muted-foreground leading-relaxed max-w-xs">
               Work tracked. Time respected. The modern platform for teams who
@@ -67,7 +67,7 @@ export function Footer() {
 
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} Shyft. All rights reserved.
+            © {new Date().getFullYear()} SHYFT. All rights reserved.
           </p>
           <p className="text-sm text-muted-foreground">
             Built with care for teams everywhere.

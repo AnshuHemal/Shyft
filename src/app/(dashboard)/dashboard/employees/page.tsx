@@ -44,7 +44,7 @@ export default async function EmployeesPage() {
           </Button>
         }
       />
-      <EmployeeList initialEmployees={employees} departments={departments} />
+      <EmployeeList initialEmployees={employees} departments={departments} adminEmail={user.email} />
     </div>
   );
 }

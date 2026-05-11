@@ -11,7 +11,7 @@ const STEPS = [
     step: "02",
     title: "Track time naturally",
     description:
-      "Start a timer with one click, or let Shyft suggest entries based on your calendar and activity. Log time the way that works for you.",
+      "Start a timer with one click, or let SHYFT suggest entries based on your calendar and activity. Log time the way that works for you.",
   },
   {
     step: "03",

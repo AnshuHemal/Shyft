@@ -79,7 +79,7 @@ export function UnderReviewScreen({ user }: UnderReviewScreenProps) {
           <div className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
             <ZapIcon className="size-4" />
           </div>
-          <span className="text-base font-semibold tracking-tight">Shyft</span>
+          <span className="text-base font-semibold tracking-tight">SHYFT</span>
         </div>
         <Button
           variant="ghost"
@@ -136,7 +136,7 @@ export function UnderReviewScreen({ user }: UnderReviewScreenProps) {
                   Your account is under review
                 </h1>
                 <p className="text-muted-foreground leading-relaxed">
-                  The Shyft team will review your account within{" "}
+                  The SHYFT team will review your account within{" "}
                   <span className="font-medium text-foreground">24 hours</span>.
                   You&apos;ll receive an email once your account is approved.
                 </p>

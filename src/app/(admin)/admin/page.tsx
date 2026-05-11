@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
 import { AdminOverview } from "@/components/admin/admin-overview";
 
-export const metadata: Metadata = { title: "Admin Overview | Shyft" };
+export const metadata: Metadata = { title: "Admin Overview" };
 
 export default async function AdminPage() {
   const [total, pending, approved, rejected] = await Promise.all([

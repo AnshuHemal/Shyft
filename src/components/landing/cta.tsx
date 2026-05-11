@@ -16,7 +16,7 @@ export function CTA() {
               Ready to respect your team's time?
             </h2>
             <p className="text-white/75 text-lg max-w-xl mx-auto mb-10 leading-relaxed">
-              Join thousands of teams who use Shyft to work smarter, bill
+              Join thousands of teams who use SHYFT to work smarter, bill
               accurately, and protect their most valuable resource.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">

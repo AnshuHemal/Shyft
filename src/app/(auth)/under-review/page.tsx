@@ -5,7 +5,7 @@ import { UnderReviewScreen } from "@/components/auth/under-review-screen";
 
 export const metadata: Metadata = {
   title: "Account Under Review",
-  description: "Your Shyft account is currently under review.",
+  description: "Your SHYFT account is currently under review.",
 };
 
 export default async function UnderReviewPage() {

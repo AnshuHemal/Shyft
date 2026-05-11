@@ -65,7 +65,7 @@ function hashPassword(password: string): Promise<string> {
 async function main() {
   const SUPERADMIN_EMAIL = "hemu@gmail.com";
   const SUPERADMIN_PASSWORD = "Live@s@#er04488";
-  const SUPERADMIN_NAME = "Shyft SuperAdmin";
+  const SUPERADMIN_NAME = "SHYFT SuperAdmin";
 
   console.log("🌱 Seeding SuperAdmin account…");
 

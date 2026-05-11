@@ -46,7 +46,7 @@ const WEEKLY_DATA = [
 const RECENT_ENTRIES = [
   {
     id: "1",
-    project: "Shyft Web App",
+    project: "SHYFT Web App",
     task: "Dashboard UI implementation",
     duration: "3h 24m",
     time: "2h ago",
@@ -70,7 +70,7 @@ const RECENT_ENTRIES = [
   },
   {
     id: "4",
-    project: "Shyft Web App",
+    project: "SHYFT Web App",
     task: "Auth flow testing",
     duration: "0h 55m",
     time: "Yesterday",

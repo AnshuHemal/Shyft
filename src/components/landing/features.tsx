@@ -41,7 +41,7 @@ const FEATURES = [
     icon: ZapIcon,
     title: "Instant setup",
     description:
-      "Connect your tools in minutes. Shyft integrates with Jira, Linear, Notion, Slack, and 40+ other apps out of the box.",
+      "Connect your tools in minutes. SHYFT integrates with Jira, Linear, Notion, Slack, and 40+ other apps out of the box.",
     color: "text-yellow-500 bg-yellow-500/10",
   },
   {

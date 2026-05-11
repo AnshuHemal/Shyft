@@ -109,7 +109,7 @@ function ReviewDialog({
           </DialogTitle>
           <DialogDescription>
             {isApprove
-              ? `Approve ${user.name}'s account? They'll receive an email and gain access to Shyft.`
+              ? `Approve ${user.name}'s account? They'll receive an email and gain access to SHYFT.`
               : `Reject ${user.name}'s account? They'll be notified via email.`}
           </DialogDescription>
         </DialogHeader>
@@ -137,7 +137,7 @@ function ReviewDialog({
               rows={3}
               placeholder={
                 isApprove
-                  ? "Welcome to Shyft! Your account is now active."
+                  ? "Welcome to SHYFT! Your account is now active."
                   : "We're unable to approve your account at this time."
               }
               value={notes}

@@ -53,7 +53,7 @@ export default function TrackerPage() {
         </CardHeader>
         <CardContent className="pt-0 divide-y divide-border/60">
           {[
-            { task: "Dashboard UI implementation", project: "Shyft Web App", duration: "3h 24m", start: "09:00", end: "12:24" },
+            { task: "Dashboard UI implementation", project: "SHYFT Web App", duration: "3h 24m", start: "09:00", end: "12:24" },
             { task: "API integration review", project: "Client Portal", duration: "1h 45m", start: "13:00", end: "14:45" },
             { task: "Team standup", project: "Internal", duration: "0h 15m", start: "08:45", end: "09:00" },
           ].map((entry, i) => (

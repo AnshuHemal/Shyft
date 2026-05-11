@@ -25,21 +25,21 @@ interface AdminEmailComposeProps {
 const TEMPLATES = [
   {
     label: "Welcome approved",
-    subject: "Welcome to Shyft!",
+    subject: "Welcome to SHYFT!",
     message:
-      "Hi there,\n\nWelcome to Shyft! Your account has been approved and you now have full access to the platform.\n\nIf you have any questions, don't hesitate to reach out.\n\nBest,\nThe Shyft Team",
+      "Hi there,\n\nWelcome to SHYFT! Your account has been approved and you now have full access to the platform.\n\nIf you have any questions, don't hesitate to reach out.\n\nBest,\nThe SHYFT Team",
   },
   {
     label: "More info needed",
     subject: "Additional information required",
     message:
-      "Hi there,\n\nThank you for signing up for Shyft. We need a bit more information before we can approve your account.\n\nPlease reply to this email with the following details:\n- Your company name\n- Your role\n- How you plan to use Shyft\n\nBest,\nThe Shyft Team",
+      "Hi there,\n\nThank you for signing up for SHYFT. We need a bit more information before we can approve your account.\n\nPlease reply to this email with the following details:\n- Your company name\n- Your role\n- How you plan to use SHYFT\n\nBest,\nThe SHYFT Team",
   },
   {
     label: "Account rejected",
-    subject: "Update on your Shyft account",
+    subject: "Update on your SHYFT account",
     message:
-      "Hi there,\n\nThank you for your interest in Shyft. After reviewing your application, we're unable to approve your account at this time.\n\nIf you believe this is a mistake or would like to provide additional context, please reply to this email.\n\nBest,\nThe Shyft Team",
+      "Hi there,\n\nThank you for your interest in SHYFT. After reviewing your application, we're unable to approve your account at this time.\n\nIf you believe this is a mistake or would like to provide additional context, please reply to this email.\n\nBest,\nThe SHYFT Team",
   },
 ];
 

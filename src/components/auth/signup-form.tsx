@@ -114,7 +114,7 @@ export function SignupForm() {
       if (result.error) {
         setErrors({ otp: result.error.message ?? "Invalid or expired code." });
       } else {
-        toast.success("Email verified! Welcome to Shyft 🎉");
+        toast.success("Email verified! Welcome to SHYFT 🎉");
         router.push("/dashboard");
         router.refresh();
       }

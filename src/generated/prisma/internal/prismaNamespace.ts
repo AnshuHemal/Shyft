@@ -1025,6 +1025,7 @@ export const EmployeeScalarFieldEnum = {
   emergencyRel: 'emergencyRel',
   password: 'password',
   passwordCheck: 'passwordCheck',
+  passwordEncrypted: 'passwordEncrypted',
   notes: 'notes',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',

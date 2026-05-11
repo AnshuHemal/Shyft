@@ -44,7 +44,7 @@ export default function ReportsPage() {
         <CardContent className="pt-6">
           <div className="space-y-4">
             {[
-              { project: "Shyft Web App", hours: 68, total: 164, color: "bg-primary" },
+              { project: "SHYFT Web App", hours: 68, total: 164, color: "bg-primary" },
               { project: "Client Portal", hours: 45, total: 164, color: "bg-blue-500" },
               { project: "Design System", hours: 28, total: 164, color: "bg-purple-500" },
               { project: "Internal", hours: 23, total: 164, color: "bg-muted-foreground" },
