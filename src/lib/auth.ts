@@ -101,9 +101,23 @@ export const auth = betterAuth({
         type: "boolean",
         defaultValue: false,
       },
+      role: {
+        type: "string",
+        defaultValue: "USER",
+      },
+      accountStatus: {
+        type: "string",
+        defaultValue: "PENDING_REVIEW",
+      },
+      reviewNotes: {
+        type: "string",
+        required: false,
+      },
     },
   },
 });
 
 export type Session = typeof auth.$Infer.Session;
 export type User = typeof auth.$Infer.Session.user;
+export type UserRole = "USER" | "SUPERADMIN";
+export type AccountStatus = "PENDING_REVIEW" | "APPROVED" | "REJECTED";

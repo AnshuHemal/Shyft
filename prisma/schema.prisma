@@ -2,7 +2,8 @@
 // Run: npx prisma generate && npx prisma db push
 
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -10,18 +11,40 @@ datasource db {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
+// Enums
+// ─────────────────────────────────────────────────────────────────────────────
+
+enum UserRole {
+  USER
+  SUPERADMIN
+}
+
+enum AccountStatus {
+  PENDING_REVIEW  // newly registered — awaiting SuperAdmin approval
+  APPROVED        // approved, can access the dashboard
+  REJECTED        // rejected by SuperAdmin
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 // better-auth core tables
 // ─────────────────────────────────────────────────────────────────────────────
 
 model User {
-  id                   String    @id @default(cuid())
+  id                   String        @id @default(cuid())
   name                 String
-  email                String    @unique
-  emailVerified        Boolean   @default(false)
+  email                String        @unique
+  emailVerified        Boolean       @default(false)
   image                String?
-  createdAt            DateTime  @default(now())
-  updatedAt            DateTime  @updatedAt
-  onboardingCompleted  Boolean   @default(false)
+  createdAt            DateTime      @default(now())
+  updatedAt            DateTime      @updatedAt
+  onboardingCompleted  Boolean       @default(false)
+
+  // ── Review system ──────────────────────────────────────────────────────────
+  role                 UserRole      @default(USER)
+  accountStatus        AccountStatus @default(PENDING_REVIEW)
+  reviewNotes          String?       // SuperAdmin's message to the user
+  reviewedAt           DateTime?     // when the account was last reviewed
+  reviewedBy           String?       // SuperAdmin user id who reviewed
 
   sessions             Session[]
   accounts             Account[]

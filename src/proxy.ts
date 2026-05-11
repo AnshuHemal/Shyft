@@ -2,7 +2,15 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { getSessionFromRequest } from "@/lib/session";
 
-const PUBLIC_PATHS = ["/", "/login", "/signup", "/api/auth"];
+// Paths accessible without authentication
+const PUBLIC_PATHS = [
+  "/",
+  "/login",
+  "/signup",
+  "/forgot-password",
+  "/api/auth",
+  "/api/seed",
+];
 
 function isPublicPath(pathname: string): boolean {
   return PUBLIC_PATHS.some(
@@ -22,7 +30,7 @@ export async function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // Check session via cookie
+  // Check session via cookie (lightweight — no DB call)
   const session = await getSessionFromRequest(request);
 
   if (!session) {
@@ -31,6 +39,14 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(loginUrl);
   }
 
+  // /under-review is accessible to any authenticated user
+  // (the page itself handles role/status checks)
+  if (pathname.startsWith("/under-review")) {
+    return NextResponse.next();
+  }
+
+  // /admin routes — role check happens in the admin layout (server component)
+  // The proxy only checks for a valid session token here
   return NextResponse.next();
 }
 
