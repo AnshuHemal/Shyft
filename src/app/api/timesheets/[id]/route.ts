@@ -53,28 +53,59 @@ export async function PATCH(
       );
     }
 
+    // Fetch the employee's reporting manager
+    const emp = await prisma.employee.findUnique({
+      where: { userId: user.id },
+      select: { reportingToId: true }
+    });
+
+    if (!emp?.reportingToId) {
+      return NextResponse.json(
+        { error: "No reporting person assigned. Please contact HR to set up your reporting line before submitting." },
+        { status: 400 }
+      );
+    }
+
     const updated = await prisma.timesheet.update({
       where: { id },
-      data: { status: "SUBMITTED", submittedAt: new Date() },
+      data: { 
+        status: "SUBMITTED", 
+        submittedAt: new Date(),
+        reportingLeadId: emp.reportingToId
+      },
     });
 
     return NextResponse.json({ success: true, timesheet: updated });
   }
 
-  // ── HR approving or rejecting ────────────────────────────────────────────
+  // ── HR or Reporting Lead approving or rejecting ──────────────────────────────
   if (action === "approve" || action === "reject") {
-    if (user.role !== "USER") {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+    let isAuthorized = false;
+
+    // Case 1: Is HR (Owner of the organization)
+    if (user.role === "USER") {
+      const org = await prisma.organization.findUnique({
+        where: { ownerId: user.id },
+        select: { id: true },
+      });
+      if (org && org.id === timesheet.employee.organizationId) {
+        isAuthorized = true;
+      }
     }
 
-    // Verify HR owns the org
-    const org = await prisma.organization.findUnique({
-      where: { ownerId: user.id },
-      select: { id: true },
-    });
+    // Case 2: Is the assigned Reporting Lead
+    if (!isAuthorized && user.role === "EMPLOYEE") {
+      const currentEmployee = await prisma.employee.findUnique({
+        where: { userId: user.id },
+        select: { id: true }
+      });
+      if (currentEmployee && currentEmployee.id === timesheet.reportingLeadId) {
+        isAuthorized = true;
+      }
+    }
 
-    if (!org || org.id !== timesheet.employee.organizationId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+    if (!isAuthorized) {
+      return NextResponse.json({ error: "Unauthorized to review this timesheet." }, { status: 403 });
     }
 
     if (timesheet.status !== "SUBMITTED") {
@@ -93,6 +124,11 @@ export async function PATCH(
         rejectionNote: action === "reject" ? (rejectionNote ?? null) : null,
       },
     });
+
+    // If approved by Lead, send email to HR
+    if (action === "approve") {
+      console.log(`[EMAIL] To: HR@${timesheet.employee.organizationId}.com, Subject: Timesheet Approved for ${timesheet.employee.userId}, Body: The timesheet has been approved by the reporting lead and is ready for final payroll processing.`);
+    }
 
     return NextResponse.json({ success: true, timesheet: updated });
   }

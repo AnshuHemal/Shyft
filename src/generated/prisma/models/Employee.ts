@@ -429,6 +429,7 @@ export type EmployeeWhereInput = {
   reportingTo?: Prisma.XOR<Prisma.EmployeeNullableScalarRelationFilter, Prisma.EmployeeWhereInput> | null
   subordinates?: Prisma.EmployeeListRelationFilter
   timesheets?: Prisma.TimesheetListRelationFilter
+  reviewedTimesheets?: Prisma.TimesheetListRelationFilter
   ledProjects?: Prisma.ProjectListRelationFilter
   projects?: Prisma.ProjectMemberListRelationFilter
 }
@@ -470,6 +471,7 @@ export type EmployeeOrderByWithRelationInput = {
   reportingTo?: Prisma.EmployeeOrderByWithRelationInput
   subordinates?: Prisma.EmployeeOrderByRelationAggregateInput
   timesheets?: Prisma.TimesheetOrderByRelationAggregateInput
+  reviewedTimesheets?: Prisma.TimesheetOrderByRelationAggregateInput
   ledProjects?: Prisma.ProjectOrderByRelationAggregateInput
   projects?: Prisma.ProjectMemberOrderByRelationAggregateInput
 }
@@ -515,6 +517,7 @@ export type EmployeeWhereUniqueInput = Prisma.AtLeast<{
   reportingTo?: Prisma.XOR<Prisma.EmployeeNullableScalarRelationFilter, Prisma.EmployeeWhereInput> | null
   subordinates?: Prisma.EmployeeListRelationFilter
   timesheets?: Prisma.TimesheetListRelationFilter
+  reviewedTimesheets?: Prisma.TimesheetListRelationFilter
   ledProjects?: Prisma.ProjectListRelationFilter
   projects?: Prisma.ProjectMemberListRelationFilter
 }, "id" | "userId" | "email_organizationId">
@@ -629,6 +632,7 @@ export type EmployeeCreateInput = {
   reportingTo?: Prisma.EmployeeCreateNestedOneWithoutSubordinatesInput
   subordinates?: Prisma.EmployeeCreateNestedManyWithoutReportingToInput
   timesheets?: Prisma.TimesheetCreateNestedManyWithoutEmployeeInput
+  reviewedTimesheets?: Prisma.TimesheetCreateNestedManyWithoutReportingLeadInput
   ledProjects?: Prisma.ProjectCreateNestedManyWithoutLeadInput
   projects?: Prisma.ProjectMemberCreateNestedManyWithoutEmployeeInput
 }
@@ -667,6 +671,7 @@ export type EmployeeUncheckedCreateInput = {
   reportingToId?: string | null
   subordinates?: Prisma.EmployeeUncheckedCreateNestedManyWithoutReportingToInput
   timesheets?: Prisma.TimesheetUncheckedCreateNestedManyWithoutEmployeeInput
+  reviewedTimesheets?: Prisma.TimesheetUncheckedCreateNestedManyWithoutReportingLeadInput
   ledProjects?: Prisma.ProjectUncheckedCreateNestedManyWithoutLeadInput
   projects?: Prisma.ProjectMemberUncheckedCreateNestedManyWithoutEmployeeInput
 }
@@ -705,6 +710,7 @@ export type EmployeeUpdateInput = {
   reportingTo?: Prisma.EmployeeUpdateOneWithoutSubordinatesNestedInput
   subordinates?: Prisma.EmployeeUpdateManyWithoutReportingToNestedInput
   timesheets?: Prisma.TimesheetUpdateManyWithoutEmployeeNestedInput
+  reviewedTimesheets?: Prisma.TimesheetUpdateManyWithoutReportingLeadNestedInput
   ledProjects?: Prisma.ProjectUpdateManyWithoutLeadNestedInput
   projects?: Prisma.ProjectMemberUpdateManyWithoutEmployeeNestedInput
 }
@@ -743,6 +749,7 @@ export type EmployeeUncheckedUpdateInput = {
   reportingToId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subordinates?: Prisma.EmployeeUncheckedUpdateManyWithoutReportingToNestedInput
   timesheets?: Prisma.TimesheetUncheckedUpdateManyWithoutEmployeeNestedInput
+  reviewedTimesheets?: Prisma.TimesheetUncheckedUpdateManyWithoutReportingLeadNestedInput
   ledProjects?: Prisma.ProjectUncheckedUpdateManyWithoutLeadNestedInput
   projects?: Prisma.ProjectMemberUncheckedUpdateManyWithoutEmployeeNestedInput
 }
@@ -1101,10 +1108,26 @@ export type EmployeeUncheckedUpdateManyWithoutReportingToNestedInput = {
   deleteMany?: Prisma.EmployeeScalarWhereInput | Prisma.EmployeeScalarWhereInput[]
 }
 
+export type EmployeeCreateNestedOneWithoutReviewedTimesheetsInput = {
+  create?: Prisma.XOR<Prisma.EmployeeCreateWithoutReviewedTimesheetsInput, Prisma.EmployeeUncheckedCreateWithoutReviewedTimesheetsInput>
+  connectOrCreate?: Prisma.EmployeeCreateOrConnectWithoutReviewedTimesheetsInput
+  connect?: Prisma.EmployeeWhereUniqueInput
+}
+
 export type EmployeeCreateNestedOneWithoutTimesheetsInput = {
   create?: Prisma.XOR<Prisma.EmployeeCreateWithoutTimesheetsInput, Prisma.EmployeeUncheckedCreateWithoutTimesheetsInput>
   connectOrCreate?: Prisma.EmployeeCreateOrConnectWithoutTimesheetsInput
   connect?: Prisma.EmployeeWhereUniqueInput
+}
+
+export type EmployeeUpdateOneWithoutReviewedTimesheetsNestedInput = {
+  create?: Prisma.XOR<Prisma.EmployeeCreateWithoutReviewedTimesheetsInput, Prisma.EmployeeUncheckedCreateWithoutReviewedTimesheetsInput>
+  connectOrCreate?: Prisma.EmployeeCreateOrConnectWithoutReviewedTimesheetsInput
+  upsert?: Prisma.EmployeeUpsertWithoutReviewedTimesheetsInput
+  disconnect?: Prisma.EmployeeWhereInput | boolean
+  delete?: Prisma.EmployeeWhereInput | boolean
+  connect?: Prisma.EmployeeWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.EmployeeUpdateToOneWithWhereWithoutReviewedTimesheetsInput, Prisma.EmployeeUpdateWithoutReviewedTimesheetsInput>, Prisma.EmployeeUncheckedUpdateWithoutReviewedTimesheetsInput>
 }
 
 export type EmployeeUpdateOneRequiredWithoutTimesheetsNestedInput = {
@@ -1210,6 +1233,7 @@ export type EmployeeCreateWithoutOrganizationInput = {
   reportingTo?: Prisma.EmployeeCreateNestedOneWithoutSubordinatesInput
   subordinates?: Prisma.EmployeeCreateNestedManyWithoutReportingToInput
   timesheets?: Prisma.TimesheetCreateNestedManyWithoutEmployeeInput
+  reviewedTimesheets?: Prisma.TimesheetCreateNestedManyWithoutReportingLeadInput
   ledProjects?: Prisma.ProjectCreateNestedManyWithoutLeadInput
   projects?: Prisma.ProjectMemberCreateNestedManyWithoutEmployeeInput
 }
@@ -1247,6 +1271,7 @@ export type EmployeeUncheckedCreateWithoutOrganizationInput = {
   reportingToId?: string | null
   subordinates?: Prisma.EmployeeUncheckedCreateNestedManyWithoutReportingToInput
   timesheets?: Prisma.TimesheetUncheckedCreateNestedManyWithoutEmployeeInput
+  reviewedTimesheets?: Prisma.TimesheetUncheckedCreateNestedManyWithoutReportingLeadInput
   ledProjects?: Prisma.ProjectUncheckedCreateNestedManyWithoutLeadInput
   projects?: Prisma.ProjectMemberUncheckedCreateNestedManyWithoutEmployeeInput
 }
@@ -1347,6 +1372,7 @@ export type EmployeeCreateWithoutSubordinatesInput = {
   user?: Prisma.UserCreateNestedOneWithoutEmployeeProfileInput
   reportingTo?: Prisma.EmployeeCreateNestedOneWithoutSubordinatesInput
   timesheets?: Prisma.TimesheetCreateNestedManyWithoutEmployeeInput
+  reviewedTimesheets?: Prisma.TimesheetCreateNestedManyWithoutReportingLeadInput
   ledProjects?: Prisma.ProjectCreateNestedManyWithoutLeadInput
   projects?: Prisma.ProjectMemberCreateNestedManyWithoutEmployeeInput
 }
@@ -1384,6 +1410,7 @@ export type EmployeeUncheckedCreateWithoutSubordinatesInput = {
   userId?: string | null
   reportingToId?: string | null
   timesheets?: Prisma.TimesheetUncheckedCreateNestedManyWithoutEmployeeInput
+  reviewedTimesheets?: Prisma.TimesheetUncheckedCreateNestedManyWithoutReportingLeadInput
   ledProjects?: Prisma.ProjectUncheckedCreateNestedManyWithoutLeadInput
   projects?: Prisma.ProjectMemberUncheckedCreateNestedManyWithoutEmployeeInput
 }
@@ -1426,6 +1453,7 @@ export type EmployeeCreateWithoutReportingToInput = {
   user?: Prisma.UserCreateNestedOneWithoutEmployeeProfileInput
   subordinates?: Prisma.EmployeeCreateNestedManyWithoutReportingToInput
   timesheets?: Prisma.TimesheetCreateNestedManyWithoutEmployeeInput
+  reviewedTimesheets?: Prisma.TimesheetCreateNestedManyWithoutReportingLeadInput
   ledProjects?: Prisma.ProjectCreateNestedManyWithoutLeadInput
   projects?: Prisma.ProjectMemberCreateNestedManyWithoutEmployeeInput
 }
@@ -1463,6 +1491,7 @@ export type EmployeeUncheckedCreateWithoutReportingToInput = {
   userId?: string | null
   subordinates?: Prisma.EmployeeUncheckedCreateNestedManyWithoutReportingToInput
   timesheets?: Prisma.TimesheetUncheckedCreateNestedManyWithoutEmployeeInput
+  reviewedTimesheets?: Prisma.TimesheetUncheckedCreateNestedManyWithoutReportingLeadInput
   ledProjects?: Prisma.ProjectUncheckedCreateNestedManyWithoutLeadInput
   projects?: Prisma.ProjectMemberUncheckedCreateNestedManyWithoutEmployeeInput
 }
@@ -1521,6 +1550,7 @@ export type EmployeeUpdateWithoutSubordinatesInput = {
   user?: Prisma.UserUpdateOneWithoutEmployeeProfileNestedInput
   reportingTo?: Prisma.EmployeeUpdateOneWithoutSubordinatesNestedInput
   timesheets?: Prisma.TimesheetUpdateManyWithoutEmployeeNestedInput
+  reviewedTimesheets?: Prisma.TimesheetUpdateManyWithoutReportingLeadNestedInput
   ledProjects?: Prisma.ProjectUpdateManyWithoutLeadNestedInput
   projects?: Prisma.ProjectMemberUpdateManyWithoutEmployeeNestedInput
 }
@@ -1558,6 +1588,7 @@ export type EmployeeUncheckedUpdateWithoutSubordinatesInput = {
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reportingToId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   timesheets?: Prisma.TimesheetUncheckedUpdateManyWithoutEmployeeNestedInput
+  reviewedTimesheets?: Prisma.TimesheetUncheckedUpdateManyWithoutReportingLeadNestedInput
   ledProjects?: Prisma.ProjectUncheckedUpdateManyWithoutLeadNestedInput
   projects?: Prisma.ProjectMemberUncheckedUpdateManyWithoutEmployeeNestedInput
 }
@@ -1576,6 +1607,87 @@ export type EmployeeUpdateWithWhereUniqueWithoutReportingToInput = {
 export type EmployeeUpdateManyWithWhereWithoutReportingToInput = {
   where: Prisma.EmployeeScalarWhereInput
   data: Prisma.XOR<Prisma.EmployeeUpdateManyMutationInput, Prisma.EmployeeUncheckedUpdateManyWithoutReportingToInput>
+}
+
+export type EmployeeCreateWithoutReviewedTimesheetsInput = {
+  id?: string
+  firstName: string
+  lastName: string
+  email: string
+  phone?: string | null
+  avatar?: string | null
+  dateOfBirth?: Date | string | null
+  gender?: string | null
+  address?: string | null
+  employeeId?: string | null
+  designation: string
+  department?: string | null
+  position?: string | null
+  employmentType?: $Enums.EmploymentType
+  status?: $Enums.EmployeeStatus
+  joiningDate?: Date | string | null
+  leavingDate?: Date | string | null
+  salary?: number | null
+  currency?: string | null
+  emergencyName?: string | null
+  emergencyPhone?: string | null
+  emergencyRel?: string | null
+  password?: string | null
+  passwordCheck?: string | null
+  passwordEncrypted?: string | null
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  organization: Prisma.OrganizationCreateNestedOneWithoutEmployeesInput
+  user?: Prisma.UserCreateNestedOneWithoutEmployeeProfileInput
+  reportingTo?: Prisma.EmployeeCreateNestedOneWithoutSubordinatesInput
+  subordinates?: Prisma.EmployeeCreateNestedManyWithoutReportingToInput
+  timesheets?: Prisma.TimesheetCreateNestedManyWithoutEmployeeInput
+  ledProjects?: Prisma.ProjectCreateNestedManyWithoutLeadInput
+  projects?: Prisma.ProjectMemberCreateNestedManyWithoutEmployeeInput
+}
+
+export type EmployeeUncheckedCreateWithoutReviewedTimesheetsInput = {
+  id?: string
+  firstName: string
+  lastName: string
+  email: string
+  phone?: string | null
+  avatar?: string | null
+  dateOfBirth?: Date | string | null
+  gender?: string | null
+  address?: string | null
+  employeeId?: string | null
+  designation: string
+  department?: string | null
+  position?: string | null
+  employmentType?: $Enums.EmploymentType
+  status?: $Enums.EmployeeStatus
+  joiningDate?: Date | string | null
+  leavingDate?: Date | string | null
+  salary?: number | null
+  currency?: string | null
+  emergencyName?: string | null
+  emergencyPhone?: string | null
+  emergencyRel?: string | null
+  password?: string | null
+  passwordCheck?: string | null
+  passwordEncrypted?: string | null
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  organizationId: string
+  userId?: string | null
+  reportingToId?: string | null
+  subordinates?: Prisma.EmployeeUncheckedCreateNestedManyWithoutReportingToInput
+  timesheets?: Prisma.TimesheetUncheckedCreateNestedManyWithoutEmployeeInput
+  ledProjects?: Prisma.ProjectUncheckedCreateNestedManyWithoutLeadInput
+  projects?: Prisma.ProjectMemberUncheckedCreateNestedManyWithoutEmployeeInput
+}
+
+export type EmployeeCreateOrConnectWithoutReviewedTimesheetsInput = {
+  where: Prisma.EmployeeWhereUniqueInput
+  create: Prisma.XOR<Prisma.EmployeeCreateWithoutReviewedTimesheetsInput, Prisma.EmployeeUncheckedCreateWithoutReviewedTimesheetsInput>
 }
 
 export type EmployeeCreateWithoutTimesheetsInput = {
@@ -1611,6 +1723,7 @@ export type EmployeeCreateWithoutTimesheetsInput = {
   user?: Prisma.UserCreateNestedOneWithoutEmployeeProfileInput
   reportingTo?: Prisma.EmployeeCreateNestedOneWithoutSubordinatesInput
   subordinates?: Prisma.EmployeeCreateNestedManyWithoutReportingToInput
+  reviewedTimesheets?: Prisma.TimesheetCreateNestedManyWithoutReportingLeadInput
   ledProjects?: Prisma.ProjectCreateNestedManyWithoutLeadInput
   projects?: Prisma.ProjectMemberCreateNestedManyWithoutEmployeeInput
 }
@@ -1648,6 +1761,7 @@ export type EmployeeUncheckedCreateWithoutTimesheetsInput = {
   userId?: string | null
   reportingToId?: string | null
   subordinates?: Prisma.EmployeeUncheckedCreateNestedManyWithoutReportingToInput
+  reviewedTimesheets?: Prisma.TimesheetUncheckedCreateNestedManyWithoutReportingLeadInput
   ledProjects?: Prisma.ProjectUncheckedCreateNestedManyWithoutLeadInput
   projects?: Prisma.ProjectMemberUncheckedCreateNestedManyWithoutEmployeeInput
 }
@@ -1655,6 +1769,93 @@ export type EmployeeUncheckedCreateWithoutTimesheetsInput = {
 export type EmployeeCreateOrConnectWithoutTimesheetsInput = {
   where: Prisma.EmployeeWhereUniqueInput
   create: Prisma.XOR<Prisma.EmployeeCreateWithoutTimesheetsInput, Prisma.EmployeeUncheckedCreateWithoutTimesheetsInput>
+}
+
+export type EmployeeUpsertWithoutReviewedTimesheetsInput = {
+  update: Prisma.XOR<Prisma.EmployeeUpdateWithoutReviewedTimesheetsInput, Prisma.EmployeeUncheckedUpdateWithoutReviewedTimesheetsInput>
+  create: Prisma.XOR<Prisma.EmployeeCreateWithoutReviewedTimesheetsInput, Prisma.EmployeeUncheckedCreateWithoutReviewedTimesheetsInput>
+  where?: Prisma.EmployeeWhereInput
+}
+
+export type EmployeeUpdateToOneWithWhereWithoutReviewedTimesheetsInput = {
+  where?: Prisma.EmployeeWhereInput
+  data: Prisma.XOR<Prisma.EmployeeUpdateWithoutReviewedTimesheetsInput, Prisma.EmployeeUncheckedUpdateWithoutReviewedTimesheetsInput>
+}
+
+export type EmployeeUpdateWithoutReviewedTimesheetsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employeeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  designation?: Prisma.StringFieldUpdateOperationsInput | string
+  department?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employmentType?: Prisma.EnumEmploymentTypeFieldUpdateOperationsInput | $Enums.EmploymentType
+  status?: Prisma.EnumEmployeeStatusFieldUpdateOperationsInput | $Enums.EmployeeStatus
+  joiningDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  leavingDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  salary?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  currency?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyRel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordCheck?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutEmployeesNestedInput
+  user?: Prisma.UserUpdateOneWithoutEmployeeProfileNestedInput
+  reportingTo?: Prisma.EmployeeUpdateOneWithoutSubordinatesNestedInput
+  subordinates?: Prisma.EmployeeUpdateManyWithoutReportingToNestedInput
+  timesheets?: Prisma.TimesheetUpdateManyWithoutEmployeeNestedInput
+  ledProjects?: Prisma.ProjectUpdateManyWithoutLeadNestedInput
+  projects?: Prisma.ProjectMemberUpdateManyWithoutEmployeeNestedInput
+}
+
+export type EmployeeUncheckedUpdateWithoutReviewedTimesheetsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employeeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  designation?: Prisma.StringFieldUpdateOperationsInput | string
+  department?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employmentType?: Prisma.EnumEmploymentTypeFieldUpdateOperationsInput | $Enums.EmploymentType
+  status?: Prisma.EnumEmployeeStatusFieldUpdateOperationsInput | $Enums.EmployeeStatus
+  joiningDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  leavingDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  salary?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  currency?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyRel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordCheck?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reportingToId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subordinates?: Prisma.EmployeeUncheckedUpdateManyWithoutReportingToNestedInput
+  timesheets?: Prisma.TimesheetUncheckedUpdateManyWithoutEmployeeNestedInput
+  ledProjects?: Prisma.ProjectUncheckedUpdateManyWithoutLeadNestedInput
+  projects?: Prisma.ProjectMemberUncheckedUpdateManyWithoutEmployeeNestedInput
 }
 
 export type EmployeeUpsertWithoutTimesheetsInput = {
@@ -1701,6 +1902,7 @@ export type EmployeeUpdateWithoutTimesheetsInput = {
   user?: Prisma.UserUpdateOneWithoutEmployeeProfileNestedInput
   reportingTo?: Prisma.EmployeeUpdateOneWithoutSubordinatesNestedInput
   subordinates?: Prisma.EmployeeUpdateManyWithoutReportingToNestedInput
+  reviewedTimesheets?: Prisma.TimesheetUpdateManyWithoutReportingLeadNestedInput
   ledProjects?: Prisma.ProjectUpdateManyWithoutLeadNestedInput
   projects?: Prisma.ProjectMemberUpdateManyWithoutEmployeeNestedInput
 }
@@ -1738,6 +1940,7 @@ export type EmployeeUncheckedUpdateWithoutTimesheetsInput = {
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reportingToId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subordinates?: Prisma.EmployeeUncheckedUpdateManyWithoutReportingToNestedInput
+  reviewedTimesheets?: Prisma.TimesheetUncheckedUpdateManyWithoutReportingLeadNestedInput
   ledProjects?: Prisma.ProjectUncheckedUpdateManyWithoutLeadNestedInput
   projects?: Prisma.ProjectMemberUncheckedUpdateManyWithoutEmployeeNestedInput
 }
@@ -1775,6 +1978,7 @@ export type EmployeeCreateWithoutUserInput = {
   reportingTo?: Prisma.EmployeeCreateNestedOneWithoutSubordinatesInput
   subordinates?: Prisma.EmployeeCreateNestedManyWithoutReportingToInput
   timesheets?: Prisma.TimesheetCreateNestedManyWithoutEmployeeInput
+  reviewedTimesheets?: Prisma.TimesheetCreateNestedManyWithoutReportingLeadInput
   ledProjects?: Prisma.ProjectCreateNestedManyWithoutLeadInput
   projects?: Prisma.ProjectMemberCreateNestedManyWithoutEmployeeInput
 }
@@ -1812,6 +2016,7 @@ export type EmployeeUncheckedCreateWithoutUserInput = {
   reportingToId?: string | null
   subordinates?: Prisma.EmployeeUncheckedCreateNestedManyWithoutReportingToInput
   timesheets?: Prisma.TimesheetUncheckedCreateNestedManyWithoutEmployeeInput
+  reviewedTimesheets?: Prisma.TimesheetUncheckedCreateNestedManyWithoutReportingLeadInput
   ledProjects?: Prisma.ProjectUncheckedCreateNestedManyWithoutLeadInput
   projects?: Prisma.ProjectMemberUncheckedCreateNestedManyWithoutEmployeeInput
 }
@@ -1865,6 +2070,7 @@ export type EmployeeUpdateWithoutUserInput = {
   reportingTo?: Prisma.EmployeeUpdateOneWithoutSubordinatesNestedInput
   subordinates?: Prisma.EmployeeUpdateManyWithoutReportingToNestedInput
   timesheets?: Prisma.TimesheetUpdateManyWithoutEmployeeNestedInput
+  reviewedTimesheets?: Prisma.TimesheetUpdateManyWithoutReportingLeadNestedInput
   ledProjects?: Prisma.ProjectUpdateManyWithoutLeadNestedInput
   projects?: Prisma.ProjectMemberUpdateManyWithoutEmployeeNestedInput
 }
@@ -1902,6 +2108,7 @@ export type EmployeeUncheckedUpdateWithoutUserInput = {
   reportingToId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subordinates?: Prisma.EmployeeUncheckedUpdateManyWithoutReportingToNestedInput
   timesheets?: Prisma.TimesheetUncheckedUpdateManyWithoutEmployeeNestedInput
+  reviewedTimesheets?: Prisma.TimesheetUncheckedUpdateManyWithoutReportingLeadNestedInput
   ledProjects?: Prisma.ProjectUncheckedUpdateManyWithoutLeadNestedInput
   projects?: Prisma.ProjectMemberUncheckedUpdateManyWithoutEmployeeNestedInput
 }
@@ -1940,6 +2147,7 @@ export type EmployeeCreateWithoutLedProjectsInput = {
   reportingTo?: Prisma.EmployeeCreateNestedOneWithoutSubordinatesInput
   subordinates?: Prisma.EmployeeCreateNestedManyWithoutReportingToInput
   timesheets?: Prisma.TimesheetCreateNestedManyWithoutEmployeeInput
+  reviewedTimesheets?: Prisma.TimesheetCreateNestedManyWithoutReportingLeadInput
   projects?: Prisma.ProjectMemberCreateNestedManyWithoutEmployeeInput
 }
 
@@ -1977,6 +2185,7 @@ export type EmployeeUncheckedCreateWithoutLedProjectsInput = {
   reportingToId?: string | null
   subordinates?: Prisma.EmployeeUncheckedCreateNestedManyWithoutReportingToInput
   timesheets?: Prisma.TimesheetUncheckedCreateNestedManyWithoutEmployeeInput
+  reviewedTimesheets?: Prisma.TimesheetUncheckedCreateNestedManyWithoutReportingLeadInput
   projects?: Prisma.ProjectMemberUncheckedCreateNestedManyWithoutEmployeeInput
 }
 
@@ -2030,6 +2239,7 @@ export type EmployeeUpdateWithoutLedProjectsInput = {
   reportingTo?: Prisma.EmployeeUpdateOneWithoutSubordinatesNestedInput
   subordinates?: Prisma.EmployeeUpdateManyWithoutReportingToNestedInput
   timesheets?: Prisma.TimesheetUpdateManyWithoutEmployeeNestedInput
+  reviewedTimesheets?: Prisma.TimesheetUpdateManyWithoutReportingLeadNestedInput
   projects?: Prisma.ProjectMemberUpdateManyWithoutEmployeeNestedInput
 }
 
@@ -2067,6 +2277,7 @@ export type EmployeeUncheckedUpdateWithoutLedProjectsInput = {
   reportingToId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subordinates?: Prisma.EmployeeUncheckedUpdateManyWithoutReportingToNestedInput
   timesheets?: Prisma.TimesheetUncheckedUpdateManyWithoutEmployeeNestedInput
+  reviewedTimesheets?: Prisma.TimesheetUncheckedUpdateManyWithoutReportingLeadNestedInput
   projects?: Prisma.ProjectMemberUncheckedUpdateManyWithoutEmployeeNestedInput
 }
 
@@ -2104,6 +2315,7 @@ export type EmployeeCreateWithoutProjectsInput = {
   reportingTo?: Prisma.EmployeeCreateNestedOneWithoutSubordinatesInput
   subordinates?: Prisma.EmployeeCreateNestedManyWithoutReportingToInput
   timesheets?: Prisma.TimesheetCreateNestedManyWithoutEmployeeInput
+  reviewedTimesheets?: Prisma.TimesheetCreateNestedManyWithoutReportingLeadInput
   ledProjects?: Prisma.ProjectCreateNestedManyWithoutLeadInput
 }
 
@@ -2141,6 +2353,7 @@ export type EmployeeUncheckedCreateWithoutProjectsInput = {
   reportingToId?: string | null
   subordinates?: Prisma.EmployeeUncheckedCreateNestedManyWithoutReportingToInput
   timesheets?: Prisma.TimesheetUncheckedCreateNestedManyWithoutEmployeeInput
+  reviewedTimesheets?: Prisma.TimesheetUncheckedCreateNestedManyWithoutReportingLeadInput
   ledProjects?: Prisma.ProjectUncheckedCreateNestedManyWithoutLeadInput
 }
 
@@ -2194,6 +2407,7 @@ export type EmployeeUpdateWithoutProjectsInput = {
   reportingTo?: Prisma.EmployeeUpdateOneWithoutSubordinatesNestedInput
   subordinates?: Prisma.EmployeeUpdateManyWithoutReportingToNestedInput
   timesheets?: Prisma.TimesheetUpdateManyWithoutEmployeeNestedInput
+  reviewedTimesheets?: Prisma.TimesheetUpdateManyWithoutReportingLeadNestedInput
   ledProjects?: Prisma.ProjectUpdateManyWithoutLeadNestedInput
 }
 
@@ -2231,6 +2445,7 @@ export type EmployeeUncheckedUpdateWithoutProjectsInput = {
   reportingToId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subordinates?: Prisma.EmployeeUncheckedUpdateManyWithoutReportingToNestedInput
   timesheets?: Prisma.TimesheetUncheckedUpdateManyWithoutEmployeeNestedInput
+  reviewedTimesheets?: Prisma.TimesheetUncheckedUpdateManyWithoutReportingLeadNestedInput
   ledProjects?: Prisma.ProjectUncheckedUpdateManyWithoutLeadNestedInput
 }
 
@@ -2300,6 +2515,7 @@ export type EmployeeUpdateWithoutOrganizationInput = {
   reportingTo?: Prisma.EmployeeUpdateOneWithoutSubordinatesNestedInput
   subordinates?: Prisma.EmployeeUpdateManyWithoutReportingToNestedInput
   timesheets?: Prisma.TimesheetUpdateManyWithoutEmployeeNestedInput
+  reviewedTimesheets?: Prisma.TimesheetUpdateManyWithoutReportingLeadNestedInput
   ledProjects?: Prisma.ProjectUpdateManyWithoutLeadNestedInput
   projects?: Prisma.ProjectMemberUpdateManyWithoutEmployeeNestedInput
 }
@@ -2337,6 +2553,7 @@ export type EmployeeUncheckedUpdateWithoutOrganizationInput = {
   reportingToId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subordinates?: Prisma.EmployeeUncheckedUpdateManyWithoutReportingToNestedInput
   timesheets?: Prisma.TimesheetUncheckedUpdateManyWithoutEmployeeNestedInput
+  reviewedTimesheets?: Prisma.TimesheetUncheckedUpdateManyWithoutReportingLeadNestedInput
   ledProjects?: Prisma.ProjectUncheckedUpdateManyWithoutLeadNestedInput
   projects?: Prisma.ProjectMemberUncheckedUpdateManyWithoutEmployeeNestedInput
 }
@@ -2440,6 +2657,7 @@ export type EmployeeUpdateWithoutReportingToInput = {
   user?: Prisma.UserUpdateOneWithoutEmployeeProfileNestedInput
   subordinates?: Prisma.EmployeeUpdateManyWithoutReportingToNestedInput
   timesheets?: Prisma.TimesheetUpdateManyWithoutEmployeeNestedInput
+  reviewedTimesheets?: Prisma.TimesheetUpdateManyWithoutReportingLeadNestedInput
   ledProjects?: Prisma.ProjectUpdateManyWithoutLeadNestedInput
   projects?: Prisma.ProjectMemberUpdateManyWithoutEmployeeNestedInput
 }
@@ -2477,6 +2695,7 @@ export type EmployeeUncheckedUpdateWithoutReportingToInput = {
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subordinates?: Prisma.EmployeeUncheckedUpdateManyWithoutReportingToNestedInput
   timesheets?: Prisma.TimesheetUncheckedUpdateManyWithoutEmployeeNestedInput
+  reviewedTimesheets?: Prisma.TimesheetUncheckedUpdateManyWithoutReportingLeadNestedInput
   ledProjects?: Prisma.ProjectUncheckedUpdateManyWithoutLeadNestedInput
   projects?: Prisma.ProjectMemberUncheckedUpdateManyWithoutEmployeeNestedInput
 }
@@ -2522,6 +2741,7 @@ export type EmployeeUncheckedUpdateManyWithoutReportingToInput = {
 export type EmployeeCountOutputType = {
   subordinates: number
   timesheets: number
+  reviewedTimesheets: number
   ledProjects: number
   projects: number
 }
@@ -2529,6 +2749,7 @@ export type EmployeeCountOutputType = {
 export type EmployeeCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   subordinates?: boolean | EmployeeCountOutputTypeCountSubordinatesArgs
   timesheets?: boolean | EmployeeCountOutputTypeCountTimesheetsArgs
+  reviewedTimesheets?: boolean | EmployeeCountOutputTypeCountReviewedTimesheetsArgs
   ledProjects?: boolean | EmployeeCountOutputTypeCountLedProjectsArgs
   projects?: boolean | EmployeeCountOutputTypeCountProjectsArgs
 }
@@ -2554,6 +2775,13 @@ export type EmployeeCountOutputTypeCountSubordinatesArgs<ExtArgs extends runtime
  * EmployeeCountOutputType without action
  */
 export type EmployeeCountOutputTypeCountTimesheetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TimesheetWhereInput
+}
+
+/**
+ * EmployeeCountOutputType without action
+ */
+export type EmployeeCountOutputTypeCountReviewedTimesheetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.TimesheetWhereInput
 }
 
@@ -2609,6 +2837,7 @@ export type EmployeeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   reportingTo?: boolean | Prisma.Employee$reportingToArgs<ExtArgs>
   subordinates?: boolean | Prisma.Employee$subordinatesArgs<ExtArgs>
   timesheets?: boolean | Prisma.Employee$timesheetsArgs<ExtArgs>
+  reviewedTimesheets?: boolean | Prisma.Employee$reviewedTimesheetsArgs<ExtArgs>
   ledProjects?: boolean | Prisma.Employee$ledProjectsArgs<ExtArgs>
   projects?: boolean | Prisma.Employee$projectsArgs<ExtArgs>
   _count?: boolean | Prisma.EmployeeCountOutputTypeDefaultArgs<ExtArgs>
@@ -2729,6 +2958,7 @@ export type EmployeeInclude<ExtArgs extends runtime.Types.Extensions.InternalArg
   reportingTo?: boolean | Prisma.Employee$reportingToArgs<ExtArgs>
   subordinates?: boolean | Prisma.Employee$subordinatesArgs<ExtArgs>
   timesheets?: boolean | Prisma.Employee$timesheetsArgs<ExtArgs>
+  reviewedTimesheets?: boolean | Prisma.Employee$reviewedTimesheetsArgs<ExtArgs>
   ledProjects?: boolean | Prisma.Employee$ledProjectsArgs<ExtArgs>
   projects?: boolean | Prisma.Employee$projectsArgs<ExtArgs>
   _count?: boolean | Prisma.EmployeeCountOutputTypeDefaultArgs<ExtArgs>
@@ -2752,6 +2982,7 @@ export type $EmployeePayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     reportingTo: Prisma.$EmployeePayload<ExtArgs> | null
     subordinates: Prisma.$EmployeePayload<ExtArgs>[]
     timesheets: Prisma.$TimesheetPayload<ExtArgs>[]
+    reviewedTimesheets: Prisma.$TimesheetPayload<ExtArgs>[]
     ledProjects: Prisma.$ProjectPayload<ExtArgs>[]
     projects: Prisma.$ProjectMemberPayload<ExtArgs>[]
   }
@@ -3186,6 +3417,7 @@ export interface Prisma__EmployeeClient<T, Null = never, ExtArgs extends runtime
   reportingTo<T extends Prisma.Employee$reportingToArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Employee$reportingToArgs<ExtArgs>>): Prisma.Prisma__EmployeeClient<runtime.Types.Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   subordinates<T extends Prisma.Employee$subordinatesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Employee$subordinatesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   timesheets<T extends Prisma.Employee$timesheetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Employee$timesheetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TimesheetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  reviewedTimesheets<T extends Prisma.Employee$reviewedTimesheetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Employee$reviewedTimesheetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TimesheetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   ledProjects<T extends Prisma.Employee$ledProjectsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Employee$ledProjectsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   projects<T extends Prisma.Employee$projectsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Employee$projectsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProjectMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
@@ -3714,6 +3946,30 @@ export type Employee$subordinatesArgs<ExtArgs extends runtime.Types.Extensions.I
  * Employee.timesheets
  */
 export type Employee$timesheetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Timesheet
+   */
+  select?: Prisma.TimesheetSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Timesheet
+   */
+  omit?: Prisma.TimesheetOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TimesheetInclude<ExtArgs> | null
+  where?: Prisma.TimesheetWhereInput
+  orderBy?: Prisma.TimesheetOrderByWithRelationInput | Prisma.TimesheetOrderByWithRelationInput[]
+  cursor?: Prisma.TimesheetWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TimesheetScalarFieldEnum | Prisma.TimesheetScalarFieldEnum[]
+}
+
+/**
+ * Employee.reviewedTimesheets
+ */
+export type Employee$reviewedTimesheetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the Timesheet
    */

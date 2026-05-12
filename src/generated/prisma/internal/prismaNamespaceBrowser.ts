@@ -58,6 +58,7 @@ export const ModelName = {
   Employee: 'Employee',
   Timesheet: 'Timesheet',
   TimesheetEntry: 'TimesheetEntry',
+  TimesheetTask: 'TimesheetTask',
   User: 'User',
   Session: 'Session',
   Account: 'Account',
@@ -188,6 +189,7 @@ export const TimesheetScalarFieldEnum = {
   reviewedAt: 'reviewedAt',
   reviewedBy: 'reviewedBy',
   rejectionNote: 'rejectionNote',
+  reportingLeadId: 'reportingLeadId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   employeeId: 'employeeId',
@@ -212,6 +214,23 @@ export const TimesheetEntryScalarFieldEnum = {
 } as const
 
 export type TimesheetEntryScalarFieldEnum = (typeof TimesheetEntryScalarFieldEnum)[keyof typeof TimesheetEntryScalarFieldEnum]
+
+
+export const TimesheetTaskScalarFieldEnum = {
+  id: 'id',
+  startTime: 'startTime',
+  endTime: 'endTime',
+  subject: 'subject',
+  description: 'description',
+  isLearning: 'isLearning',
+  links: 'links',
+  projectId: 'projectId',
+  timesheetEntryId: 'timesheetEntryId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type TimesheetTaskScalarFieldEnum = (typeof TimesheetTaskScalarFieldEnum)[keyof typeof TimesheetTaskScalarFieldEnum]
 
 
 export const UserScalarFieldEnum = {
@@ -288,6 +307,7 @@ export const ProjectScalarFieldEnum = {
   budget: 'budget',
   startDate: 'startDate',
   endDate: 'endDate',
+  isLearning: 'isLearning',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   organizationId: 'organizationId',
@@ -315,6 +335,14 @@ export const SortOrder = {
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
+export const NullableJsonNullValueInput = {
+  DbNull: DbNull,
+  JsonNull: JsonNull
+} as const
+
+export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
 export const QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
@@ -329,4 +357,13 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const JsonNullValueFilter = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+  AnyNull: AnyNull
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 

@@ -77,6 +77,11 @@ export type Timesheet = Prisma.TimesheetModel
  */
 export type TimesheetEntry = Prisma.TimesheetEntryModel
 /**
+ * Model TimesheetTask
+ * 
+ */
+export type TimesheetTask = Prisma.TimesheetTaskModel
+/**
  * Model User
  * 
  */

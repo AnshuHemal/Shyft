@@ -14,8 +14,6 @@ import {
   formatHours,
   isWithinEditWindow,
   isFutureDate,
-  TIME_OPTIONS,
-  BREAK_OPTIONS,
 } from "@/lib/timesheet-utils";
 import {
   ChevronLeftIcon,
@@ -23,27 +21,35 @@ import {
   SendIcon,
   CheckCircle2Icon,
   ClockIcon,
-  PlusIcon,
-  XIcon,
-  LinkIcon,
-  SaveIcon,
   CalendarDaysIcon,
+  ExternalLinkIcon,
+  ChevronDownIcon,
+  CoffeeIcon,
 } from "lucide-react";
+import { TaskLogModal } from "./task-log-modal";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
 type DayType = "WORKING" | "HOLIDAY" | "LEAVE" | "HALF_DAY" | "WEEKEND";
 type TimesheetStatus = "DRAFT" | "SUBMITTED" | "APPROVED" | "REJECTED";
 
+interface TimesheetTask {
+  id: string;
+  startTime: string;
+  endTime: string;
+  subject: string;
+  description: string | null;
+  isLearning: boolean;
+  links: { url: string; label: string }[];
+  project: { id: string; name: string; isLearning: boolean } | null;
+}
+
 interface TimesheetEntry {
   id: string;
   date: string;
   dayType: DayType;
-  startTime: string | null;
-  endTime: string | null;
-  breakMinutes: number | null;
-  workDone: string | null;
-  links: string[];
+  breakMinutes: number;
+  tasks: TimesheetTask[];
 }
 
 interface Timesheet {
@@ -53,6 +59,8 @@ interface Timesheet {
   status: TimesheetStatus;
   submittedAt: string | null;
   rejectionNote: string | null;
+  reportingLeadId: string | null;
+  reportingLead?: { firstName: string; lastName: string } | null;
   entries: TimesheetEntry[];
 }
 
@@ -68,33 +76,21 @@ const STATUS_CONFIG: Record<TimesheetStatus, { label: string; color: string }> =
 const DAY_TYPE_CONFIG: Record<DayType, { label: string; rowClass: string; badgeClass: string }> = {
   WORKING: { label: "Working", rowClass: "", badgeClass: "bg-transparent text-muted-foreground border-transparent" },
   HOLIDAY: { label: "Holiday", rowClass: "bg-blue-500/5", badgeClass: "bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20" },
-  WEEKEND: { label: "Weekend", rowClass: "bg-muted/30", badgeClass: "bg-muted text-muted-foreground border-border" },
+  WEEKEND: { label: "Weekend", rowClass: "bg-emerald-500/5", badgeClass: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20" },
   LEAVE: { label: "Leave", rowClass: "bg-yellow-500/5", badgeClass: "bg-yellow-500/10 text-yellow-600 dark:text-yellow-400 border-yellow-500/20" },
   HALF_DAY: { label: "Half day", rowClass: "bg-purple-500/5", badgeClass: "bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20" },
 };
 
-// ── Row editor component ──────────────────────────────────────────────────────
+// ── Row display component ──────────────────────────────────────────────────────
 
-interface RowEditorProps {
+interface RowDisplayProps {
   entry: TimesheetEntry;
-  onSave: (id: string, data: Partial<TimesheetEntry>) => Promise<void>;
+  onEdit: (entry: TimesheetEntry) => void;
   readOnly: boolean;
   holidayName?: string;
 }
 
-function RowEditor({ entry, onSave, readOnly, holidayName }: RowEditorProps) {
-  const [editing, setEditing] = React.useState(false);
-  const [saving, setSaving] = React.useState(false);
-  const [local, setLocal] = React.useState({
-    dayType: entry.dayType,
-    startTime: entry.startTime ?? "",
-    endTime: entry.endTime ?? "",
-    breakMinutes: String(entry.breakMinutes ?? 0),
-    workDone: entry.workDone ?? "",
-    links: entry.links ?? [],
-  });
-  const [newLink, setNewLink] = React.useState("");
-
+function RowDisplay({ entry, onEdit, readOnly, holidayName }: RowDisplayProps) {
   const date = new Date(entry.date);
   const dayName = DAY_NAMES[date.getUTCDay()];
   const dateStr = date.toLocaleDateString("en-IN", {
@@ -107,224 +103,147 @@ function RowEditor({ entry, onSave, readOnly, holidayName }: RowEditorProps) {
   const canEdit =
     !readOnly &&
     !isFutureDate(date) &&
-    isWithinEditWindow(date) &&
-    (entry.dayType === "WORKING" || entry.dayType === "HALF_DAY" || entry.dayType === "LEAVE");
-
-  const netMins =
-    local.startTime && local.endTime
-      ? calcNetMinutes(local.startTime, local.endTime, Number(local.breakMinutes))
-      : null;
+    isWithinEditWindow(date);
 
   const cfg = DAY_TYPE_CONFIG[entry.dayType];
 
-  async function handleSave() {
-    setSaving(true);
-    try {
-      await onSave(entry.id, {
-        dayType: local.dayType,
-        startTime: local.startTime || null,
-        endTime: local.endTime || null,
-        breakMinutes: Number(local.breakMinutes),
-        workDone: local.workDone || null,
-        links: local.links,
-      });
-      setEditing(false);
-    } finally {
-      setSaving(false);
-    }
-  }
-
-  function addLink() {
-    const url = newLink.trim();
-    if (!url) return;
-    setLocal((l) => ({ ...l, links: [...l.links, url] }));
-    setNewLink("");
-  }
-
-  function removeLink(i: number) {
-    setLocal((l) => ({ ...l, links: l.links.filter((_, idx) => idx !== i) }));
-  }
+  // Calculate total minutes from tasks minus breaks
+  const totalTaskMinutes = entry.tasks.reduce((acc, t) => acc + calcNetMinutes(t.startTime, t.endTime, 0), 0);
+  const netMinutes = Math.max(0, totalTaskMinutes - (entry.breakMinutes || 0));
 
   return (
-    <tr className={cn("border-b border-border/60 transition-colors", cfg.rowClass, editing && "ring-2 ring-inset ring-primary/20")}>
+    <tr className={cn("border-b border-border/60 transition-colors group/row", cfg.rowClass)}>
       {/* Date */}
-      <td className="px-3 py-3 text-sm font-mono text-muted-foreground whitespace-nowrap w-28">
+      <td className="px-4 py-4 text-[14px] font-mono font-medium text-muted-foreground whitespace-nowrap w-28">
         {dateStr}
       </td>
       {/* Day */}
-      <td className="px-3 py-3 text-sm text-muted-foreground w-16">{dayName}</td>
+      <td className="px-4 py-4 text-sm text-muted-foreground w-16">{dayName}</td>
       {/* Day type */}
-      <td className="px-3 py-3 w-28">
-        {editing && (local.dayType === "WORKING" || local.dayType === "LEAVE" || local.dayType === "HALF_DAY") ? (
-          <select
-            value={local.dayType}
-            onChange={(e) => setLocal((l) => ({ ...l, dayType: e.target.value as DayType }))}
-            className="h-7 rounded-md border border-input bg-transparent px-2 text-xs focus:outline-none focus:ring-2 focus:ring-ring/50"
-          >
-            <option value="WORKING">Working</option>
-            <option value="HALF_DAY">Half day</option>
-            <option value="LEAVE">Leave</option>
-          </select>
-        ) : (
-          <div className="space-y-0.5">
-            {entry.dayType === "HOLIDAY" && holidayName ? (
-              <Tooltip>
-                <TooltipTrigger className={cn("inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-medium cursor-help", cfg.badgeClass)}>
-                  {cfg.label}
-                </TooltipTrigger>
-                <TooltipContent side="top" className="max-w-xs">
-                  <p className="text-sm font-medium">{holidayName}</p>
-                </TooltipContent>
-              </Tooltip>
-            ) : (
-              <span className={cn("inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-medium", cfg.badgeClass)}>
-                {cfg.label}
-              </span>
-            )}
-          </div>
-        )}
+      <td className="px-4 py-4 w-32">
+        <div className="space-y-0.5">
+          {entry.dayType === "HOLIDAY" && holidayName ? (
+            <Tooltip>
+              <TooltipTrigger
+                render={
+                  <div className={cn("inline-flex items-center rounded-full border px-2.5 py-0.5 text-[12px] font-bold cursor-help", cfg.badgeClass)}>
+                    {cfg.label}
+                  </div>
+                }
+              />
+              <TooltipContent side="top" className="max-w-xs">
+                <p className="text-sm font-medium">{holidayName}</p>
+              </TooltipContent>
+            </Tooltip>
+          ) : (
+            <span className={cn("inline-flex items-center rounded-full border px-2.5 py-0.5 text-[12px] font-bold", cfg.badgeClass)}>
+              {cfg.label}
+            </span>
+          )}
+        </div>
       </td>
-      {/* Time duration */}
-      <td className="px-3 py-3 w-64">
-        {editing && (local.dayType === "WORKING" || local.dayType === "HALF_DAY") ? (
-          <div className="flex items-center gap-1.5 flex-wrap">
-            <select
-              value={local.startTime}
-              onChange={(e) => setLocal((l) => ({ ...l, startTime: e.target.value }))}
-              className="h-7 rounded-md border border-input bg-transparent px-2 text-xs focus:outline-none focus:ring-2 focus:ring-ring/50"
-            >
-              <option value="">Start</option>
-              {TIME_OPTIONS.map((t) => (
-                <option key={t.value} value={t.value}>{t.label}</option>
-              ))}
-            </select>
-            <span className="text-xs text-muted-foreground">to</span>
-            <select
-              value={local.endTime}
-              onChange={(e) => setLocal((l) => ({ ...l, endTime: e.target.value }))}
-              className="h-7 rounded-md border border-input bg-transparent px-2 text-xs focus:outline-none focus:ring-2 focus:ring-ring/50"
-            >
-              <option value="">End</option>
-              {TIME_OPTIONS.map((t) => (
-                <option key={t.value} value={t.value}>{t.label}</option>
-              ))}
-            </select>
-            <select
-              value={local.breakMinutes}
-              onChange={(e) => setLocal((l) => ({ ...l, breakMinutes: e.target.value }))}
-              className="h-7 rounded-md border border-input bg-transparent px-2 text-xs focus:outline-none focus:ring-2 focus:ring-ring/50"
-            >
-              {BREAK_OPTIONS.map((b) => (
-                <option key={b.value} value={b.value}>{b.label}</option>
-              ))}
-            </select>
+      {/* Time duration summary */}
+      <td className="px-4 py-4 w-72">
+        {entry.tasks.length > 0 ? (
+          <div className="space-y-1.5">
+            {entry.tasks.map((task, i) => (
+              <div key={i} className="flex items-center gap-2 text-[13px]">
+                <span className="font-bold tabular-nums text-muted-foreground/80">{task.startTime}-{task.endTime}</span>
+                {(task.project || task.isLearning) && (
+                  <div className="flex items-center gap-1">
+                    {task.project && (
+                      <span className="text-primary font-bold px-1.5 rounded bg-primary/5 border border-primary/10">
+                        {task.project.name}
+                      </span>
+                    )}
+                    {(task.project?.isLearning || task.isLearning) && (
+                      <span className="text-[12px] font-bold text-amber-600 bg-amber-500/10 px-1.5 rounded border border-amber-500/20 uppercase tracking-tighter">
+                        Lrn
+                      </span>
+                    )}
+                  </div>
+                )}
+              </div>
+            ))}
           </div>
         ) : (
-          <div className="text-xs text-muted-foreground">
-            {entry.startTime && entry.endTime ? (
-              <div className="space-y-0.5">
-                <p className="font-medium text-foreground">
-                  {entry.startTime} – {entry.endTime}
-                </p>
-                <p>Break: {entry.breakMinutes ?? 0} min · Net: {formatHours(calcNetMinutes(entry.startTime, entry.endTime, entry.breakMinutes ?? 0))}</p>
-              </div>
-            ) : (
-              <span className="text-muted-foreground/50">—</span>
-            )}
-          </div>
+          <span className="text-muted-foreground/40 text-xs">—</span>
         )}
       </td>
       {/* Net hours */}
-      <td className="px-3 py-3 text-sm tabular-nums w-20">
-        {netMins !== null && netMins > 0 ? (
-          <span className="font-medium text-foreground">{formatHours(netMins)}</span>
-        ) : entry.startTime && entry.endTime ? (
-          <span className="font-medium text-foreground">
-            {formatHours(calcNetMinutes(entry.startTime, entry.endTime, entry.breakMinutes ?? 0))}
-          </span>
-        ) : (
-          <span className="text-muted-foreground/50">—</span>
-        )}
-      </td>
-      {/* Work done */}
-      <td className="px-3 py-3 min-w-[200px]">
-        {editing ? (
-          <textarea
-            rows={3}
-            placeholder="Describe what you worked on…"
-            value={local.workDone}
-            onChange={(e) => setLocal((l) => ({ ...l, workDone: e.target.value }))}
-            className="w-full rounded-md border border-input bg-transparent px-2.5 py-1.5 text-xs placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 resize-none"
-          />
-        ) : (
-          <p className="text-xs text-foreground whitespace-pre-wrap line-clamp-3">
-            {entry.workDone || <span className="text-muted-foreground/50">—</span>}
-          </p>
-        )}
-      </td>
-      {/* Links */}
-      <td className="px-3 py-3 w-40">
-        {editing ? (
-          <div className="space-y-1.5">
-            {local.links.map((link, i) => (
-              <div key={i} className="flex items-center gap-1">
-                <a href={link} target="_blank" rel="noopener noreferrer" className="text-xs text-primary truncate max-w-[100px] hover:underline">
-                  {link.replace(/^https?:\/\//, "").slice(0, 20)}…
-                </a>
-                <button type="button" onClick={() => removeLink(i)} className="text-muted-foreground hover:text-destructive">
-                  <XIcon className="size-3" />
-                </button>
-              </div>
-            ))}
-            <div className="flex gap-1">
-              <input
-                type="url"
-                placeholder="https://…"
-                value={newLink}
-                onChange={(e) => setNewLink(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addLink())}
-                className="flex-1 h-6 rounded border border-input bg-transparent px-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-ring/50 min-w-0"
-              />
-              <button type="button" onClick={addLink} className="text-primary hover:text-primary/80">
-                <PlusIcon className="size-3.5" />
-              </button>
-            </div>
-          </div>
-        ) : (
+      <td className="px-4 py-4 w-32">
+        {netMinutes > 0 ? (
           <div className="space-y-1">
-            {entry.links.length > 0 ? (
-              entry.links.map((link, i) => (
-                <a key={i} href={link} target="_blank" rel="noopener noreferrer"
-                  className="flex items-center gap-1 text-xs text-primary hover:underline truncate">
-                  <LinkIcon className="size-3 shrink-0" />
-                  <span className="truncate">{link.replace(/^https?:\/\//, "").slice(0, 25)}</span>
-                </a>
-              ))
-            ) : (
-              <span className="text-muted-foreground/50 text-xs">—</span>
+            <span className="text-base font-black text-foreground tabular-nums">{formatHours(netMinutes)}</span>
+            {entry.breakMinutes > 0 && (
+              <p className="text-[12px] text-amber-600 font-bold flex items-center gap-1">
+                <CoffeeIcon className="size-3" />
+                {entry.breakMinutes}m break
+              </p>
             )}
           </div>
+        ) : (
+          <span className="text-muted-foreground/30">—</span>
         )}
       </td>
-      {/* Actions */}
-      <td className="px-3 py-3 w-24">
-        {canEdit ? (
-          editing ? (
-            <div className="flex gap-1.5">
-              <Button size="xs" className="gap-1 h-7 px-2" onClick={handleSave} disabled={saving}>
-                {saving ? <Spinner className="size-3" /> : <SaveIcon className="size-3" />}
-                Save
-              </Button>
-              <Button size="xs" variant="ghost" className="h-7 px-2" onClick={() => setEditing(false)} disabled={saving}>
-                Cancel
-              </Button>
-            </div>
+      {/* Work done / Tasks */}
+      <td className="px-4 py-4 min-w-[300px]">
+        {entry.tasks.length > 0 ? (
+          <div className="space-y-3">
+            {entry.tasks.map((task, i) => (
+              <div key={i} className="space-y-1">
+                <p className="text-sm font-bold text-foreground line-clamp-1 leading-tight">{task.subject}</p>
+                {task.description && (
+                  <p className="text-[13px] text-foreground line-clamp-2 leading-relaxed">{task.description}</p>
+                )}
+              </div>
+            ))}
+          </div>
+        ) : (
+          <span className="text-muted-foreground/30 text-xs">—</span>
+        )}
+      </td>
+      {/* Links (Masked) */}
+      <td className="px-4 py-4 w-52">
+        <div className="flex flex-wrap gap-1.5">
+          {entry.tasks.flatMap(t => t.links || []).length > 0 ? (
+            entry.tasks.flatMap(t => t.links || []).map((link: any, i) => (
+              <Tooltip key={i}>
+                <TooltipTrigger
+                  render={
+                    <a
+                      href={link.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 px-2 py-1 rounded bg-muted border border-border/50 text-[12px] font-medium text-primary hover:bg-primary/5 transition-colors max-w-[120px]"
+                    >
+                      <ExternalLinkIcon className="size-3 shrink-0" />
+                      <span className="truncate">{link.label || "Link"}</span>
+                    </a>
+                  }
+                />
+                <TooltipContent side="top">
+                  <p className="text-[11px] font-mono">{link.url}</p>
+                </TooltipContent>
+              </Tooltip>
+            ))
           ) : (
-            <Button size="xs" variant="outline" className="h-7 px-2" onClick={() => setEditing(true)}>
-              Edit
-            </Button>
-          )
-        ) : null}
+            <span className="text-muted-foreground/30 text-xs">—</span>
+          )}
+        </div>
+      </td>
+      {/* Actions */}
+      <td className="px-4 py-4 w-28 text-right">
+        {canEdit && (entry.dayType === "WORKING" || entry.dayType === "HALF_DAY" || entry.dayType === "LEAVE") && (
+          <Button
+            size="xs"
+            variant="outline"
+            className="h-8 px-4 text-xs font-bold bg-background group-hover/row:border-primary group-hover/row:text-primary transition-all shadow-sm rounded-lg"
+            onClick={() => onEdit(entry)}
+          >
+            Log Tasks
+          </Button>
+        )}
       </td>
     </tr>
   );
@@ -341,6 +260,24 @@ export function TimesheetView() {
   const [loading, setLoading] = React.useState(true);
   const [submitting, setSubmitting] = React.useState(false);
   const [mounted, setMounted] = React.useState(false);
+  const [isPickerOpen, setIsPickerOpen] = React.useState(false);
+  const pickerRef = React.useRef<HTMLDivElement>(null);
+
+  // Close picker on click outside
+  React.useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (pickerRef.current && !pickerRef.current.contains(event.target as Node)) {
+        setIsPickerOpen(false);
+      }
+    }
+    if (isPickerOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isPickerOpen]);
+
+  // Modal state
+  const [editingEntry, setEditingEntry] = React.useState<TimesheetEntry | null>(null);
 
   React.useEffect(() => {
     const t = setTimeout(() => setMounted(true), 50);
@@ -367,7 +304,7 @@ export function TimesheetView() {
     fetchTimesheet();
   }, [month, year]);
 
-  async function handleSaveEntry(id: string, data: Partial<TimesheetEntry>) {
+  async function handleSaveEntry(id: string, data: any) {
     const res = await fetch(`/api/timesheets/entries/${id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
@@ -382,14 +319,14 @@ export function TimesheetView() {
     setTimesheet((ts) =>
       ts
         ? {
-            ...ts,
-            entries: ts.entries.map((e) =>
-              e.id === id ? { ...e, ...json.entry } : e
-            ),
-          }
+          ...ts,
+          entries: ts.entries.map((e) =>
+            e.id === id ? { ...e, ...json.entry } : e
+          ),
+        }
         : ts
     );
-    toast.success("Entry saved.");
+    toast.success("Log saved successfully.");
   }
 
   async function handleSubmit() {
@@ -423,18 +360,16 @@ export function TimesheetView() {
   }
 
   // Summary stats
-  const workingEntries = timesheet?.entries.filter(
-    (e) => e.dayType === "WORKING" && e.startTime && e.endTime
-  ) ?? [];
-  const totalMins = workingEntries.reduce(
-    (acc, e) => acc + calcNetMinutes(e.startTime!, e.endTime!, e.breakMinutes ?? 0),
+  const totalMins = timesheet?.entries.reduce(
+    (acc, e) => acc + Math.max(0, e.tasks.reduce((tAcc, t) => tAcc + calcNetMinutes(t.startTime, t.endTime, 0), 0) - (e.breakMinutes || 0)),
     0
-  );
-  const daysLogged = workingEntries.length;
+  ) ?? 0;
+
+  const daysWithTasks = timesheet?.entries.filter(e => e.tasks.length > 0).length ?? 0;
   const status = (timesheet?.status ?? "DRAFT") as TimesheetStatus;
   const statusCfg = STATUS_CONFIG[status];
   const canEdit = status === "DRAFT" || status === "REJECTED";
-  const canSubmit = canEdit && daysLogged > 0;
+  const canSubmit = canEdit && daysWithTasks > 0;
 
   return (
     <div
@@ -447,24 +382,84 @@ export function TimesheetView() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">My Timesheet</h1>
-          <p className="text-sm text-muted-foreground mt-1">
-            Fill in your daily work log. You can edit entries within 48 hours.
+          <p className="text-md text-muted-foreground mt-1">
+            Log your daily project tasks and activities.
           </p>
         </div>
 
         {/* Month navigator */}
-        <div className="flex items-center gap-2">
-          <Button variant="outline" size="icon-sm" onClick={() => navigateMonth(-1)}>
+        <div className="flex items-center gap-2 relative">
+          <Button variant="outline" size="icon-sm" onClick={() => navigateMonth(-1)} className="rounded-xl">
             <ChevronLeftIcon className="size-4" />
           </Button>
-          <span className="text-sm font-medium min-w-32 text-center">
-            {MONTH_NAMES[month - 1]} {year}
-          </span>
+          
+          <div className="relative" ref={pickerRef}>
+            <button 
+              onClick={() => setIsPickerOpen(!isPickerOpen)}
+              className="group flex items-center gap-2 px-4 py-2 rounded-xl border border-border/60 bg-card hover:bg-muted/50 hover:border-primary/30 transition-all duration-300 shadow-sm"
+            >
+              <CalendarDaysIcon className="size-4 text-primary group-hover:scale-110 transition-transform" />
+              <span className="text-sm font-black tracking-tight min-w-[100px]">
+                {MONTH_NAMES[month - 1]} {year}
+              </span>
+              <ChevronDownIcon className={cn("size-3.5 text-muted-foreground transition-transform duration-300", isPickerOpen && "rotate-180")} />
+            </button>
+
+            {/* Month Picker Popover */}
+            {isPickerOpen && (
+              <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 z-50 p-4 bg-card border border-border shadow-2xl rounded-2xl w-[280px] animate-in fade-in zoom-in-95 duration-200">
+                <div className="flex items-center justify-between mb-4 pb-2 border-b border-border/50">
+                  <button onClick={() => setYear(y => y - 1)} className="p-1 hover:bg-muted rounded-lg transition-colors">
+                    <ChevronLeftIcon className="size-4" />
+                  </button>
+                  <span className="text-sm font-bold tracking-widest uppercase">{year}</span>
+                  <button 
+                    onClick={() => setYear(y => y + 1)} 
+                    disabled={year >= now.getFullYear()}
+                    className="p-1 hover:bg-muted rounded-lg transition-colors disabled:opacity-30"
+                  >
+                    <ChevronRightIcon className="size-4" />
+                  </button>
+                </div>
+                
+                <div className="grid grid-cols-3 gap-2">
+                  {MONTH_NAMES.map((name, i) => {
+                    const mNum = i + 1;
+                    const isSelected = month === mNum;
+                    const isFuture = year === now.getFullYear() && mNum > now.getMonth() + 1;
+                    
+                    return (
+                      <button
+                        key={name}
+                        disabled={isFuture}
+                        onClick={() => {
+                          setMonth(mNum);
+                          setIsPickerOpen(false);
+                        }}
+                        className={cn(
+                          "py-2 text-[10px] font-black uppercase tracking-wider rounded-lg transition-all",
+                          isSelected 
+                            ? "bg-primary text-primary-foreground shadow-md" 
+                            : isFuture 
+                              ? "opacity-20 cursor-not-allowed" 
+                              : "hover:bg-muted text-muted-foreground hover:text-foreground"
+                        )}
+                      >
+                        {name.substring(0, 3)}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </div>
+
           <Button
             variant="outline"
             size="icon-sm"
             onClick={() => navigateMonth(1)}
             disabled={month === now.getMonth() + 1 && year === now.getFullYear()}
+            className="rounded-xl"
           >
             <ChevronRightIcon className="size-4" />
           </Button>
@@ -473,32 +468,38 @@ export function TimesheetView() {
 
       {/* Status + summary bar */}
       {timesheet && (
-        <div className="flex flex-col sm:flex-row sm:items-center gap-3 rounded-xl border border-border/60 bg-card px-4 py-3">
-          <span className={cn("inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium", statusCfg.color)}>
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3 rounded-2xl border border-border/60 bg-card/50 backdrop-blur-sm px-5 py-4">
+          <span className={cn("inline-flex items-center rounded-full border px-3 py-0.5 text-[11px] font-bold uppercase tracking-tight", statusCfg.color)}>
             {statusCfg.label}
           </span>
-          <div className="flex items-center gap-4 text-sm text-muted-foreground">
-            <span className="flex items-center gap-1.5">
-              <CalendarDaysIcon className="size-3.5" />
-              {daysLogged} days logged
+          {status === "SUBMITTED" && timesheet.reportingLead && (
+            <div className="flex items-center gap-2 px-3 py-1 rounded-xl bg-primary/5 border border-primary/10 text-[11px]">
+              <span className="text-muted-foreground font-medium italic">Pending review by:</span>
+              <span className="text-primary font-bold">{timesheet.reportingLead.firstName} {timesheet.reportingLead.lastName}</span>
+            </div>
+          )}
+          <div className="flex items-center gap-6 text-sm text-muted-foreground ml-2">
+            <span className="flex items-center gap-2">
+              <CalendarDaysIcon className="size-4 text-primary/60" />
+              <span className="font-medium text-foreground">{daysWithTasks}</span> days logged
             </span>
-            <span className="flex items-center gap-1.5">
-              <ClockIcon className="size-3.5" />
-              {formatHours(totalMins)} total
+            <span className="flex items-center gap-2">
+              <ClockIcon className="size-4 text-primary/60" />
+              <span className="font-medium text-foreground">{formatHours(totalMins)}</span> total duration
             </span>
           </div>
-          <div className="sm:ml-auto flex gap-2">
+          <div className="sm:ml-auto flex gap-3">
             {canSubmit && (
-              <Button size="sm" className="gap-2" onClick={handleSubmit} disabled={submitting}>
+              <Button size="sm" className="gap-2 px-4 shadow-lg shadow-primary/20" onClick={handleSubmit} disabled={submitting}>
                 {submitting ? <Spinner className="size-4" /> : <SendIcon className="size-4" />}
                 {submitting ? "Submitting…" : "Submit for review"}
               </Button>
             )}
             {status === "APPROVED" && (
-              <span className="flex items-center gap-1.5 text-sm text-green-600 dark:text-green-400 font-medium">
+              <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-green-500/10 text-green-600 dark:text-green-400 text-sm font-bold border border-green-500/20">
                 <CheckCircle2Icon className="size-4" />
                 Approved
-              </span>
+              </div>
             )}
           </div>
         </div>
@@ -506,26 +507,26 @@ export function TimesheetView() {
 
       {/* Rejection note */}
       {timesheet?.rejectionNote && (
-        <div className="rounded-xl border border-destructive/20 bg-destructive/5 px-4 py-3">
-          <p className="text-sm font-medium text-destructive mb-1">Rejection note from HR</p>
-          <p className="text-sm text-muted-foreground">{timesheet.rejectionNote}</p>
+        <div className="rounded-2xl border border-destructive/20 bg-destructive/5 px-5 py-4">
+          <p className="text-sm font-bold text-destructive mb-1 uppercase tracking-tight">Review Feedback</p>
+          <p className="text-sm text-muted-foreground leading-relaxed">{timesheet.rejectionNote}</p>
         </div>
       )}
 
       {/* Table */}
       {loading ? (
-        <div className="flex items-center justify-center py-20 gap-3 text-muted-foreground">
-          <Spinner className="size-5" />
-          Loading timesheet…
+        <div className="flex flex-col items-center justify-center py-24 gap-4 text-muted-foreground bg-muted/5 rounded-3xl border border-dashed">
+          <Spinner className="size-6" />
+          <p className="text-sm font-medium">Preparing your work logs...</p>
         </div>
       ) : (
-        <div className="rounded-xl border border-border/60 bg-card overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
+        <div className="rounded-3xl border border-border/50 bg-card overflow-hidden shadow-sm">
+          <div className="overflow-x-auto no-scrollbar">
+            <table className="w-full text-md">
               <thead>
-                <tr className="border-b border-border/60 bg-muted/30">
-                  {["Date", "Day", "Type", "Time Duration", "Net Hours", "Work Done", "Links", ""].map((h) => (
-                    <th key={h} className="px-3 py-2.5 text-left text-xs font-medium text-muted-foreground whitespace-nowrap">
+                <tr className="border-b border-border/50 bg-muted/30">
+                  {["Date", "Day", "Status", "Timeline", "Productivity", "Activity & Projects", "Documentation", ""].map((h) => (
+                    <th key={h} className="px-4 py-4 text-left text-[12px] font-black text-muted-foreground/80 uppercase tracking-[0.1em] whitespace-nowrap">
                       {h}
                     </th>
                   ))}
@@ -533,18 +534,18 @@ export function TimesheetView() {
               </thead>
               <tbody>
                 {timesheet?.entries.map((entry) => (
-                  <RowEditor
+                  <RowDisplay
                     key={entry.id}
                     entry={entry}
-                    onSave={handleSaveEntry}
+                    onEdit={setEditingEntry}
                     readOnly={!canEdit}
                     holidayName={
                       entry.dayType === "HOLIDAY"
                         ? holidays.find(
-                            (h) =>
-                              h.date.split("T")[0] ===
-                              entry.date.split("T")[0]
-                          )?.name
+                          (h) =>
+                            h.date.split("T")[0] ===
+                            entry.date.split("T")[0]
+                        )?.name
                         : undefined
                     }
                   />
@@ -554,6 +555,14 @@ export function TimesheetView() {
           </div>
         </div>
       )}
+
+      {/* Task Edit Modal */}
+      <TaskLogModal
+        isOpen={!!editingEntry}
+        onClose={() => setEditingEntry(null)}
+        entry={editingEntry}
+        onSave={handleSaveEntry}
+      />
     </div>
   );
 }

@@ -44,6 +44,7 @@ import {
   ChevronsUpDownIcon,
   BellIcon,
   CalendarDaysIcon,
+  CheckCircle2Icon,
 } from "lucide-react";
 
 const NAV_ITEMS = [
@@ -65,6 +66,14 @@ const NAV_ITEMS = [
   },
 ];
 
+const LEAD_NAV_ITEMS = [
+  {
+    label: "Team Approvals",
+    href: "/employee/approvals",
+    icon: CheckCircle2Icon,
+  },
+];
+
 function getInitials(name: string) {
   return name
     .split(" ")
@@ -78,6 +87,7 @@ interface EmployeeShellProps {
   children: React.ReactNode;
   user: User;
   orgName: string;
+  isLead?: boolean;
   employeeProfile: {
     firstName: string;
     lastName: string;
@@ -91,6 +101,7 @@ export function EmployeeShell({
   children,
   user,
   orgName,
+  isLead = false,
   employeeProfile,
 }: EmployeeShellProps) {
   const pathname = usePathname();
@@ -156,6 +167,28 @@ export function EmployeeShell({
               </SidebarMenu>
             </SidebarGroupContent>
           </SidebarGroup>
+
+          {isLead && (
+            <SidebarGroup>
+              <SidebarGroupLabel>Management</SidebarGroupLabel>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  {LEAD_NAV_ITEMS.map((item) => (
+                    <SidebarMenuItem key={item.href}>
+                      <SidebarMenuButton
+                        render={<Link href={item.href} />}
+                        isActive={isActive(item.href, item.exact)}
+                        tooltip={item.label}
+                      >
+                        <item.icon />
+                        <span>{item.label}</span>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  ))}
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+          )}
         </SidebarContent>
 
         {/* Footer — user menu */}

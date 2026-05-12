@@ -261,6 +261,7 @@ export type TimesheetEntryWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"TimesheetEntry"> | Date | string
   timesheetId?: Prisma.StringFilter<"TimesheetEntry"> | string
   timesheet?: Prisma.XOR<Prisma.TimesheetScalarRelationFilter, Prisma.TimesheetWhereInput>
+  tasks?: Prisma.TimesheetTaskListRelationFilter
 }
 
 export type TimesheetEntryOrderByWithRelationInput = {
@@ -276,6 +277,7 @@ export type TimesheetEntryOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   timesheetId?: Prisma.SortOrder
   timesheet?: Prisma.TimesheetOrderByWithRelationInput
+  tasks?: Prisma.TimesheetTaskOrderByRelationAggregateInput
 }
 
 export type TimesheetEntryWhereUniqueInput = Prisma.AtLeast<{
@@ -295,6 +297,7 @@ export type TimesheetEntryWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"TimesheetEntry"> | Date | string
   timesheetId?: Prisma.StringFilter<"TimesheetEntry"> | string
   timesheet?: Prisma.XOR<Prisma.TimesheetScalarRelationFilter, Prisma.TimesheetWhereInput>
+  tasks?: Prisma.TimesheetTaskListRelationFilter
 }, "id" | "timesheetId_date">
 
 export type TimesheetEntryOrderByWithAggregationInput = {
@@ -345,6 +348,7 @@ export type TimesheetEntryCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   timesheet: Prisma.TimesheetCreateNestedOneWithoutEntriesInput
+  tasks?: Prisma.TimesheetTaskCreateNestedManyWithoutTimesheetEntryInput
 }
 
 export type TimesheetEntryUncheckedCreateInput = {
@@ -359,6 +363,7 @@ export type TimesheetEntryUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   timesheetId: string
+  tasks?: Prisma.TimesheetTaskUncheckedCreateNestedManyWithoutTimesheetEntryInput
 }
 
 export type TimesheetEntryUpdateInput = {
@@ -373,6 +378,7 @@ export type TimesheetEntryUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   timesheet?: Prisma.TimesheetUpdateOneRequiredWithoutEntriesNestedInput
+  tasks?: Prisma.TimesheetTaskUpdateManyWithoutTimesheetEntryNestedInput
 }
 
 export type TimesheetEntryUncheckedUpdateInput = {
@@ -387,6 +393,7 @@ export type TimesheetEntryUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   timesheetId?: Prisma.StringFieldUpdateOperationsInput | string
+  tasks?: Prisma.TimesheetTaskUncheckedUpdateManyWithoutTimesheetEntryNestedInput
 }
 
 export type TimesheetEntryCreateManyInput = {
@@ -501,6 +508,11 @@ export type TimesheetEntrySumOrderByAggregateInput = {
   breakMinutes?: Prisma.SortOrder
 }
 
+export type TimesheetEntryScalarRelationFilter = {
+  is?: Prisma.TimesheetEntryWhereInput
+  isNot?: Prisma.TimesheetEntryWhereInput
+}
+
 export type TimesheetEntryCreateNestedManyWithoutTimesheetInput = {
   create?: Prisma.XOR<Prisma.TimesheetEntryCreateWithoutTimesheetInput, Prisma.TimesheetEntryUncheckedCreateWithoutTimesheetInput> | Prisma.TimesheetEntryCreateWithoutTimesheetInput[] | Prisma.TimesheetEntryUncheckedCreateWithoutTimesheetInput[]
   connectOrCreate?: Prisma.TimesheetEntryCreateOrConnectWithoutTimesheetInput | Prisma.TimesheetEntryCreateOrConnectWithoutTimesheetInput[]
@@ -556,6 +568,20 @@ export type TimesheetEntryUpdatelinksInput = {
   push?: string | string[]
 }
 
+export type TimesheetEntryCreateNestedOneWithoutTasksInput = {
+  create?: Prisma.XOR<Prisma.TimesheetEntryCreateWithoutTasksInput, Prisma.TimesheetEntryUncheckedCreateWithoutTasksInput>
+  connectOrCreate?: Prisma.TimesheetEntryCreateOrConnectWithoutTasksInput
+  connect?: Prisma.TimesheetEntryWhereUniqueInput
+}
+
+export type TimesheetEntryUpdateOneRequiredWithoutTasksNestedInput = {
+  create?: Prisma.XOR<Prisma.TimesheetEntryCreateWithoutTasksInput, Prisma.TimesheetEntryUncheckedCreateWithoutTasksInput>
+  connectOrCreate?: Prisma.TimesheetEntryCreateOrConnectWithoutTasksInput
+  upsert?: Prisma.TimesheetEntryUpsertWithoutTasksInput
+  connect?: Prisma.TimesheetEntryWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TimesheetEntryUpdateToOneWithWhereWithoutTasksInput, Prisma.TimesheetEntryUpdateWithoutTasksInput>, Prisma.TimesheetEntryUncheckedUpdateWithoutTasksInput>
+}
+
 export type TimesheetEntryCreateWithoutTimesheetInput = {
   id?: string
   date: Date | string
@@ -567,6 +593,7 @@ export type TimesheetEntryCreateWithoutTimesheetInput = {
   links?: Prisma.TimesheetEntryCreatelinksInput | string[]
   createdAt?: Date | string
   updatedAt?: Date | string
+  tasks?: Prisma.TimesheetTaskCreateNestedManyWithoutTimesheetEntryInput
 }
 
 export type TimesheetEntryUncheckedCreateWithoutTimesheetInput = {
@@ -580,6 +607,7 @@ export type TimesheetEntryUncheckedCreateWithoutTimesheetInput = {
   links?: Prisma.TimesheetEntryCreatelinksInput | string[]
   createdAt?: Date | string
   updatedAt?: Date | string
+  tasks?: Prisma.TimesheetTaskUncheckedCreateNestedManyWithoutTimesheetEntryInput
 }
 
 export type TimesheetEntryCreateOrConnectWithoutTimesheetInput = {
@@ -625,6 +653,78 @@ export type TimesheetEntryScalarWhereInput = {
   timesheetId?: Prisma.StringFilter<"TimesheetEntry"> | string
 }
 
+export type TimesheetEntryCreateWithoutTasksInput = {
+  id?: string
+  date: Date | string
+  dayType?: $Enums.DayType
+  startTime?: string | null
+  endTime?: string | null
+  breakMinutes?: number | null
+  workDone?: string | null
+  links?: Prisma.TimesheetEntryCreatelinksInput | string[]
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  timesheet: Prisma.TimesheetCreateNestedOneWithoutEntriesInput
+}
+
+export type TimesheetEntryUncheckedCreateWithoutTasksInput = {
+  id?: string
+  date: Date | string
+  dayType?: $Enums.DayType
+  startTime?: string | null
+  endTime?: string | null
+  breakMinutes?: number | null
+  workDone?: string | null
+  links?: Prisma.TimesheetEntryCreatelinksInput | string[]
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  timesheetId: string
+}
+
+export type TimesheetEntryCreateOrConnectWithoutTasksInput = {
+  where: Prisma.TimesheetEntryWhereUniqueInput
+  create: Prisma.XOR<Prisma.TimesheetEntryCreateWithoutTasksInput, Prisma.TimesheetEntryUncheckedCreateWithoutTasksInput>
+}
+
+export type TimesheetEntryUpsertWithoutTasksInput = {
+  update: Prisma.XOR<Prisma.TimesheetEntryUpdateWithoutTasksInput, Prisma.TimesheetEntryUncheckedUpdateWithoutTasksInput>
+  create: Prisma.XOR<Prisma.TimesheetEntryCreateWithoutTasksInput, Prisma.TimesheetEntryUncheckedCreateWithoutTasksInput>
+  where?: Prisma.TimesheetEntryWhereInput
+}
+
+export type TimesheetEntryUpdateToOneWithWhereWithoutTasksInput = {
+  where?: Prisma.TimesheetEntryWhereInput
+  data: Prisma.XOR<Prisma.TimesheetEntryUpdateWithoutTasksInput, Prisma.TimesheetEntryUncheckedUpdateWithoutTasksInput>
+}
+
+export type TimesheetEntryUpdateWithoutTasksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dayType?: Prisma.EnumDayTypeFieldUpdateOperationsInput | $Enums.DayType
+  startTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  endTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  breakMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  workDone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  links?: Prisma.TimesheetEntryUpdatelinksInput | string[]
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  timesheet?: Prisma.TimesheetUpdateOneRequiredWithoutEntriesNestedInput
+}
+
+export type TimesheetEntryUncheckedUpdateWithoutTasksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dayType?: Prisma.EnumDayTypeFieldUpdateOperationsInput | $Enums.DayType
+  startTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  endTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  breakMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  workDone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  links?: Prisma.TimesheetEntryUpdatelinksInput | string[]
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  timesheetId?: Prisma.StringFieldUpdateOperationsInput | string
+}
+
 export type TimesheetEntryCreateManyTimesheetInput = {
   id?: string
   date: Date | string
@@ -649,6 +749,7 @@ export type TimesheetEntryUpdateWithoutTimesheetInput = {
   links?: Prisma.TimesheetEntryUpdatelinksInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tasks?: Prisma.TimesheetTaskUpdateManyWithoutTimesheetEntryNestedInput
 }
 
 export type TimesheetEntryUncheckedUpdateWithoutTimesheetInput = {
@@ -662,6 +763,7 @@ export type TimesheetEntryUncheckedUpdateWithoutTimesheetInput = {
   links?: Prisma.TimesheetEntryUpdatelinksInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tasks?: Prisma.TimesheetTaskUncheckedUpdateManyWithoutTimesheetEntryNestedInput
 }
 
 export type TimesheetEntryUncheckedUpdateManyWithoutTimesheetInput = {
@@ -678,6 +780,35 @@ export type TimesheetEntryUncheckedUpdateManyWithoutTimesheetInput = {
 }
 
 
+/**
+ * Count Type TimesheetEntryCountOutputType
+ */
+
+export type TimesheetEntryCountOutputType = {
+  tasks: number
+}
+
+export type TimesheetEntryCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  tasks?: boolean | TimesheetEntryCountOutputTypeCountTasksArgs
+}
+
+/**
+ * TimesheetEntryCountOutputType without action
+ */
+export type TimesheetEntryCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TimesheetEntryCountOutputType
+   */
+  select?: Prisma.TimesheetEntryCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * TimesheetEntryCountOutputType without action
+ */
+export type TimesheetEntryCountOutputTypeCountTasksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TimesheetTaskWhereInput
+}
+
 
 export type TimesheetEntrySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -692,6 +823,8 @@ export type TimesheetEntrySelect<ExtArgs extends runtime.Types.Extensions.Intern
   updatedAt?: boolean
   timesheetId?: boolean
   timesheet?: boolean | Prisma.TimesheetDefaultArgs<ExtArgs>
+  tasks?: boolean | Prisma.TimesheetEntry$tasksArgs<ExtArgs>
+  _count?: boolean | Prisma.TimesheetEntryCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["timesheetEntry"]>
 
 export type TimesheetEntrySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -741,6 +874,8 @@ export type TimesheetEntrySelectScalar = {
 export type TimesheetEntryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "date" | "dayType" | "startTime" | "endTime" | "breakMinutes" | "workDone" | "links" | "createdAt" | "updatedAt" | "timesheetId", ExtArgs["result"]["timesheetEntry"]>
 export type TimesheetEntryInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   timesheet?: boolean | Prisma.TimesheetDefaultArgs<ExtArgs>
+  tasks?: boolean | Prisma.TimesheetEntry$tasksArgs<ExtArgs>
+  _count?: boolean | Prisma.TimesheetEntryCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type TimesheetEntryIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   timesheet?: boolean | Prisma.TimesheetDefaultArgs<ExtArgs>
@@ -753,6 +888,7 @@ export type $TimesheetEntryPayload<ExtArgs extends runtime.Types.Extensions.Inte
   name: "TimesheetEntry"
   objects: {
     timesheet: Prisma.$TimesheetPayload<ExtArgs>
+    tasks: Prisma.$TimesheetTaskPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1161,6 +1297,7 @@ readonly fields: TimesheetEntryFieldRefs;
 export interface Prisma__TimesheetEntryClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   timesheet<T extends Prisma.TimesheetDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TimesheetDefaultArgs<ExtArgs>>): Prisma.Prisma__TimesheetClient<runtime.Types.Result.GetResult<Prisma.$TimesheetPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  tasks<T extends Prisma.TimesheetEntry$tasksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TimesheetEntry$tasksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TimesheetTaskPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1599,6 +1736,30 @@ export type TimesheetEntryDeleteManyArgs<ExtArgs extends runtime.Types.Extension
    * Limit how many TimesheetEntries to delete.
    */
   limit?: number
+}
+
+/**
+ * TimesheetEntry.tasks
+ */
+export type TimesheetEntry$tasksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TimesheetTask
+   */
+  select?: Prisma.TimesheetTaskSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the TimesheetTask
+   */
+  omit?: Prisma.TimesheetTaskOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TimesheetTaskInclude<ExtArgs> | null
+  where?: Prisma.TimesheetTaskWhereInput
+  orderBy?: Prisma.TimesheetTaskOrderByWithRelationInput | Prisma.TimesheetTaskOrderByWithRelationInput[]
+  cursor?: Prisma.TimesheetTaskWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TimesheetTaskScalarFieldEnum | Prisma.TimesheetTaskScalarFieldEnum[]
 }
 
 /**

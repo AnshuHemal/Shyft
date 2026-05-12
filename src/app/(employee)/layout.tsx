@@ -32,6 +32,10 @@ export default async function EmployeeLayout({
       organization: {
         select: { id: true, name: true },
       },
+      subordinates: {
+        select: { id: true },
+        take: 1
+      }
     },
   });
 
@@ -44,6 +48,7 @@ export default async function EmployeeLayout({
     <EmployeeShell
       user={session.user}
       orgName={employee.organization.name}
+      isLead={employee.subordinates.length > 0}
       employeeProfile={{
         firstName: employee.firstName,
         lastName: employee.lastName,

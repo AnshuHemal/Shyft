@@ -61,7 +61,13 @@ export async function GET(request: Request) {
         year,
       },
     },
-    include: { entries: { orderBy: { date: "asc" } } },
+    include: {
+      reportingLead: { select: { firstName: true, lastName: true } },
+      entries: {
+        orderBy: { date: "asc" },
+        include: { tasks: { include: { project: true } } },
+      },
+    },
   });
 
   if (!timesheet) {
@@ -87,7 +93,13 @@ export async function GET(request: Request) {
           }),
         },
       },
-      include: { entries: { orderBy: { date: "asc" } } },
+      include: {
+        reportingLead: { select: { firstName: true, lastName: true } },
+        entries: {
+          orderBy: { date: "asc" },
+          include: { tasks: { include: { project: true } } },
+        },
+      },
     });
   } else {
     // Sync any missing days (e.g. if timesheet was created before holidays were added)
@@ -168,10 +180,15 @@ export async function GET(request: Request) {
       }
     }
 
-    // Re-fetch with all updated entries
     timesheet = await prisma.timesheet.findUnique({
       where: { id: timesheet.id },
-      include: { entries: { orderBy: { date: "asc" } } },
+      include: {
+        reportingLead: { select: { firstName: true, lastName: true } },
+        entries: {
+          orderBy: { date: "asc" },
+          include: { tasks: { include: { project: true } } },
+        },
+      },
     });
   }
 

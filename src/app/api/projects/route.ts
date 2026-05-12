@@ -50,7 +50,7 @@ export async function GET(request: Request) {
       ...(ctx.role === "EMPLOYEE" && {
         OR: [
           { leadId: ctx.employeeId },
-          { members: { some: { employeeId: ctx.employeeId } } }
+          { members: { some: { employeeId: ctx.employeeId! } } }
         ]
       })
     },
@@ -88,12 +88,12 @@ export async function POST(request: Request) {
     }
   }
 
-  const json = await request.json();
-  const { name, description, client, budget, color } = json;
-
-  if (!name) return NextResponse.json({ error: "Project name is required" }, { status: 400 });
-
   try {
+    const json = await request.json();
+    const { name, description, client, budget, color, isLearning } = json;
+
+    if (!name) return NextResponse.json({ error: "Project name is required" }, { status: 400 });
+
     const project = await prisma.project.create({
       data: {
         name,
@@ -101,8 +101,9 @@ export async function POST(request: Request) {
         client,
         budget: budget ? parseFloat(budget) : null,
         color: color || "bg-primary",
+        isLearning: !!isLearning,
         organizationId: ctx.orgId!,
-        leadId: ctx.employeeId, // If created by employee, they are the lead
+        leadId: ctx.employeeId,
       },
     });
 

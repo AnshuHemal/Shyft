@@ -72,41 +72,38 @@ export async function PATCH(
   }
 
   const body = await request.json();
-  const {
-    dayType,
-    startTime,
-    endTime,
-    breakMinutes,
-    workDone,
-    links,
-  } = body;
-
-  // Validate time fields if dayType is WORKING or HALF_DAY
-  if (
-    (dayType === "WORKING" || dayType === "HALF_DAY") &&
-    startTime &&
-    endTime
-  ) {
-    const [sh, sm] = startTime.split(":").map(Number);
-    const [eh, em] = endTime.split(":").map(Number);
-    if (eh * 60 + em <= sh * 60 + sm) {
-      return NextResponse.json(
-        { error: "End time must be after start time." },
-        { status: 400 }
-      );
-    }
-  }
+  const { dayType, tasks, breakMinutes } = body;
 
   const updated = await prisma.timesheetEntry.update({
     where: { id },
     data: {
       ...(dayType !== undefined && { dayType }),
-      startTime: startTime ?? null,
-      endTime: endTime ?? null,
-      breakMinutes: breakMinutes !== undefined ? Number(breakMinutes) : 0,
-      workDone: workDone?.trim() || null,
-      links: Array.isArray(links) ? links.filter(Boolean) : [],
+      ...(breakMinutes !== undefined && { breakMinutes: parseInt(breakMinutes) || 0 }),
+      // Clear legacy fields if they exist
+      startTime: null,
+      endTime: null,
+      workDone: null,
+      links: [],
+      
+      // Update tasks
+      tasks: tasks ? {
+        deleteMany: {}, // Simplest way to sync: remove all and recreate
+        create: tasks.map((t: any) => ({
+          startTime: t.startTime,
+          endTime: t.endTime,
+          subject: t.subject,
+          description: t.description,
+          isLearning: !!t.isLearning,
+          links: t.links || [],
+          projectId: t.projectId || null,
+        })),
+      } : undefined,
     },
+    include: {
+      tasks: {
+        include: { project: true }
+      }
+    }
   });
 
   return NextResponse.json({ success: true, entry: updated });

@@ -391,6 +391,7 @@ export const ModelName = {
   Employee: 'Employee',
   Timesheet: 'Timesheet',
   TimesheetEntry: 'TimesheetEntry',
+  TimesheetTask: 'TimesheetTask',
   User: 'User',
   Session: 'Session',
   Account: 'Account',
@@ -412,7 +413,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "organization" | "department" | "position" | "holiday" | "employee" | "timesheet" | "timesheetEntry" | "user" | "session" | "account" | "verification" | "project" | "projectMember"
+    modelProps: "organization" | "department" | "position" | "holiday" | "employee" | "timesheet" | "timesheetEntry" | "timesheetTask" | "user" | "session" | "account" | "verification" | "project" | "projectMember"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -931,6 +932,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.TimesheetEntryCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.TimesheetEntryCountAggregateOutputType> | number
+        }
+      }
+    }
+    TimesheetTask: {
+      payload: Prisma.$TimesheetTaskPayload<ExtArgs>
+      fields: Prisma.TimesheetTaskFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.TimesheetTaskFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimesheetTaskPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.TimesheetTaskFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimesheetTaskPayload>
+        }
+        findFirst: {
+          args: Prisma.TimesheetTaskFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimesheetTaskPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.TimesheetTaskFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimesheetTaskPayload>
+        }
+        findMany: {
+          args: Prisma.TimesheetTaskFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimesheetTaskPayload>[]
+        }
+        create: {
+          args: Prisma.TimesheetTaskCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimesheetTaskPayload>
+        }
+        createMany: {
+          args: Prisma.TimesheetTaskCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.TimesheetTaskCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimesheetTaskPayload>[]
+        }
+        delete: {
+          args: Prisma.TimesheetTaskDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimesheetTaskPayload>
+        }
+        update: {
+          args: Prisma.TimesheetTaskUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimesheetTaskPayload>
+        }
+        deleteMany: {
+          args: Prisma.TimesheetTaskDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.TimesheetTaskUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.TimesheetTaskUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimesheetTaskPayload>[]
+        }
+        upsert: {
+          args: Prisma.TimesheetTaskUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimesheetTaskPayload>
+        }
+        aggregate: {
+          args: Prisma.TimesheetTaskAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTimesheetTask>
+        }
+        groupBy: {
+          args: Prisma.TimesheetTaskGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TimesheetTaskGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.TimesheetTaskCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TimesheetTaskCountAggregateOutputType> | number
         }
       }
     }
@@ -1523,6 +1598,7 @@ export const TimesheetScalarFieldEnum = {
   reviewedAt: 'reviewedAt',
   reviewedBy: 'reviewedBy',
   rejectionNote: 'rejectionNote',
+  reportingLeadId: 'reportingLeadId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   employeeId: 'employeeId',
@@ -1547,6 +1623,23 @@ export const TimesheetEntryScalarFieldEnum = {
 } as const
 
 export type TimesheetEntryScalarFieldEnum = (typeof TimesheetEntryScalarFieldEnum)[keyof typeof TimesheetEntryScalarFieldEnum]
+
+
+export const TimesheetTaskScalarFieldEnum = {
+  id: 'id',
+  startTime: 'startTime',
+  endTime: 'endTime',
+  subject: 'subject',
+  description: 'description',
+  isLearning: 'isLearning',
+  links: 'links',
+  projectId: 'projectId',
+  timesheetEntryId: 'timesheetEntryId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type TimesheetTaskScalarFieldEnum = (typeof TimesheetTaskScalarFieldEnum)[keyof typeof TimesheetTaskScalarFieldEnum]
 
 
 export const UserScalarFieldEnum = {
@@ -1623,6 +1716,7 @@ export const ProjectScalarFieldEnum = {
   budget: 'budget',
   startDate: 'startDate',
   endDate: 'endDate',
+  isLearning: 'isLearning',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   organizationId: 'organizationId',
@@ -1650,6 +1744,14 @@ export const SortOrder = {
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
+export const NullableJsonNullValueInput = {
+  DbNull: DbNull,
+  JsonNull: JsonNull
+} as const
+
+export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
 export const QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
@@ -1664,6 +1766,15 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const JsonNullValueFilter = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+  AnyNull: AnyNull
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
 
 
@@ -1802,6 +1913,20 @@ export type EnumDayTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaMo
  * Reference to a field of type 'DayType[]'
  */
 export type ListEnumDayTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DayType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Json'
+ */
+export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+/**
+ * Reference to a field of type 'QueryMode'
+ */
+export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
     
 
 
@@ -1949,6 +2074,7 @@ export type GlobalOmitConfig = {
   employee?: Prisma.EmployeeOmit
   timesheet?: Prisma.TimesheetOmit
   timesheetEntry?: Prisma.TimesheetEntryOmit
+  timesheetTask?: Prisma.TimesheetTaskOmit
   user?: Prisma.UserOmit
   session?: Prisma.SessionOmit
   account?: Prisma.AccountOmit

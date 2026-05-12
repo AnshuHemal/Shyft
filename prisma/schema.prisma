@@ -219,6 +219,7 @@ model Employee {
   subordinates   Employee[]     @relation("ReportingLine")
 
   timesheets     Timesheet[]
+  reviewedTimesheets Timesheet[] @relation("ReportingLeadReview")
   ledProjects    Project[]      @relation("ProjectLead")
   projects       ProjectMember[]
 
@@ -239,6 +240,8 @@ model Timesheet {
   reviewedAt     DateTime?
   reviewedBy     String?         // HR/Admin user id
   rejectionNote  String?
+  reportingLeadId String?
+  reportingLead   Employee?       @relation("ReportingLeadReview", fields: [reportingLeadId], references: [id], onDelete: SetNull)
 
   createdAt      DateTime        @default(now())
   updatedAt      DateTime        @updatedAt
@@ -281,8 +284,31 @@ model TimesheetEntry {
   timesheetId    String
   timesheet      Timesheet  @relation(fields: [timesheetId], references: [id], onDelete: Cascade)
 
+  tasks          TimesheetTask[]
+
   @@unique([timesheetId, date])
   @@map("timesheet_entry")
+}
+
+model TimesheetTask {
+  id               String         @id @default(cuid())
+  startTime        String
+  endTime          String
+  subject          String
+  description      String?
+  isLearning       Boolean        @default(false)
+  links            Json?          @default("[]")
+  
+  projectId        String?
+  project          Project?       @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  
+  timesheetEntryId String
+  timesheetEntry   TimesheetEntry @relation(fields: [timesheetEntryId], references: [id], onDelete: Cascade)
+
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+
+  @@map("timesheet_task")
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -377,6 +403,7 @@ model Project {
   
   startDate      DateTime?
   endDate        DateTime?
+  isLearning     Boolean      @default(false)
   
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
@@ -390,6 +417,7 @@ model Project {
   
   // Members of the project
   members        ProjectMember[]
+  timesheetTasks TimesheetTask[]
 
   @@map("project")
 }

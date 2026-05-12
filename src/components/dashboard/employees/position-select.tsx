@@ -161,11 +161,11 @@ export function PositionSelect({
     <>
       <Combobox
         value={value}
-        onValueChange={onChange}
+        onValueChange={(val) => onChange(val || "")}
         open={isOpen}
         onOpenChange={setIsOpen}
-        searchValue={searchInput}
-        onSearchValueChange={setSearchInput}
+        inputValue={searchInput}
+        onInputValueChange={setSearchInput}
       >
         <ComboboxInput
           disabled={disabled || loading}

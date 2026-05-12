@@ -45,6 +45,7 @@ export type TimesheetMinAggregateOutputType = {
   reviewedAt: Date | null
   reviewedBy: string | null
   rejectionNote: string | null
+  reportingLeadId: string | null
   createdAt: Date | null
   updatedAt: Date | null
   employeeId: string | null
@@ -60,6 +61,7 @@ export type TimesheetMaxAggregateOutputType = {
   reviewedAt: Date | null
   reviewedBy: string | null
   rejectionNote: string | null
+  reportingLeadId: string | null
   createdAt: Date | null
   updatedAt: Date | null
   employeeId: string | null
@@ -75,6 +77,7 @@ export type TimesheetCountAggregateOutputType = {
   reviewedAt: number
   reviewedBy: number
   rejectionNote: number
+  reportingLeadId: number
   createdAt: number
   updatedAt: number
   employeeId: number
@@ -102,6 +105,7 @@ export type TimesheetMinAggregateInputType = {
   reviewedAt?: true
   reviewedBy?: true
   rejectionNote?: true
+  reportingLeadId?: true
   createdAt?: true
   updatedAt?: true
   employeeId?: true
@@ -117,6 +121,7 @@ export type TimesheetMaxAggregateInputType = {
   reviewedAt?: true
   reviewedBy?: true
   rejectionNote?: true
+  reportingLeadId?: true
   createdAt?: true
   updatedAt?: true
   employeeId?: true
@@ -132,6 +137,7 @@ export type TimesheetCountAggregateInputType = {
   reviewedAt?: true
   reviewedBy?: true
   rejectionNote?: true
+  reportingLeadId?: true
   createdAt?: true
   updatedAt?: true
   employeeId?: true
@@ -234,6 +240,7 @@ export type TimesheetGroupByOutputType = {
   reviewedAt: Date | null
   reviewedBy: string | null
   rejectionNote: string | null
+  reportingLeadId: string | null
   createdAt: Date
   updatedAt: Date
   employeeId: string
@@ -272,10 +279,12 @@ export type TimesheetWhereInput = {
   reviewedAt?: Prisma.DateTimeNullableFilter<"Timesheet"> | Date | string | null
   reviewedBy?: Prisma.StringNullableFilter<"Timesheet"> | string | null
   rejectionNote?: Prisma.StringNullableFilter<"Timesheet"> | string | null
+  reportingLeadId?: Prisma.StringNullableFilter<"Timesheet"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Timesheet"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Timesheet"> | Date | string
   employeeId?: Prisma.StringFilter<"Timesheet"> | string
   organizationId?: Prisma.StringFilter<"Timesheet"> | string
+  reportingLead?: Prisma.XOR<Prisma.EmployeeNullableScalarRelationFilter, Prisma.EmployeeWhereInput> | null
   employee?: Prisma.XOR<Prisma.EmployeeScalarRelationFilter, Prisma.EmployeeWhereInput>
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
   entries?: Prisma.TimesheetEntryListRelationFilter
@@ -290,10 +299,12 @@ export type TimesheetOrderByWithRelationInput = {
   reviewedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   reviewedBy?: Prisma.SortOrderInput | Prisma.SortOrder
   rejectionNote?: Prisma.SortOrderInput | Prisma.SortOrder
+  reportingLeadId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   employeeId?: Prisma.SortOrder
   organizationId?: Prisma.SortOrder
+  reportingLead?: Prisma.EmployeeOrderByWithRelationInput
   employee?: Prisma.EmployeeOrderByWithRelationInput
   organization?: Prisma.OrganizationOrderByWithRelationInput
   entries?: Prisma.TimesheetEntryOrderByRelationAggregateInput
@@ -312,10 +323,12 @@ export type TimesheetWhereUniqueInput = Prisma.AtLeast<{
   reviewedAt?: Prisma.DateTimeNullableFilter<"Timesheet"> | Date | string | null
   reviewedBy?: Prisma.StringNullableFilter<"Timesheet"> | string | null
   rejectionNote?: Prisma.StringNullableFilter<"Timesheet"> | string | null
+  reportingLeadId?: Prisma.StringNullableFilter<"Timesheet"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Timesheet"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Timesheet"> | Date | string
   employeeId?: Prisma.StringFilter<"Timesheet"> | string
   organizationId?: Prisma.StringFilter<"Timesheet"> | string
+  reportingLead?: Prisma.XOR<Prisma.EmployeeNullableScalarRelationFilter, Prisma.EmployeeWhereInput> | null
   employee?: Prisma.XOR<Prisma.EmployeeScalarRelationFilter, Prisma.EmployeeWhereInput>
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
   entries?: Prisma.TimesheetEntryListRelationFilter
@@ -330,6 +343,7 @@ export type TimesheetOrderByWithAggregationInput = {
   reviewedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   reviewedBy?: Prisma.SortOrderInput | Prisma.SortOrder
   rejectionNote?: Prisma.SortOrderInput | Prisma.SortOrder
+  reportingLeadId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   employeeId?: Prisma.SortOrder
@@ -353,6 +367,7 @@ export type TimesheetScalarWhereWithAggregatesInput = {
   reviewedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Timesheet"> | Date | string | null
   reviewedBy?: Prisma.StringNullableWithAggregatesFilter<"Timesheet"> | string | null
   rejectionNote?: Prisma.StringNullableWithAggregatesFilter<"Timesheet"> | string | null
+  reportingLeadId?: Prisma.StringNullableWithAggregatesFilter<"Timesheet"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Timesheet"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Timesheet"> | Date | string
   employeeId?: Prisma.StringWithAggregatesFilter<"Timesheet"> | string
@@ -370,6 +385,7 @@ export type TimesheetCreateInput = {
   rejectionNote?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  reportingLead?: Prisma.EmployeeCreateNestedOneWithoutReviewedTimesheetsInput
   employee: Prisma.EmployeeCreateNestedOneWithoutTimesheetsInput
   organization: Prisma.OrganizationCreateNestedOneWithoutTimesheetsInput
   entries?: Prisma.TimesheetEntryCreateNestedManyWithoutTimesheetInput
@@ -384,6 +400,7 @@ export type TimesheetUncheckedCreateInput = {
   reviewedAt?: Date | string | null
   reviewedBy?: string | null
   rejectionNote?: string | null
+  reportingLeadId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   employeeId: string
@@ -402,6 +419,7 @@ export type TimesheetUpdateInput = {
   rejectionNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  reportingLead?: Prisma.EmployeeUpdateOneWithoutReviewedTimesheetsNestedInput
   employee?: Prisma.EmployeeUpdateOneRequiredWithoutTimesheetsNestedInput
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutTimesheetsNestedInput
   entries?: Prisma.TimesheetEntryUpdateManyWithoutTimesheetNestedInput
@@ -416,6 +434,7 @@ export type TimesheetUncheckedUpdateInput = {
   reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   reviewedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rejectionNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reportingLeadId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   employeeId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -432,6 +451,7 @@ export type TimesheetCreateManyInput = {
   reviewedAt?: Date | string | null
   reviewedBy?: string | null
   rejectionNote?: string | null
+  reportingLeadId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   employeeId: string
@@ -460,6 +480,7 @@ export type TimesheetUncheckedUpdateManyInput = {
   reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   reviewedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rejectionNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reportingLeadId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   employeeId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -491,6 +512,7 @@ export type TimesheetCountOrderByAggregateInput = {
   reviewedAt?: Prisma.SortOrder
   reviewedBy?: Prisma.SortOrder
   rejectionNote?: Prisma.SortOrder
+  reportingLeadId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   employeeId?: Prisma.SortOrder
@@ -511,6 +533,7 @@ export type TimesheetMaxOrderByAggregateInput = {
   reviewedAt?: Prisma.SortOrder
   reviewedBy?: Prisma.SortOrder
   rejectionNote?: Prisma.SortOrder
+  reportingLeadId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   employeeId?: Prisma.SortOrder
@@ -526,6 +549,7 @@ export type TimesheetMinOrderByAggregateInput = {
   reviewedAt?: Prisma.SortOrder
   reviewedBy?: Prisma.SortOrder
   rejectionNote?: Prisma.SortOrder
+  reportingLeadId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   employeeId?: Prisma.SortOrder
@@ -591,10 +615,24 @@ export type TimesheetCreateNestedManyWithoutEmployeeInput = {
   connect?: Prisma.TimesheetWhereUniqueInput | Prisma.TimesheetWhereUniqueInput[]
 }
 
+export type TimesheetCreateNestedManyWithoutReportingLeadInput = {
+  create?: Prisma.XOR<Prisma.TimesheetCreateWithoutReportingLeadInput, Prisma.TimesheetUncheckedCreateWithoutReportingLeadInput> | Prisma.TimesheetCreateWithoutReportingLeadInput[] | Prisma.TimesheetUncheckedCreateWithoutReportingLeadInput[]
+  connectOrCreate?: Prisma.TimesheetCreateOrConnectWithoutReportingLeadInput | Prisma.TimesheetCreateOrConnectWithoutReportingLeadInput[]
+  createMany?: Prisma.TimesheetCreateManyReportingLeadInputEnvelope
+  connect?: Prisma.TimesheetWhereUniqueInput | Prisma.TimesheetWhereUniqueInput[]
+}
+
 export type TimesheetUncheckedCreateNestedManyWithoutEmployeeInput = {
   create?: Prisma.XOR<Prisma.TimesheetCreateWithoutEmployeeInput, Prisma.TimesheetUncheckedCreateWithoutEmployeeInput> | Prisma.TimesheetCreateWithoutEmployeeInput[] | Prisma.TimesheetUncheckedCreateWithoutEmployeeInput[]
   connectOrCreate?: Prisma.TimesheetCreateOrConnectWithoutEmployeeInput | Prisma.TimesheetCreateOrConnectWithoutEmployeeInput[]
   createMany?: Prisma.TimesheetCreateManyEmployeeInputEnvelope
+  connect?: Prisma.TimesheetWhereUniqueInput | Prisma.TimesheetWhereUniqueInput[]
+}
+
+export type TimesheetUncheckedCreateNestedManyWithoutReportingLeadInput = {
+  create?: Prisma.XOR<Prisma.TimesheetCreateWithoutReportingLeadInput, Prisma.TimesheetUncheckedCreateWithoutReportingLeadInput> | Prisma.TimesheetCreateWithoutReportingLeadInput[] | Prisma.TimesheetUncheckedCreateWithoutReportingLeadInput[]
+  connectOrCreate?: Prisma.TimesheetCreateOrConnectWithoutReportingLeadInput | Prisma.TimesheetCreateOrConnectWithoutReportingLeadInput[]
+  createMany?: Prisma.TimesheetCreateManyReportingLeadInputEnvelope
   connect?: Prisma.TimesheetWhereUniqueInput | Prisma.TimesheetWhereUniqueInput[]
 }
 
@@ -612,6 +650,20 @@ export type TimesheetUpdateManyWithoutEmployeeNestedInput = {
   deleteMany?: Prisma.TimesheetScalarWhereInput | Prisma.TimesheetScalarWhereInput[]
 }
 
+export type TimesheetUpdateManyWithoutReportingLeadNestedInput = {
+  create?: Prisma.XOR<Prisma.TimesheetCreateWithoutReportingLeadInput, Prisma.TimesheetUncheckedCreateWithoutReportingLeadInput> | Prisma.TimesheetCreateWithoutReportingLeadInput[] | Prisma.TimesheetUncheckedCreateWithoutReportingLeadInput[]
+  connectOrCreate?: Prisma.TimesheetCreateOrConnectWithoutReportingLeadInput | Prisma.TimesheetCreateOrConnectWithoutReportingLeadInput[]
+  upsert?: Prisma.TimesheetUpsertWithWhereUniqueWithoutReportingLeadInput | Prisma.TimesheetUpsertWithWhereUniqueWithoutReportingLeadInput[]
+  createMany?: Prisma.TimesheetCreateManyReportingLeadInputEnvelope
+  set?: Prisma.TimesheetWhereUniqueInput | Prisma.TimesheetWhereUniqueInput[]
+  disconnect?: Prisma.TimesheetWhereUniqueInput | Prisma.TimesheetWhereUniqueInput[]
+  delete?: Prisma.TimesheetWhereUniqueInput | Prisma.TimesheetWhereUniqueInput[]
+  connect?: Prisma.TimesheetWhereUniqueInput | Prisma.TimesheetWhereUniqueInput[]
+  update?: Prisma.TimesheetUpdateWithWhereUniqueWithoutReportingLeadInput | Prisma.TimesheetUpdateWithWhereUniqueWithoutReportingLeadInput[]
+  updateMany?: Prisma.TimesheetUpdateManyWithWhereWithoutReportingLeadInput | Prisma.TimesheetUpdateManyWithWhereWithoutReportingLeadInput[]
+  deleteMany?: Prisma.TimesheetScalarWhereInput | Prisma.TimesheetScalarWhereInput[]
+}
+
 export type TimesheetUncheckedUpdateManyWithoutEmployeeNestedInput = {
   create?: Prisma.XOR<Prisma.TimesheetCreateWithoutEmployeeInput, Prisma.TimesheetUncheckedCreateWithoutEmployeeInput> | Prisma.TimesheetCreateWithoutEmployeeInput[] | Prisma.TimesheetUncheckedCreateWithoutEmployeeInput[]
   connectOrCreate?: Prisma.TimesheetCreateOrConnectWithoutEmployeeInput | Prisma.TimesheetCreateOrConnectWithoutEmployeeInput[]
@@ -623,6 +675,20 @@ export type TimesheetUncheckedUpdateManyWithoutEmployeeNestedInput = {
   connect?: Prisma.TimesheetWhereUniqueInput | Prisma.TimesheetWhereUniqueInput[]
   update?: Prisma.TimesheetUpdateWithWhereUniqueWithoutEmployeeInput | Prisma.TimesheetUpdateWithWhereUniqueWithoutEmployeeInput[]
   updateMany?: Prisma.TimesheetUpdateManyWithWhereWithoutEmployeeInput | Prisma.TimesheetUpdateManyWithWhereWithoutEmployeeInput[]
+  deleteMany?: Prisma.TimesheetScalarWhereInput | Prisma.TimesheetScalarWhereInput[]
+}
+
+export type TimesheetUncheckedUpdateManyWithoutReportingLeadNestedInput = {
+  create?: Prisma.XOR<Prisma.TimesheetCreateWithoutReportingLeadInput, Prisma.TimesheetUncheckedCreateWithoutReportingLeadInput> | Prisma.TimesheetCreateWithoutReportingLeadInput[] | Prisma.TimesheetUncheckedCreateWithoutReportingLeadInput[]
+  connectOrCreate?: Prisma.TimesheetCreateOrConnectWithoutReportingLeadInput | Prisma.TimesheetCreateOrConnectWithoutReportingLeadInput[]
+  upsert?: Prisma.TimesheetUpsertWithWhereUniqueWithoutReportingLeadInput | Prisma.TimesheetUpsertWithWhereUniqueWithoutReportingLeadInput[]
+  createMany?: Prisma.TimesheetCreateManyReportingLeadInputEnvelope
+  set?: Prisma.TimesheetWhereUniqueInput | Prisma.TimesheetWhereUniqueInput[]
+  disconnect?: Prisma.TimesheetWhereUniqueInput | Prisma.TimesheetWhereUniqueInput[]
+  delete?: Prisma.TimesheetWhereUniqueInput | Prisma.TimesheetWhereUniqueInput[]
+  connect?: Prisma.TimesheetWhereUniqueInput | Prisma.TimesheetWhereUniqueInput[]
+  update?: Prisma.TimesheetUpdateWithWhereUniqueWithoutReportingLeadInput | Prisma.TimesheetUpdateWithWhereUniqueWithoutReportingLeadInput[]
+  updateMany?: Prisma.TimesheetUpdateManyWithWhereWithoutReportingLeadInput | Prisma.TimesheetUpdateManyWithWhereWithoutReportingLeadInput[]
   deleteMany?: Prisma.TimesheetScalarWhereInput | Prisma.TimesheetScalarWhereInput[]
 }
 
@@ -663,6 +729,7 @@ export type TimesheetCreateWithoutOrganizationInput = {
   rejectionNote?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  reportingLead?: Prisma.EmployeeCreateNestedOneWithoutReviewedTimesheetsInput
   employee: Prisma.EmployeeCreateNestedOneWithoutTimesheetsInput
   entries?: Prisma.TimesheetEntryCreateNestedManyWithoutTimesheetInput
 }
@@ -676,6 +743,7 @@ export type TimesheetUncheckedCreateWithoutOrganizationInput = {
   reviewedAt?: Date | string | null
   reviewedBy?: string | null
   rejectionNote?: string | null
+  reportingLeadId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   employeeId: string
@@ -720,6 +788,7 @@ export type TimesheetScalarWhereInput = {
   reviewedAt?: Prisma.DateTimeNullableFilter<"Timesheet"> | Date | string | null
   reviewedBy?: Prisma.StringNullableFilter<"Timesheet"> | string | null
   rejectionNote?: Prisma.StringNullableFilter<"Timesheet"> | string | null
+  reportingLeadId?: Prisma.StringNullableFilter<"Timesheet"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Timesheet"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Timesheet"> | Date | string
   employeeId?: Prisma.StringFilter<"Timesheet"> | string
@@ -737,6 +806,7 @@ export type TimesheetCreateWithoutEmployeeInput = {
   rejectionNote?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  reportingLead?: Prisma.EmployeeCreateNestedOneWithoutReviewedTimesheetsInput
   organization: Prisma.OrganizationCreateNestedOneWithoutTimesheetsInput
   entries?: Prisma.TimesheetEntryCreateNestedManyWithoutTimesheetInput
 }
@@ -750,6 +820,7 @@ export type TimesheetUncheckedCreateWithoutEmployeeInput = {
   reviewedAt?: Date | string | null
   reviewedBy?: string | null
   rejectionNote?: string | null
+  reportingLeadId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   organizationId: string
@@ -763,6 +834,48 @@ export type TimesheetCreateOrConnectWithoutEmployeeInput = {
 
 export type TimesheetCreateManyEmployeeInputEnvelope = {
   data: Prisma.TimesheetCreateManyEmployeeInput | Prisma.TimesheetCreateManyEmployeeInput[]
+  skipDuplicates?: boolean
+}
+
+export type TimesheetCreateWithoutReportingLeadInput = {
+  id?: string
+  month: number
+  year: number
+  status?: $Enums.TimesheetStatus
+  submittedAt?: Date | string | null
+  reviewedAt?: Date | string | null
+  reviewedBy?: string | null
+  rejectionNote?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  employee: Prisma.EmployeeCreateNestedOneWithoutTimesheetsInput
+  organization: Prisma.OrganizationCreateNestedOneWithoutTimesheetsInput
+  entries?: Prisma.TimesheetEntryCreateNestedManyWithoutTimesheetInput
+}
+
+export type TimesheetUncheckedCreateWithoutReportingLeadInput = {
+  id?: string
+  month: number
+  year: number
+  status?: $Enums.TimesheetStatus
+  submittedAt?: Date | string | null
+  reviewedAt?: Date | string | null
+  reviewedBy?: string | null
+  rejectionNote?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  employeeId: string
+  organizationId: string
+  entries?: Prisma.TimesheetEntryUncheckedCreateNestedManyWithoutTimesheetInput
+}
+
+export type TimesheetCreateOrConnectWithoutReportingLeadInput = {
+  where: Prisma.TimesheetWhereUniqueInput
+  create: Prisma.XOR<Prisma.TimesheetCreateWithoutReportingLeadInput, Prisma.TimesheetUncheckedCreateWithoutReportingLeadInput>
+}
+
+export type TimesheetCreateManyReportingLeadInputEnvelope = {
+  data: Prisma.TimesheetCreateManyReportingLeadInput | Prisma.TimesheetCreateManyReportingLeadInput[]
   skipDuplicates?: boolean
 }
 
@@ -782,6 +895,22 @@ export type TimesheetUpdateManyWithWhereWithoutEmployeeInput = {
   data: Prisma.XOR<Prisma.TimesheetUpdateManyMutationInput, Prisma.TimesheetUncheckedUpdateManyWithoutEmployeeInput>
 }
 
+export type TimesheetUpsertWithWhereUniqueWithoutReportingLeadInput = {
+  where: Prisma.TimesheetWhereUniqueInput
+  update: Prisma.XOR<Prisma.TimesheetUpdateWithoutReportingLeadInput, Prisma.TimesheetUncheckedUpdateWithoutReportingLeadInput>
+  create: Prisma.XOR<Prisma.TimesheetCreateWithoutReportingLeadInput, Prisma.TimesheetUncheckedCreateWithoutReportingLeadInput>
+}
+
+export type TimesheetUpdateWithWhereUniqueWithoutReportingLeadInput = {
+  where: Prisma.TimesheetWhereUniqueInput
+  data: Prisma.XOR<Prisma.TimesheetUpdateWithoutReportingLeadInput, Prisma.TimesheetUncheckedUpdateWithoutReportingLeadInput>
+}
+
+export type TimesheetUpdateManyWithWhereWithoutReportingLeadInput = {
+  where: Prisma.TimesheetScalarWhereInput
+  data: Prisma.XOR<Prisma.TimesheetUpdateManyMutationInput, Prisma.TimesheetUncheckedUpdateManyWithoutReportingLeadInput>
+}
+
 export type TimesheetCreateWithoutEntriesInput = {
   id?: string
   month: number
@@ -793,6 +922,7 @@ export type TimesheetCreateWithoutEntriesInput = {
   rejectionNote?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  reportingLead?: Prisma.EmployeeCreateNestedOneWithoutReviewedTimesheetsInput
   employee: Prisma.EmployeeCreateNestedOneWithoutTimesheetsInput
   organization: Prisma.OrganizationCreateNestedOneWithoutTimesheetsInput
 }
@@ -806,6 +936,7 @@ export type TimesheetUncheckedCreateWithoutEntriesInput = {
   reviewedAt?: Date | string | null
   reviewedBy?: string | null
   rejectionNote?: string | null
+  reportingLeadId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   employeeId: string
@@ -839,6 +970,7 @@ export type TimesheetUpdateWithoutEntriesInput = {
   rejectionNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  reportingLead?: Prisma.EmployeeUpdateOneWithoutReviewedTimesheetsNestedInput
   employee?: Prisma.EmployeeUpdateOneRequiredWithoutTimesheetsNestedInput
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutTimesheetsNestedInput
 }
@@ -852,6 +984,7 @@ export type TimesheetUncheckedUpdateWithoutEntriesInput = {
   reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   reviewedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rejectionNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reportingLeadId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   employeeId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -867,6 +1000,7 @@ export type TimesheetCreateManyOrganizationInput = {
   reviewedAt?: Date | string | null
   reviewedBy?: string | null
   rejectionNote?: string | null
+  reportingLeadId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   employeeId: string
@@ -883,6 +1017,7 @@ export type TimesheetUpdateWithoutOrganizationInput = {
   rejectionNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  reportingLead?: Prisma.EmployeeUpdateOneWithoutReviewedTimesheetsNestedInput
   employee?: Prisma.EmployeeUpdateOneRequiredWithoutTimesheetsNestedInput
   entries?: Prisma.TimesheetEntryUpdateManyWithoutTimesheetNestedInput
 }
@@ -896,6 +1031,7 @@ export type TimesheetUncheckedUpdateWithoutOrganizationInput = {
   reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   reviewedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rejectionNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reportingLeadId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   employeeId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -911,6 +1047,7 @@ export type TimesheetUncheckedUpdateManyWithoutOrganizationInput = {
   reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   reviewedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rejectionNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reportingLeadId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   employeeId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -925,8 +1062,24 @@ export type TimesheetCreateManyEmployeeInput = {
   reviewedAt?: Date | string | null
   reviewedBy?: string | null
   rejectionNote?: string | null
+  reportingLeadId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  organizationId: string
+}
+
+export type TimesheetCreateManyReportingLeadInput = {
+  id?: string
+  month: number
+  year: number
+  status?: $Enums.TimesheetStatus
+  submittedAt?: Date | string | null
+  reviewedAt?: Date | string | null
+  reviewedBy?: string | null
+  rejectionNote?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  employeeId: string
   organizationId: string
 }
 
@@ -941,6 +1094,7 @@ export type TimesheetUpdateWithoutEmployeeInput = {
   rejectionNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  reportingLead?: Prisma.EmployeeUpdateOneWithoutReviewedTimesheetsNestedInput
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutTimesheetsNestedInput
   entries?: Prisma.TimesheetEntryUpdateManyWithoutTimesheetNestedInput
 }
@@ -954,6 +1108,7 @@ export type TimesheetUncheckedUpdateWithoutEmployeeInput = {
   reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   reviewedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rejectionNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reportingLeadId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organizationId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -969,8 +1124,56 @@ export type TimesheetUncheckedUpdateManyWithoutEmployeeInput = {
   reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   reviewedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rejectionNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reportingLeadId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+}
+
+export type TimesheetUpdateWithoutReportingLeadInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  month?: Prisma.IntFieldUpdateOperationsInput | number
+  year?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumTimesheetStatusFieldUpdateOperationsInput | $Enums.TimesheetStatus
+  submittedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rejectionNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  employee?: Prisma.EmployeeUpdateOneRequiredWithoutTimesheetsNestedInput
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutTimesheetsNestedInput
+  entries?: Prisma.TimesheetEntryUpdateManyWithoutTimesheetNestedInput
+}
+
+export type TimesheetUncheckedUpdateWithoutReportingLeadInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  month?: Prisma.IntFieldUpdateOperationsInput | number
+  year?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumTimesheetStatusFieldUpdateOperationsInput | $Enums.TimesheetStatus
+  submittedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rejectionNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  employeeId?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  entries?: Prisma.TimesheetEntryUncheckedUpdateManyWithoutTimesheetNestedInput
+}
+
+export type TimesheetUncheckedUpdateManyWithoutReportingLeadInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  month?: Prisma.IntFieldUpdateOperationsInput | number
+  year?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumTimesheetStatusFieldUpdateOperationsInput | $Enums.TimesheetStatus
+  submittedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rejectionNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  employeeId?: Prisma.StringFieldUpdateOperationsInput | string
   organizationId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
@@ -1014,10 +1217,12 @@ export type TimesheetSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   reviewedAt?: boolean
   reviewedBy?: boolean
   rejectionNote?: boolean
+  reportingLeadId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   employeeId?: boolean
   organizationId?: boolean
+  reportingLead?: boolean | Prisma.Timesheet$reportingLeadArgs<ExtArgs>
   employee?: boolean | Prisma.EmployeeDefaultArgs<ExtArgs>
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   entries?: boolean | Prisma.Timesheet$entriesArgs<ExtArgs>
@@ -1033,10 +1238,12 @@ export type TimesheetSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   reviewedAt?: boolean
   reviewedBy?: boolean
   rejectionNote?: boolean
+  reportingLeadId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   employeeId?: boolean
   organizationId?: boolean
+  reportingLead?: boolean | Prisma.Timesheet$reportingLeadArgs<ExtArgs>
   employee?: boolean | Prisma.EmployeeDefaultArgs<ExtArgs>
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["timesheet"]>
@@ -1050,10 +1257,12 @@ export type TimesheetSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
   reviewedAt?: boolean
   reviewedBy?: boolean
   rejectionNote?: boolean
+  reportingLeadId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   employeeId?: boolean
   organizationId?: boolean
+  reportingLead?: boolean | Prisma.Timesheet$reportingLeadArgs<ExtArgs>
   employee?: boolean | Prisma.EmployeeDefaultArgs<ExtArgs>
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["timesheet"]>
@@ -1067,24 +1276,28 @@ export type TimesheetSelectScalar = {
   reviewedAt?: boolean
   reviewedBy?: boolean
   rejectionNote?: boolean
+  reportingLeadId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   employeeId?: boolean
   organizationId?: boolean
 }
 
-export type TimesheetOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "month" | "year" | "status" | "submittedAt" | "reviewedAt" | "reviewedBy" | "rejectionNote" | "createdAt" | "updatedAt" | "employeeId" | "organizationId", ExtArgs["result"]["timesheet"]>
+export type TimesheetOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "month" | "year" | "status" | "submittedAt" | "reviewedAt" | "reviewedBy" | "rejectionNote" | "reportingLeadId" | "createdAt" | "updatedAt" | "employeeId" | "organizationId", ExtArgs["result"]["timesheet"]>
 export type TimesheetInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  reportingLead?: boolean | Prisma.Timesheet$reportingLeadArgs<ExtArgs>
   employee?: boolean | Prisma.EmployeeDefaultArgs<ExtArgs>
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   entries?: boolean | Prisma.Timesheet$entriesArgs<ExtArgs>
   _count?: boolean | Prisma.TimesheetCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type TimesheetIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  reportingLead?: boolean | Prisma.Timesheet$reportingLeadArgs<ExtArgs>
   employee?: boolean | Prisma.EmployeeDefaultArgs<ExtArgs>
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
 }
 export type TimesheetIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  reportingLead?: boolean | Prisma.Timesheet$reportingLeadArgs<ExtArgs>
   employee?: boolean | Prisma.EmployeeDefaultArgs<ExtArgs>
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
 }
@@ -1092,6 +1305,7 @@ export type TimesheetIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
 export type $TimesheetPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Timesheet"
   objects: {
+    reportingLead: Prisma.$EmployeePayload<ExtArgs> | null
     employee: Prisma.$EmployeePayload<ExtArgs>
     organization: Prisma.$OrganizationPayload<ExtArgs>
     entries: Prisma.$TimesheetEntryPayload<ExtArgs>[]
@@ -1105,6 +1319,7 @@ export type $TimesheetPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     reviewedAt: Date | null
     reviewedBy: string | null
     rejectionNote: string | null
+    reportingLeadId: string | null
     createdAt: Date
     updatedAt: Date
     employeeId: string
@@ -1503,6 +1718,7 @@ readonly fields: TimesheetFieldRefs;
  */
 export interface Prisma__TimesheetClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  reportingLead<T extends Prisma.Timesheet$reportingLeadArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Timesheet$reportingLeadArgs<ExtArgs>>): Prisma.Prisma__EmployeeClient<runtime.Types.Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   employee<T extends Prisma.EmployeeDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.EmployeeDefaultArgs<ExtArgs>>): Prisma.Prisma__EmployeeClient<runtime.Types.Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   organization<T extends Prisma.OrganizationDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrganizationDefaultArgs<ExtArgs>>): Prisma.Prisma__OrganizationClient<runtime.Types.Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   entries<T extends Prisma.Timesheet$entriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Timesheet$entriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TimesheetEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -1543,6 +1759,7 @@ export interface TimesheetFieldRefs {
   readonly reviewedAt: Prisma.FieldRef<"Timesheet", 'DateTime'>
   readonly reviewedBy: Prisma.FieldRef<"Timesheet", 'String'>
   readonly rejectionNote: Prisma.FieldRef<"Timesheet", 'String'>
+  readonly reportingLeadId: Prisma.FieldRef<"Timesheet", 'String'>
   readonly createdAt: Prisma.FieldRef<"Timesheet", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Timesheet", 'DateTime'>
   readonly employeeId: Prisma.FieldRef<"Timesheet", 'String'>
@@ -1945,6 +2162,25 @@ export type TimesheetDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Int
    * Limit how many Timesheets to delete.
    */
   limit?: number
+}
+
+/**
+ * Timesheet.reportingLead
+ */
+export type Timesheet$reportingLeadArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Employee
+   */
+  select?: Prisma.EmployeeSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Employee
+   */
+  omit?: Prisma.EmployeeOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.EmployeeInclude<ExtArgs> | null
+  where?: Prisma.EmployeeWhereInput
 }
 
 /**

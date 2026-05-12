@@ -23,7 +23,9 @@ import {
   ClockIcon, 
   CheckCircle2Icon,
   PlusCircleIcon,
-  LayoutGridIcon
+  LayoutGridIcon,
+  GraduationCapIcon,
+  BookOpenIcon
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Spinner } from "@/components/ui/spinner";
@@ -36,6 +38,7 @@ interface Project {
   status: string;
   color: string | null;
   budget: number | null;
+  isLearning: boolean;
   _count: { members: number };
 }
 
@@ -54,6 +57,7 @@ export function ProjectList({ isSenior }: ProjectListProps) {
   const [description, setDescription] = React.useState("");
   const [client, setClient] = React.useState("");
   const [budget, setBudget] = React.useState("");
+  const [isLearning, setIsLearning] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
 
   const fetchProjects = React.useCallback(async () => {
@@ -85,7 +89,7 @@ export function ProjectList({ isSenior }: ProjectListProps) {
       const res = await fetch("/api/projects", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, description, client, budget }),
+        body: JSON.stringify({ name, description, client, budget, isLearning }),
       });
 
       const data = await res.json();
@@ -101,6 +105,7 @@ export function ProjectList({ isSenior }: ProjectListProps) {
       setDescription("");
       setClient("");
       setBudget("");
+      setIsLearning(false);
       toast.success("Project created successfully!");
     } catch (err) {
       setError("Something went wrong. Please try again.");
@@ -169,9 +174,17 @@ export function ProjectList({ isSenior }: ProjectListProps) {
                         </p>
                       )}
                     </div>
-                    <Badge variant="secondary" className="capitalize text-[10px] h-5">
-                      {project.status}
-                    </Badge>
+                    <div className="flex flex-col items-end gap-1.5">
+                      <Badge variant="secondary" className="capitalize text-[10px] h-5">
+                        {project.status}
+                      </Badge>
+                      {project.isLearning && (
+                        <Badge className="bg-amber-500/10 text-amber-600 border-amber-500/20 text-[9px] h-4 gap-1 px-1.5 font-bold uppercase tracking-wider">
+                          <GraduationCapIcon className="size-2.5" />
+                          Learning
+                        </Badge>
+                      )}
+                    </div>
                   </div>
 
                   {project.description && (
@@ -262,6 +275,22 @@ export function ProjectList({ isSenior }: ProjectListProps) {
                 className="resize-none"
               />
             </Field>
+            
+            <div className="flex items-center gap-3 p-3 rounded-xl bg-amber-500/5 border border-amber-500/10 transition-all hover:bg-amber-500/10">
+              <div className="flex size-9 items-center justify-center rounded-lg bg-amber-500/10 text-amber-600">
+                <BookOpenIcon className="size-5" />
+              </div>
+              <div className="flex-1">
+                <p className="text-sm font-semibold text-amber-700">Learning Phase Project</p>
+                <p className="text-[11px] text-amber-600/80 leading-tight">Mark this as a training project for junior employees.</p>
+              </div>
+              <input 
+                type="checkbox"
+                checked={isLearning}
+                onChange={(e) => setIsLearning(e.target.checked)}
+                className="size-5 rounded border-amber-500/30 text-amber-600 focus:ring-amber-500/20 cursor-pointer"
+              />
+            </div>
 
             {error && (
               <div className="p-3 rounded-lg bg-destructive/10 text-destructive text-sm flex items-center gap-2">

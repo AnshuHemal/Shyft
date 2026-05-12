@@ -76,11 +76,11 @@ export function LeadSelect({
   return (
     <Combobox
       value={value}
-      onValueChange={onChange}
+      onValueChange={(val) => onChange(val || "")}
       open={isOpen}
       onOpenChange={setIsOpen}
-      searchValue={search}
-      onSearchValueChange={setSearch}
+      inputValue={search}
+      onInputValueChange={setSearch}
     >
       <div className="relative">
         <ComboboxInput
