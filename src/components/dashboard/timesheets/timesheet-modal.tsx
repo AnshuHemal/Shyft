@@ -283,7 +283,7 @@ export function TimesheetModal({
 
   return (
     <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
-      <DialogContent showCloseButton={false} className="max-w-[100vw] sm:max-w-[100vw] w-full h-[100vh] sm:h-[100vh] flex flex-col p-0 overflow-hidden border border-border/60 shadow-2xl gap-0">
+      <DialogContent showCloseButton={false} className="max-w-[100vw] sm:max-w-[100vw] w-full h-screen sm:h-screen flex flex-col p-0 overflow-hidden border border-border/60 shadow-2xl gap-0">
 
         {/* ── Modal header ── */}
         <div className="relative shrink-0 overflow-hidden">
