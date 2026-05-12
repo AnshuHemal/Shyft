@@ -1,6 +1,7 @@
 /**
  * GET /api/timesheets/hr?month=M&year=Y
  * Returns all employees' timesheets for the given month — HR only.
+ * Includes full entry + task data for the expandable timesheet view.
  */
 
 import { NextResponse } from "next/server";
@@ -31,7 +32,6 @@ export async function GET(request: Request) {
   const month = Number(searchParams.get("month") ?? now.getMonth() + 1);
   const year = Number(searchParams.get("year") ?? now.getFullYear());
 
-  // Get all employees in org
   const employees = await prisma.employee.findMany({
     where: { organizationId: ctx.orgId, status: { not: "TERMINATED" } },
     select: {
@@ -41,6 +41,7 @@ export async function GET(request: Request) {
       designation: true,
       department: true,
       employeeId: true,
+      avatar: true,
       timesheets: {
         where: { month, year },
         select: {
@@ -48,11 +49,20 @@ export async function GET(request: Request) {
           status: true,
           submittedAt: true,
           reviewedAt: true,
+          hrSubmittedAt: true,
+          hrReviewedAt: true,
           rejectionNote: true,
-          _count: { select: { entries: true } },
+          // Full entries with tasks for the expandable view
           entries: {
-            where: { dayType: "WORKING", startTime: { not: null } },
-            select: { startTime: true, endTime: true, breakMinutes: true },
+            orderBy: { date: "asc" },
+            include: {
+              tasks: {
+                include: {
+                  project: { select: { id: true, name: true, isLearning: true } },
+                },
+                orderBy: { startTime: "asc" },
+              },
+            },
           },
         },
       },
@@ -60,5 +70,21 @@ export async function GET(request: Request) {
     orderBy: [{ department: "asc" }, { firstName: "asc" }],
   });
 
-  return NextResponse.json({ employees, month, year });
+  // Fetch org holidays for the month
+  const startOfMonth = new Date(Date.UTC(year, month - 1, 1));
+  const endOfMonth = new Date(Date.UTC(year, month, 0, 23, 59, 59));
+  const holidays = await prisma.holiday.findMany({
+    where: {
+      organizationId: ctx.orgId,
+      date: { gte: startOfMonth, lte: endOfMonth },
+    },
+    select: { date: true, name: true },
+  });
+
+  return NextResponse.json({
+    employees,
+    month,
+    year,
+    holidays: holidays.map((h) => ({ date: h.date.toISOString(), name: h.name })),
+  });
 }

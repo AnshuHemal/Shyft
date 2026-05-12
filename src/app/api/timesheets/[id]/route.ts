@@ -1,6 +1,5 @@
 /**
- * PATCH /api/timesheets/[id]        — submit timesheet (employee)
- * GET   /api/timesheets/[id]        — get timesheet by id (HR or employee)
+ * PATCH /api/timesheets/[id]  — submit / approve / reject / hr_submit / hr_approve / hr_reject
  */
 
 import { NextResponse } from "next/server";
@@ -15,7 +14,7 @@ async function getSessionUser() {
   return session;
 }
 
-// ── PATCH — submit or approve/reject timesheet ────────────────────────────────
+// ── PATCH ─────────────────────────────────────────────────────────────────────
 export async function PATCH(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -26,7 +25,7 @@ export async function PATCH(
   const { id } = await params;
   const body = await request.json();
   const { action, rejectionNote } = body as {
-    action: "submit" | "approve" | "reject";
+    action: "submit" | "approve" | "reject" | "hr_submit" | "hr_approve" | "hr_reject";
     rejectionNote?: string;
   };
 
@@ -41,7 +40,7 @@ export async function PATCH(
     return NextResponse.json({ error: "Timesheet not found." }, { status: 404 });
   }
 
-  // ── Employee submitting their own timesheet ──────────────────────────────
+  // ── 1. Employee submitting to reporting lead ──────────────────────────────
   if (action === "submit") {
     if (user.role !== "EMPLOYEE" || timesheet.employee.userId !== user.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
@@ -53,13 +52,14 @@ export async function PATCH(
       );
     }
 
-    // Fetch the employee's reporting manager
+    const { reportingLeadId: requestedLeadId } = body as { reportingLeadId?: string };
     const emp = await prisma.employee.findUnique({
       where: { userId: user.id },
-      select: { reportingToId: true }
+      select: { reportingToId: true },
     });
+    const finalLeadId = requestedLeadId || emp?.reportingToId;
 
-    if (!emp?.reportingToId) {
+    if (!finalLeadId) {
       return NextResponse.json(
         { error: "No reporting person assigned. Please contact HR to set up your reporting line before submitting." },
         { status: 400 }
@@ -68,51 +68,36 @@ export async function PATCH(
 
     const updated = await prisma.timesheet.update({
       where: { id },
-      data: { 
-        status: "SUBMITTED", 
-        submittedAt: new Date(),
-        reportingLeadId: emp.reportingToId
-      },
+      data: { status: "SUBMITTED", submittedAt: new Date(), reportingLeadId: finalLeadId },
     });
-
     return NextResponse.json({ success: true, timesheet: updated });
   }
 
-  // ── HR or Reporting Lead approving or rejecting ──────────────────────────────
+  // ── 2. Lead approving / rejecting ─────────────────────────────────────────
   if (action === "approve" || action === "reject") {
     let isAuthorized = false;
 
-    // Case 1: Is HR (Owner of the organization)
     if (user.role === "USER") {
       const org = await prisma.organization.findUnique({
         where: { ownerId: user.id },
         select: { id: true },
       });
-      if (org && org.id === timesheet.employee.organizationId) {
-        isAuthorized = true;
-      }
+      if (org && org.id === timesheet.employee.organizationId) isAuthorized = true;
     }
 
-    // Case 2: Is the assigned Reporting Lead
     if (!isAuthorized && user.role === "EMPLOYEE") {
       const currentEmployee = await prisma.employee.findUnique({
         where: { userId: user.id },
-        select: { id: true }
+        select: { id: true },
       });
-      if (currentEmployee && currentEmployee.id === timesheet.reportingLeadId) {
-        isAuthorized = true;
-      }
+      if (currentEmployee && currentEmployee.id === timesheet.reportingLeadId) isAuthorized = true;
     }
 
     if (!isAuthorized) {
       return NextResponse.json({ error: "Unauthorized to review this timesheet." }, { status: 403 });
     }
-
     if (timesheet.status !== "SUBMITTED") {
-      return NextResponse.json(
-        { error: "Only SUBMITTED timesheets can be reviewed." },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Only SUBMITTED timesheets can be reviewed." }, { status: 400 });
     }
 
     const updated = await prisma.timesheet.update({
@@ -124,12 +109,56 @@ export async function PATCH(
         rejectionNote: action === "reject" ? (rejectionNote ?? null) : null,
       },
     });
+    return NextResponse.json({ success: true, timesheet: updated });
+  }
 
-    // If approved by Lead, send email to HR
-    if (action === "approve") {
-      console.log(`[EMAIL] To: HR@${timesheet.employee.organizationId}.com, Subject: Timesheet Approved for ${timesheet.employee.userId}, Body: The timesheet has been approved by the reporting lead and is ready for final payroll processing.`);
+  // ── 3. Employee forwarding lead-approved timesheet to HR ──────────────────
+  if (action === "hr_submit") {
+    if (user.role !== "EMPLOYEE" || timesheet.employee.userId !== user.id) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+    }
+    if (timesheet.status !== "APPROVED") {
+      return NextResponse.json(
+        { error: "Only lead-approved timesheets can be forwarded to HR." },
+        { status: 400 }
+      );
     }
 
+    const updated = await prisma.timesheet.update({
+      where: { id },
+      data: { status: "HR_SUBMITTED", hrSubmittedAt: new Date() },
+    });
+    return NextResponse.json({ success: true, timesheet: updated });
+  }
+
+  // ── 4. HR final approve / reject ──────────────────────────────────────────
+  if (action === "hr_approve" || action === "hr_reject") {
+    if (user.role !== "USER") {
+      return NextResponse.json({ error: "Only HR can perform final approval." }, { status: 403 });
+    }
+    const org = await prisma.organization.findUnique({
+      where: { ownerId: user.id },
+      select: { id: true },
+    });
+    if (!org || org.id !== timesheet.employee.organizationId) {
+      return NextResponse.json({ error: "Unauthorized." }, { status: 403 });
+    }
+    if (timesheet.status !== "HR_SUBMITTED") {
+      return NextResponse.json(
+        { error: "Only HR_SUBMITTED timesheets can be finally reviewed." },
+        { status: 400 }
+      );
+    }
+
+    const updated = await prisma.timesheet.update({
+      where: { id },
+      data: {
+        status: action === "hr_approve" ? "HR_APPROVED" : "REJECTED",
+        hrReviewedAt: new Date(),
+        reviewedBy: user.id,
+        rejectionNote: action === "hr_reject" ? (rejectionNote ?? null) : null,
+      },
+    });
     return NextResponse.json({ success: true, timesheet: updated });
   }
 

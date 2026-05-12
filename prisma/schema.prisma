@@ -62,6 +62,8 @@ enum TimesheetStatus {
   SUBMITTED
   APPROVED
   REJECTED
+  HR_SUBMITTED   // Employee forwarded lead-approved timesheet to HR
+  HR_APPROVED    // HR gave final approval (payroll ready)
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -242,6 +244,8 @@ model Timesheet {
   rejectionNote  String?
   reportingLeadId String?
   reportingLead   Employee?       @relation("ReportingLeadReview", fields: [reportingLeadId], references: [id], onDelete: SetNull)
+  hrSubmittedAt  DateTime?       // when employee forwarded to HR after lead approval
+  hrReviewedAt   DateTime?       // when HR gave final approval
 
   createdAt      DateTime        @default(now())
   updatedAt      DateTime        @updatedAt

@@ -60,23 +60,42 @@ export function LeadSelect({
   }, []);
 
   React.useEffect(() => {
-    if (isOpen && !fetched && !loading) {
+    if (!fetched && !loading) {
       fetchEmployees();
     }
-  }, [isOpen, fetched, loading, fetchEmployees]);
+  }, [fetched, loading, fetchEmployees]);
+
+  // Sync search text with selected employee's name when not searching
+  React.useEffect(() => {
+    if (!isOpen && value) {
+      const selected = employees.find((e) => e.id === value);
+      if (selected) {
+        const fullName = `${selected.firstName} ${selected.lastName}`;
+        if (search !== fullName) {
+          setSearch(fullName);
+        }
+      }
+    } else if (!isOpen && !value && search !== "") {
+      setSearch("");
+    }
+  }, [value, employees, isOpen, search]);
+
+  const selected = employees.find((e) => e.id === value);
 
   const filtered = employees.filter((e) => {
     if (e.id === excludeId) return false;
     const name = `${e.firstName} ${e.lastName}`.toLowerCase();
+    // If search is empty or matches the selected name, show all (or the selection)
+    if (!search || (selected && `${selected.firstName} ${selected.lastName}` === search)) return true;
     return name.includes(search.toLowerCase()) || e.designation.toLowerCase().includes(search.toLowerCase());
   });
-
-  const selected = employees.find((e) => e.id === value);
 
   return (
     <Combobox
       value={value}
-      onValueChange={(val) => onChange(val || "")}
+      onValueChange={(val) => {
+        onChange(val || "");
+      }}
       open={isOpen}
       onOpenChange={setIsOpen}
       inputValue={search}
@@ -84,7 +103,7 @@ export function LeadSelect({
     >
       <div className="relative">
         <ComboboxInput
-          disabled={disabled}
+          disabled={disabled || loading}
           placeholder={placeholder}
           className="w-full"
           showClear

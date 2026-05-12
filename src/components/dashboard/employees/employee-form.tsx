@@ -111,10 +111,10 @@ const CURRENCIES = ["INR", "USD", "EUR", "GBP", "AED", "SGD", "AUD", "CAD"];
 // Uses a small subset of words — the full list lives server-side.
 
 const CLIENT_WORDS = [
-  "swift","noble","brave","crisp","fresh","bright","smart","light","solid",
-  "quiet","proud","lucky","happy","sunny","windy","rainy","silky","spicy",
-  "golden","silver","copper","marble","velvet","cotton","linen","contact",
-  "slender","puffy","round","plain","vivid","grand","clean","sharp","calm",
+  "swift", "noble", "brave", "crisp", "fresh", "bright", "smart", "light", "solid",
+  "quiet", "proud", "lucky", "happy", "sunny", "windy", "rainy", "silky", "spicy",
+  "golden", "silver", "copper", "marble", "velvet", "cotton", "linen", "contact",
+  "slender", "puffy", "round", "plain", "vivid", "grand", "clean", "sharp", "calm",
 ];
 
 function clientPickWord(): string {
@@ -513,34 +513,37 @@ export function EmployeeForm({ mode, employee }: EmployeeFormProps) {
               </Card>
 
               {/* Actions */}
-              <div className="flex flex-col gap-2">
-                <Button type="submit" className="w-full gap-2" disabled={loading}>
-                  {loading ? <Spinner className="size-4" /> : <SaveIcon className="size-4" />}
-                  {loading
-                    ? mode === "create" ? "Adding…" : "Saving…"
-                    : mode === "create" ? "Add employee" : "Save changes"}
-                </Button>
-
+              <div className="flex items-center gap-2">
                 <Button
                   type="button"
                   variant="outline"
-                  className="w-full gap-2"
+                  className="flex-1 gap-2 h-11 rounded-xl"
                   onClick={() => router.back()}
                 >
                   <ArrowLeftIcon className="size-4" />
-                  Back
+                  <span>Back</span>
+                </Button>
+
+                <Button type="submit" className="flex-1 gap-2 h-11 rounded-xl shadow-lg shadow-primary/20" disabled={loading}>
+                  {loading ? <Spinner className="size-4" /> : <SaveIcon className="size-4" />}
+                  <span className="hidden sm:inline">
+                    {loading
+                      ? mode === "create" ? "Adding…" : "Saving…"
+                      : mode === "create" ? "Add" : "Save"}
+                  </span>
+                  <span className="sm:hidden">{mode === "create" ? "Add" : "Save"}</span>
                 </Button>
 
                 {mode === "edit" && employee?.status !== "TERMINATED" && (
                   <Button
                     type="button"
                     variant="destructive"
-                    className="w-full gap-2"
+                    className="flex-1 gap-2 h-11 rounded-xl bg-destructive/5 text-destructive border-destructive/10 hover:bg-destructive hover:text-white transition-all shadow-sm"
                     onClick={handleTerminate}
                     disabled={deleting}
                   >
                     {deleting ? <Spinner className="size-4" /> : <TrashIcon className="size-4" />}
-                    Terminate employee
+                    <span className="hidden md:inline">Terminate</span>
                   </Button>
                 )}
               </div>

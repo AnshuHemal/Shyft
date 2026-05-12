@@ -5,7 +5,6 @@ import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
-import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
 import {
   MONTH_NAMES,
@@ -14,6 +13,8 @@ import {
   formatHours,
   isWithinEditWindow,
   isFutureDate,
+  isMonthComplete,
+  daysRemainingInMonth,
 } from "@/lib/timesheet-utils";
 import {
   ChevronLeftIcon,
@@ -25,13 +26,26 @@ import {
   ExternalLinkIcon,
   ChevronDownIcon,
   CoffeeIcon,
+  LockIcon,
+  CalendarClockIcon,
+  Building2Icon,
+  PartyPopperIcon,
 } from "lucide-react";
 import { TaskLogModal } from "./task-log-modal";
+import { SubmissionModal } from "./submission-modal";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
 type DayType = "WORKING" | "HOLIDAY" | "LEAVE" | "HALF_DAY" | "WEEKEND";
-type TimesheetStatus = "DRAFT" | "SUBMITTED" | "APPROVED" | "REJECTED";
+type TimesheetStatus = "DRAFT" | "SUBMITTED" | "APPROVED" | "REJECTED" | "HR_SUBMITTED" | "HR_APPROVED";
 
 interface TimesheetTask {
   id: string;
@@ -67,10 +81,12 @@ interface Timesheet {
 // ── Status config ─────────────────────────────────────────────────────────────
 
 const STATUS_CONFIG: Record<TimesheetStatus, { label: string; color: string }> = {
-  DRAFT: { label: "Draft", color: "bg-muted text-muted-foreground border-border" },
-  SUBMITTED: { label: "Submitted for review", color: "bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20" },
-  APPROVED: { label: "Approved", color: "bg-green-500/10 text-green-600 dark:text-green-400 border-green-500/20" },
-  REJECTED: { label: "Rejected — please revise", color: "bg-destructive/10 text-destructive border-destructive/20" },
+  DRAFT:        { label: "Draft",                    color: "bg-muted text-muted-foreground border-border" },
+  SUBMITTED:    { label: "Submitted for review",     color: "bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20" },
+  APPROVED:     { label: "Approved by lead",         color: "bg-green-500/10 text-green-600 dark:text-green-400 border-green-500/20" },
+  REJECTED:     { label: "Rejected — please revise", color: "bg-destructive/10 text-destructive border-destructive/20" },
+  HR_SUBMITTED: { label: "Submitted to HR",          color: "bg-violet-500/10 text-violet-600 dark:text-violet-400 border-violet-500/20" },
+  HR_APPROVED:  { label: "HR Approved",              color: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20" },
 };
 
 const DAY_TYPE_CONFIG: Record<DayType, { label: string; rowClass: string; badgeClass: string }> = {
@@ -259,8 +275,11 @@ export function TimesheetView() {
   const [holidays, setHolidays] = React.useState<{ date: string; name: string }[]>([]);
   const [loading, setLoading] = React.useState(true);
   const [submitting, setSubmitting] = React.useState(false);
+  const [hrSubmitting, setHrSubmitting] = React.useState(false);
+  const [showHrSubmitDialog, setShowHrSubmitDialog] = React.useState(false);
   const [mounted, setMounted] = React.useState(false);
   const [isPickerOpen, setIsPickerOpen] = React.useState(false);
+  const [isSubmissionModalOpen, setIsSubmissionModalOpen] = React.useState(false);
   const pickerRef = React.useRef<HTMLDivElement>(null);
 
   // Close picker on click outside
@@ -329,14 +348,18 @@ export function TimesheetView() {
     toast.success("Log saved successfully.");
   }
 
-  async function handleSubmit() {
+  function handleSubmit() {
+    setIsSubmissionModalOpen(true);
+  }
+
+  async function handleConfirmSubmission(reviewerId: string) {
     if (!timesheet) return;
     setSubmitting(true);
     try {
       const res = await fetch(`/api/timesheets/${timesheet.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "submit" }),
+        body: JSON.stringify({ action: "submit", reportingLeadId: reviewerId }),
       });
       const json = await res.json();
       if (!res.ok) {
@@ -345,8 +368,31 @@ export function TimesheetView() {
       }
       setTimesheet((ts) => ts ? { ...ts, status: "SUBMITTED" } : ts);
       toast.success("Timesheet submitted for review.");
+      setIsSubmissionModalOpen(false);
     } finally {
       setSubmitting(false);
+    }
+  }
+
+  async function handleHrSubmit() {
+    if (!timesheet) return;
+    setHrSubmitting(true);
+    try {
+      const res = await fetch(`/api/timesheets/${timesheet.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "hr_submit" }),
+      });
+      const json = await res.json();
+      if (!res.ok) {
+        toast.error(json.error ?? "Failed to submit to HR.");
+        return;
+      }
+      setTimesheet((ts) => ts ? { ...ts, status: "HR_SUBMITTED" } : ts);
+      setShowHrSubmitDialog(false);
+      toast.success("Timesheet forwarded to HR for final approval.");
+    } finally {
+      setHrSubmitting(false);
     }
   }
 
@@ -369,7 +415,10 @@ export function TimesheetView() {
   const status = (timesheet?.status ?? "DRAFT") as TimesheetStatus;
   const statusCfg = STATUS_CONFIG[status];
   const canEdit = status === "DRAFT" || status === "REJECTED";
-  const canSubmit = canEdit && daysWithTasks > 0;
+  const monthComplete = isMonthComplete(month, year);
+  const daysLeft = daysRemainingInMonth(month, year);
+  const canSubmit = canEdit && daysWithTasks > 0 && monthComplete;
+  const canSubmitToHR = status === "APPROVED";
 
   return (
     <div
@@ -488,19 +537,105 @@ export function TimesheetView() {
               <span className="font-medium text-foreground">{formatHours(totalMins)}</span> total duration
             </span>
           </div>
-          <div className="sm:ml-auto flex gap-3">
+          <div className="sm:ml-auto flex items-center gap-3">
+            {/* Month not complete yet — show locked state with days remaining */}
+            {canEdit && daysWithTasks > 0 && !monthComplete && (
+              <Tooltip>
+                <TooltipTrigger render={
+                  <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-amber-500/8 border border-amber-500/20 text-amber-600 dark:text-amber-400 cursor-not-allowed select-none">
+                    <LockIcon className="size-3.5 shrink-0" />
+                    <span className="text-xs font-bold">Submit for review</span>
+                  </div>
+                } />
+                <TooltipContent side="top" className="max-w-xs">
+                  <div className="flex items-start gap-2 py-0.5">
+                    <CalendarClockIcon className="size-4 shrink-0 mt-0.5 text-amber-400" />
+                    <div>
+                      <p className="font-bold text-sm">Month not complete</p>
+                      <p className="text-xs text-muted-foreground mt-0.5">
+                        {daysLeft === 1
+                          ? "1 day remaining in this month."
+                          : `${daysLeft} days remaining in this month.`}
+                        {" "}Submission unlocks on the 1st of next month.
+                      </p>
+                    </div>
+                  </div>
+                </TooltipContent>
+              </Tooltip>
+            )}
+            {/* Month complete — show active submit button */}
             {canSubmit && (
-              <Button size="sm" className="gap-2 px-4 shadow-lg shadow-primary/20" onClick={handleSubmit} disabled={submitting}>
+              <Button size="sm" className="gap-2 px-4 shadow-lg shadow-primary/20 animate-in fade-in zoom-in-95 duration-300" onClick={handleSubmit} disabled={submitting}>
                 {submitting ? <Spinner className="size-4" /> : <SendIcon className="size-4" />}
                 {submitting ? "Submitting…" : "Submit for review"}
               </Button>
             )}
-            {status === "APPROVED" && (
-              <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-green-500/10 text-green-600 dark:text-green-400 text-sm font-bold border border-green-500/20">
-                <CheckCircle2Icon className="size-4" />
-                Approved
+            {/* Lead approved — show Submit to HR button */}
+            {canSubmitToHR && (
+              <Button
+                size="sm"
+                className="gap-2 px-4 shadow-lg shadow-violet-500/20 bg-violet-600 hover:bg-violet-700 text-white animate-in fade-in zoom-in-95 duration-300"
+                onClick={() => setShowHrSubmitDialog(true)}
+              >
+                <Building2Icon className="size-4" />
+                Submit to HR
+              </Button>
+            )}
+            {/* HR submitted — waiting */}
+            {status === "HR_SUBMITTED" && (
+              <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 text-violet-600 dark:text-violet-400 text-sm font-bold border border-violet-500/20 animate-in fade-in duration-300">
+                <Building2Icon className="size-4" />
+                Awaiting HR review
               </div>
             )}
+            {/* HR final approval */}
+            {status === "HR_APPROVED" && (
+              <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-sm font-bold border border-emerald-500/20 animate-in fade-in duration-300">
+                <PartyPopperIcon className="size-4" />
+                HR Approved
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Month-in-progress notice — shown when viewing current month in DRAFT */}
+      {timesheet && canEdit && !monthComplete && (
+        <div className={cn(
+          "flex items-start gap-4 rounded-2xl border border-amber-500/20 bg-amber-500/5 px-5 py-4 transition-all duration-500",
+          mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
+        )}>
+          <div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-amber-500/10 mt-0.5">
+            <CalendarClockIcon className="size-4 text-amber-600 dark:text-amber-400" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-bold text-amber-700 dark:text-amber-400">
+              Month in progress — {daysLeft} {daysLeft === 1 ? "day" : "days"} remaining
+            </p>
+            <p className="text-xs text-amber-600/80 dark:text-amber-500/80 mt-0.5 leading-relaxed">
+              Keep logging your daily tasks. The <span className="font-bold">Submit for review</span> button will unlock automatically once {MONTH_NAMES[month - 1]} is complete.
+            </p>
+          </div>
+          {/* Progress bar */}
+          <div className="hidden sm:flex flex-col items-end gap-1.5 shrink-0">
+            <span className="text-[10px] font-black uppercase tracking-widest text-amber-600/70 dark:text-amber-500/70">
+              Month progress
+            </span>
+            <div className="w-32 h-1.5 rounded-full bg-amber-500/15 overflow-hidden">
+              <div
+                className="h-full rounded-full bg-amber-500 transition-all duration-700"
+                style={{
+                  width: `${Math.round(
+                    ((new Date(Date.UTC(year, month, 0)).getDate() - daysLeft) /
+                      new Date(Date.UTC(year, month, 0)).getDate()) *
+                      100
+                  )}%`,
+                }}
+              />
+            </div>
+            <span className="text-[10px] font-bold text-amber-600/70 dark:text-amber-500/70 tabular-nums">
+              {new Date(Date.UTC(year, month, 0)).getDate() - daysLeft} / {new Date(Date.UTC(year, month, 0)).getDate()} days
+            </span>
           </div>
         </div>
       )}
@@ -510,6 +645,26 @@ export function TimesheetView() {
         <div className="rounded-2xl border border-destructive/20 bg-destructive/5 px-5 py-4">
           <p className="text-sm font-bold text-destructive mb-1 uppercase tracking-tight">Review Feedback</p>
           <p className="text-sm text-muted-foreground leading-relaxed">{timesheet.rejectionNote}</p>
+        </div>
+      )}
+
+      {/* HR Approved — final celebration banner */}
+      {status === "HR_APPROVED" && (
+        <div className={cn(
+          "flex items-start gap-4 rounded-2xl border border-emerald-500/20 bg-emerald-500/5 px-5 py-4 transition-all duration-500",
+          mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
+        )}>
+          <div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-emerald-500/10 mt-0.5">
+            <PartyPopperIcon className="size-4 text-emerald-600 dark:text-emerald-400" />
+          </div>
+          <div>
+            <p className="text-sm font-bold text-emerald-700 dark:text-emerald-400">
+              Timesheet fully approved by HR
+            </p>
+            <p className="text-xs text-emerald-600/80 dark:text-emerald-500/80 mt-0.5 leading-relaxed">
+              Your {MONTH_NAMES[month - 1]} {year} timesheet has been reviewed and approved by HR. It is now ready for payroll processing.
+            </p>
+          </div>
         </div>
       )}
 
@@ -563,6 +718,87 @@ export function TimesheetView() {
         entry={editingEntry}
         onSave={handleSaveEntry}
       />
+
+      {/* Submission Modal */}
+      <SubmissionModal
+        isOpen={isSubmissionModalOpen}
+        onOpenChange={setIsSubmissionModalOpen}
+        onConfirm={handleConfirmSubmission}
+        isSubmitting={submitting}
+      />
+
+      {/* HR Submit Confirmation Dialog */}
+      <Dialog open={showHrSubmitDialog} onOpenChange={(o) => !o && setShowHrSubmitDialog(false)}>
+        <DialogContent className="max-w-md rounded-3xl p-0 overflow-hidden border-none shadow-2xl">
+          {/* Colored header */}
+          <div className="relative p-8 bg-violet-600 text-white overflow-hidden">
+            <div className="absolute top-0 right-0 p-8 opacity-10 rotate-12 scale-150">
+              <Building2Icon className="size-24" />
+            </div>
+            <DialogHeader className="space-y-3 relative">
+              <div className="size-14 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center shadow-xl">
+                <Building2Icon className="size-7" />
+              </div>
+              <DialogTitle className="text-2xl font-black uppercase tracking-tight text-white">
+                Submit to HR
+              </DialogTitle>
+              <DialogDescription className="text-white/80 font-medium leading-relaxed">
+                Your timesheet has been approved by your reporting lead. Forwarding it to HR marks it ready for payroll processing.
+              </DialogDescription>
+            </DialogHeader>
+          </div>
+
+          {/* Body */}
+          <div className="p-8 bg-card space-y-5">
+            {/* Summary */}
+            <div className="rounded-2xl bg-muted/40 border border-border/60 p-4 space-y-3">
+              <p className="text-xs font-black uppercase tracking-widest text-muted-foreground">Timesheet summary</p>
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-muted-foreground">Period</span>
+                <span className="font-bold">{MONTH_NAMES[month - 1]} {year}</span>
+              </div>
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-muted-foreground">Days logged</span>
+                <span className="font-bold">{daysWithTasks} days</span>
+              </div>
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-muted-foreground">Total hours</span>
+                <span className="font-bold">{formatHours(totalMins)}</span>
+              </div>
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-muted-foreground">Lead status</span>
+                <span className="inline-flex items-center gap-1.5 text-green-600 font-bold">
+                  <CheckCircle2Icon className="size-3.5" />
+                  Approved
+                </span>
+              </div>
+            </div>
+
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              Once submitted to HR, you will not be able to make further changes. HR will do a final review before payroll.
+            </p>
+
+            <DialogFooter className="flex gap-3 sm:justify-between pt-1">
+              <Button
+                variant="ghost"
+                onClick={() => setShowHrSubmitDialog(false)}
+                disabled={hrSubmitting}
+                className="font-bold h-11 rounded-xl"
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={handleHrSubmit}
+                disabled={hrSubmitting}
+                className="h-11 px-8 rounded-xl font-black uppercase tracking-widest shadow-lg bg-violet-600 hover:bg-violet-700 text-white shadow-violet-500/20 gap-2 transition-all active:scale-95"
+              >
+                {hrSubmitting ? <Spinner className="size-4" /> : <Building2Icon className="size-4" />}
+                {hrSubmitting ? "Submitting…" : "Confirm & Submit"}
+              </Button>
+            </DialogFooter>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

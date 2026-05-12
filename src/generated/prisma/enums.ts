@@ -74,7 +74,9 @@ export const TimesheetStatus = {
   DRAFT: 'DRAFT',
   SUBMITTED: 'SUBMITTED',
   APPROVED: 'APPROVED',
-  REJECTED: 'REJECTED'
+  REJECTED: 'REJECTED',
+  HR_SUBMITTED: 'HR_SUBMITTED',
+  HR_APPROVED: 'HR_APPROVED'
 } as const
 
 export type TimesheetStatus = (typeof TimesheetStatus)[keyof typeof TimesheetStatus]

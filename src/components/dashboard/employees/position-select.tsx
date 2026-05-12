@@ -52,7 +52,7 @@ export function PositionSelect({
   const [loading, setLoading] = React.useState(false);
   const [fetched, setFetched] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
-  const [searchInput, setSearchInput] = React.useState("");
+  const [searchInput, setSearchInput] = React.useState(value || "");
   const [isOpen, setIsOpen] = React.useState(false);
   const [showAddDialog, setShowAddDialog] = React.useState(false);
   const [newPositionName, setNewPositionName] = React.useState("");
@@ -84,12 +84,19 @@ export function PositionSelect({
     }
   }, []);
 
-  // Fetch when dropdown opens for the first time
+  // Fetch on mount to resolve the initial value's label if needed
   React.useEffect(() => {
-    if (isOpen && !fetched && !loading) {
-      fetchPositions("");
+    if (!fetched && !loading) {
+      fetchPositions(value || "");
     }
-  }, [isOpen, fetched, loading, fetchPositions]);
+  }, [fetched, loading, fetchPositions, value]);
+
+  // Sync search input with value when value changes externally (e.g. form reset)
+  React.useEffect(() => {
+    if (!isOpen && value !== searchInput) {
+      setSearchInput(value || "");
+    }
+  }, [value, isOpen, searchInput]);
 
   // Debounce search input while dropdown is open
   React.useEffect(() => {
@@ -154,8 +161,7 @@ export function PositionSelect({
   };
 
   // Get selected position label
-  const selectedPosition = positions.find((p) => p.id === value);
-  const displayLabel = selectedPosition?.name || placeholder;
+  const displayLabel = value || placeholder;
 
   return (
     <>
@@ -173,113 +179,111 @@ export function PositionSelect({
           showClear
         />
 
-        {isOpen && (
-          <ComboboxContent
-            className="overflow-hidden p-1 rounded-lg"
-            align="start"
-            side="bottom"
-            sideOffset={4}
-          >
-            {/* Loading state */}
-            {loading && !positions.length && (
-              <div className="flex items-center justify-center gap-2 py-6 px-4">
-                <Spinner className="size-4" />
-                <span className="text-sm text-muted-foreground">Loading positions…</span>
-              </div>
-            )}
+        <ComboboxContent
+          className="overflow-hidden p-1 rounded-lg"
+          align="start"
+          side="bottom"
+          sideOffset={4}
+        >
+          {/* Loading state */}
+          {loading && !positions.length && (
+            <div className="flex items-center justify-center gap-2 py-6 px-4">
+              <Spinner className="size-4" />
+              <span className="text-sm text-muted-foreground">Loading positions…</span>
+            </div>
+          )}
 
-            {/* Error state */}
-            {error && !loading && (
-              <div className="flex items-start gap-2 py-3 px-4 text-sm text-destructive bg-destructive/5">
-                <AlertCircleIcon className="size-4 mt-0.5 shrink-0" />
-                <div>
-                  <p className="font-medium">{error}</p>
-                  <button
-                    className="text-xs underline mt-1 hover:no-underline"
-                    onClick={() => fetchPositions()}
-                  >
-                    Try again
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {/* Empty state */}
-            {!loading && filteredPositions.length === 0 && !error && (
-              <div className="py-8 px-4 text-center">
-                <p className="text-sm text-muted-foreground mb-3">
-                  {searchInput ? "No positions found" : "No positions yet"}
-                </p>
-                <Button
-                  type="button"
-                  size="sm"
-                  className="gap-1.5"
-                  onClick={() => {
-                    setShowAddDialog(true);
-                    setIsOpen(false);
-                  }}
+          {/* Error state */}
+          {error && !loading && (
+            <div className="flex items-start gap-2 py-3 px-4 text-sm text-destructive bg-destructive/5">
+              <AlertCircleIcon className="size-4 mt-0.5 shrink-0" />
+              <div>
+                <p className="font-medium">{error}</p>
+                <button
+                  className="text-xs underline mt-1 hover:no-underline"
+                  onClick={() => fetchPositions()}
                 >
-                  <PlusIcon className="size-3.5" />
-                  Create position
-                </Button>
+                  Try again
+                </button>
               </div>
-            )}
+            </div>
+          )}
 
-            {/* Items */}
-            {!loading &&
-              filteredPositions.length > 0 &&
-              filteredPositions.map((position, idx) => (
-                <React.Fragment key={position.id}>
-                  <ComboboxItem
-                    value={position.name}
-                    className="cursor-pointer p-2 rounded-md transition-all duration-200 data-highlighted:bg-primary/10"
-                  >
-                    <div className="flex items-center gap-3 flex-1 min-w-0">
-                      <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary/5 text-primary border border-primary/10">
-                        <BriefcaseIcon className="size-4" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center justify-between gap-2">
-                          <p className="font-medium text-sm truncate">{position.name}</p>
-                          {position.level && (
-                            <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-primary/10 text-primary uppercase tracking-wider shrink-0">
-                              L{position.level}
-                            </span>
-                          )}
-                        </div>
-                        {position.description && (
-                          <p className="text-xs text-muted-foreground line-clamp-1 mt-0.5">
-                            {position.description}
-                          </p>
+          {/* Empty state */}
+          {!loading && filteredPositions.length === 0 && !error && (
+            <div className="py-8 px-4 text-center">
+              <p className="text-sm text-muted-foreground mb-3">
+                {searchInput ? "No positions found" : "No positions yet"}
+              </p>
+              <Button
+                type="button"
+                size="sm"
+                className="gap-1.5"
+                onClick={() => {
+                  setShowAddDialog(true);
+                  setIsOpen(false);
+                }}
+              >
+                <PlusIcon className="size-3.5" />
+                Create position
+              </Button>
+            </div>
+          )}
+
+          {/* Items */}
+          {!loading &&
+            filteredPositions.length > 0 &&
+            filteredPositions.map((position, idx) => (
+              <React.Fragment key={position.id}>
+                <ComboboxItem
+                  value={position.name}
+                  className="cursor-pointer p-2 rounded-md transition-all duration-200 data-highlighted:bg-primary/10"
+                >
+                  <div className="flex items-center gap-3 flex-1 min-w-0">
+                    <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary/5 text-primary border border-primary/10">
+                      <BriefcaseIcon className="size-4" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between gap-2">
+                        <p className="font-medium text-sm truncate">{position.name}</p>
+                        {position.level && (
+                          <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-primary/10 text-primary uppercase tracking-wider shrink-0">
+                            L{position.level}
+                          </span>
                         )}
                       </div>
+                      {position.description && (
+                        <p className="text-xs text-muted-foreground line-clamp-1 mt-0.5">
+                          {position.description}
+                        </p>
+                      )}
                     </div>
-                  </ComboboxItem>
-                </React.Fragment>
-              ))}
-
-            {/* Create new — Persistent at bottom */}
-            {!loading && (
-              <>
-                <ComboboxSeparator className="my-1 opacity-50" />
-                <button
-                  type="button"
-                  onMouseDown={(e) => {
-                    e.preventDefault();
-                    setShowAddDialog(true);
-                    setIsOpen(false);
-                  }}
-                  className="w-full flex items-center gap-2 px-3 py-2 text-sm font-medium text-primary hover:bg-primary/10 transition-all rounded-md"
-                >
-                  <div className="flex size-7 items-center justify-center rounded-full bg-primary text-white shadow-sm shadow-primary/20">
-                    <PlusIcon className="size-4" />
                   </div>
-                  Create new position
-                </button>
-              </>
-            )}
-          </ComboboxContent>
-        )}
+                </ComboboxItem>
+              </React.Fragment>
+            ))}
+
+          {/* Create new — Persistent at bottom */}
+          {!loading && (
+            <>
+              <ComboboxSeparator className="my-1 opacity-50" />
+              <button
+                type="button"
+                onMouseDown={(e) => {
+                  e.preventDefault();
+                  setShowAddDialog(true);
+                  setIsOpen(false);
+                }}
+                className="w-full flex items-center gap-2 px-3 py-2 text-sm font-medium text-primary hover:bg-primary/10 transition-all rounded-md"
+              >
+                <div className="flex size-7 items-center justify-center rounded-full bg-primary text-white shadow-sm shadow-primary/20">
+                  <PlusIcon className="size-4" />
+                </div>
+                Create new position
+              </button>
+            </>
+          )}
+        </ComboboxContent>
       </Combobox>
 
       {/* Add Position Dialog */}

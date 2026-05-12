@@ -7,9 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function ApprovalsPage() {
-  return (
-    <div className="max-w-6xl mx-auto">
-      <LeadApprovals />
-    </div>
-  );
+  return <LeadApprovals />;
 }

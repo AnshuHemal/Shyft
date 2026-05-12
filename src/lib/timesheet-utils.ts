@@ -79,6 +79,31 @@ export function isFutureDate(date: Date): boolean {
 }
 
 /**
+ * Check if a given month/year is fully complete (i.e. today is past the last day of that month).
+ * Employees can only submit once the entire month has passed.
+ */
+export function isMonthComplete(month: number, year: number): boolean {
+  const now = new Date();
+  const todayUTC = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));
+  // Last day of the given month at UTC midnight
+  const lastDayOfMonth = new Date(Date.UTC(year, month, 0)); // month is 1-based, so month,0 = last day
+  return todayUTC > lastDayOfMonth;
+}
+
+/**
+ * Returns how many days remain in the given month from today.
+ * Returns 0 if the month is already complete.
+ */
+export function daysRemainingInMonth(month: number, year: number): number {
+  const now = new Date();
+  const todayUTC = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));
+  const lastDayOfMonth = new Date(Date.UTC(year, month, 0));
+  if (todayUTC > lastDayOfMonth) return 0;
+  const diff = lastDayOfMonth.getTime() - todayUTC.getTime();
+  return Math.ceil(diff / (1000 * 60 * 60 * 24));
+}
+
+/**
  * Generate time options in 30-minute increments for time pickers.
  */
 export function getTimeOptions(): { value: string; label: string }[] {
@@ -108,3 +133,23 @@ export const BREAK_OPTIONS = [
   { value: "60", label: "1 hour" },
   { value: "90", label: "1.5 hours" },
 ];
+
+/**
+ * Returns a Tailwind background color class for a given day type.
+ */
+export function getDayTypeColor(type: string): string {
+  switch (type) {
+    case "WORKING":
+      return "bg-primary";
+    case "HOLIDAY":
+      return "bg-amber-500";
+    case "LEAVE":
+      return "bg-rose-500";
+    case "HALF_DAY":
+      return "bg-indigo-500";
+    case "WEEKEND":
+      return "bg-slate-300 dark:bg-slate-700";
+    default:
+      return "bg-muted";
+  }
+}

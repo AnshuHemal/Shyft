@@ -1,3 +1,9 @@
+/**
+ * GET /api/timesheets/lead?month=M&year=Y
+ * Returns all SUBMITTED timesheets assigned to the current employee as reporting lead.
+ * Includes full entry data (tasks, links, dayType, workDone) for the tabular review view.
+ */
+
 import { NextResponse } from "next/server";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
@@ -29,53 +35,95 @@ export async function GET(request: Request) {
   const month = Number(searchParams.get("month") ?? now.getMonth() + 1);
   const year = Number(searchParams.get("year") ?? now.getFullYear());
 
-  // Fetch all employees reporting to this lead
-  // and include their timesheets for the selected month
-  const teamTimesheets = await prisma.employee.findMany({
+  // Fetch all timesheets where this lead is the assigned reviewer (any status for history)
+  const timesheets = await prisma.timesheet.findMany({
     where: {
-      reportingToId: ctx.employee.id,
+      reportingLeadId: ctx.employee.id,
+      month,
+      year,
       organizationId: ctx.employee.organizationId,
+      // Show SUBMITTED (pending) + APPROVED/REJECTED (history) — not DRAFT
+      status: { in: ["SUBMITTED", "APPROVED", "REJECTED"] },
     },
-    select: {
-      id: true,
-      firstName: true,
-      lastName: true,
-      designation: true,
-      department: true,
-      timesheets: {
-        where: {
-          month,
-          year,
-          status: "SUBMITTED",
-        },
+    include: {
+      employee: {
         select: {
           id: true,
-          status: true,
-          submittedAt: true,
-          entries: {
-            select: {
-              startTime: true,
-              endTime: true,
-              breakMinutes: true,
-              tasks: {
-                select: {
-                  subject: true,
-                }
-              }
-            }
-          }
-        }
-      }
+          firstName: true,
+          lastName: true,
+          designation: true,
+          department: true,
+          employeeId: true,
+          avatar: true,
+        },
+      },
+      entries: {
+        orderBy: { date: "asc" },
+        include: {
+          tasks: {
+            include: {
+              project: {
+                select: { id: true, name: true, isLearning: true },
+              },
+            },
+            orderBy: { startTime: "asc" },
+          },
+        },
+      },
     },
-    orderBy: { firstName: "asc" }
+    orderBy: { submittedAt: "desc" },
   });
 
-  // Filter to only those with submitted timesheets
-  const pendingApprovals = teamTimesheets.filter(t => t.timesheets.length > 0);
+  // Also fetch org holidays for the month so the review view can show holiday names
+  const startOfMonth = new Date(Date.UTC(year, month - 1, 1));
+  const endOfMonth = new Date(Date.UTC(year, month, 0, 23, 59, 59));
+  const holidays = await prisma.holiday.findMany({
+    where: {
+      organizationId: ctx.employee.organizationId,
+      date: { gte: startOfMonth, lte: endOfMonth },
+    },
+    select: { date: true, name: true },
+  });
 
-  return NextResponse.json({ 
-    approvals: pendingApprovals,
+  // Transform to match the expected structure
+  const approvals = timesheets.map((ts) => ({
+    ...ts.employee,
+    timesheets: [
+      {
+        id: ts.id,
+        status: ts.status,
+        submittedAt: ts.submittedAt,
+        reviewedAt: ts.reviewedAt,
+        rejectionNote: ts.rejectionNote,
+        entries: ts.entries.map((e) => ({
+          id: e.id,
+          date: e.date,
+          dayType: e.dayType,
+          breakMinutes: e.breakMinutes ?? 0,
+          workDone: e.workDone,
+          links: e.links ?? [],
+          tasks: e.tasks.map((t) => ({
+            id: t.id,
+            startTime: t.startTime,
+            endTime: t.endTime,
+            subject: t.subject,
+            description: t.description,
+            isLearning: t.isLearning,
+            links: (t.links as { url: string; label: string }[]) ?? [],
+            project: t.project,
+          })),
+        })),
+      },
+    ],
+  }));
+
+  return NextResponse.json({
+    approvals,
     month,
-    year
+    year,
+    holidays: holidays.map((h) => ({
+      date: h.date.toISOString(),
+      name: h.name,
+    })),
   });
 }

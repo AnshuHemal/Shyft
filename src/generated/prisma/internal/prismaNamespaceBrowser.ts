@@ -190,6 +190,8 @@ export const TimesheetScalarFieldEnum = {
   reviewedBy: 'reviewedBy',
   rejectionNote: 'rejectionNote',
   reportingLeadId: 'reportingLeadId',
+  hrSubmittedAt: 'hrSubmittedAt',
+  hrReviewedAt: 'hrReviewedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   employeeId: 'employeeId',

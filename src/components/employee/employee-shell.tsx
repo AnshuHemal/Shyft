@@ -47,7 +47,14 @@ import {
   CheckCircle2Icon,
 } from "lucide-react";
 
-const NAV_ITEMS = [
+interface NavItem {
+  label: string;
+  href: string;
+  icon: React.ElementType;
+  exact?: boolean;
+}
+
+const NAV_ITEMS: NavItem[] = [
   {
     label: "Overview",
     href: "/employee",
@@ -66,7 +73,7 @@ const NAV_ITEMS = [
   },
 ];
 
-const LEAD_NAV_ITEMS = [
+const LEAD_NAV_ITEMS: NavItem[] = [
   {
     label: "Team Approvals",
     href: "/employee/approvals",
