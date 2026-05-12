@@ -551,14 +551,6 @@ export type EnumDayTypeFieldUpdateOperationsInput = {
   set?: $Enums.DayType
 }
 
-export type NullableIntFieldUpdateOperationsInput = {
-  set?: number | null
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
 export type TimesheetEntryUpdatelinksInput = {
   set?: string[]
   push?: string | string[]

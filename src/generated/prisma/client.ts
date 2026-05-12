@@ -52,6 +52,11 @@ export type Organization = Prisma.OrganizationModel
  */
 export type Department = Prisma.DepartmentModel
 /**
+ * Model Position
+ * 
+ */
+export type Position = Prisma.PositionModel
+/**
  * Model Holiday
  * 
  */
@@ -91,3 +96,13 @@ export type Account = Prisma.AccountModel
  * 
  */
 export type Verification = Prisma.VerificationModel
+/**
+ * Model Project
+ * 
+ */
+export type Project = Prisma.ProjectModel
+/**
+ * Model ProjectMember
+ * 
+ */
+export type ProjectMember = Prisma.ProjectMemberModel

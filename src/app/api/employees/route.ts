@@ -100,6 +100,18 @@ export async function GET(request: Request) {
         status: status as "ACTIVE" | "INACTIVE" | "ON_LEAVE" | "TERMINATED",
       }),
     },
+    select: {
+      id: true,
+      firstName: true,
+      lastName: true,
+      email: true,
+      designation: true,
+      status: true,
+      avatar: true,
+      employeeId: true,
+      department: true,
+      position: true,
+    },
     orderBy: [{ status: "asc" }, { firstName: "asc" }],
   });
 
@@ -244,6 +256,7 @@ export async function POST(request: Request) {
         notes: body.notes?.trim() || null,
         organizationId: ctx.orgId,
         userId: userRecord.id,        // link to the User account
+        reportingToId: body.reportingToId || null,
       },
     });
 

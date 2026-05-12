@@ -154,27 +154,38 @@ export function DepartmentSelect({
             <ComboboxEmpty>No departments found.</ComboboxEmpty>
 
             {departments.map((dept) => (
-              <ComboboxItem key={dept.id} value={dept.name}>
-                <BuildingIcon className="size-3.5 text-muted-foreground" />
-                {dept.name}
+              <ComboboxItem
+                key={dept.id}
+                value={dept.name}
+                className="cursor-pointer p-2 rounded-md transition-all duration-200 data-highlighted:bg-primary/10"
+              >
+                <div className="flex items-center gap-3 flex-1 min-w-0">
+                  <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary/5 text-primary border border-primary/10">
+                    <BuildingIcon className="size-4" />
+                  </div>
+                  <span className="font-medium text-sm truncate">{dept.name}</span>
+                </div>
               </ComboboxItem>
             ))}
 
-            {departments.length > 0 && <ComboboxSeparator />}
-
             {/* Add new department — triggers modal */}
-            <button
-              type="button"
-              onMouseDown={(e) => {
-                // Use mousedown so it fires before the combobox closes
-                e.preventDefault();
-                openModal();
-              }}
-              className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-sm text-primary hover:bg-accent hover:text-accent-foreground transition-colors"
-            >
-              <PlusIcon className="size-3.5 shrink-0" />
-              Add new department
-            </button>
+            <>
+              <ComboboxSeparator className="my-1 opacity-50" />
+              <button
+                type="button"
+                onMouseDown={(e) => {
+                  // Use mousedown so it fires before the combobox closes
+                  e.preventDefault();
+                  openModal();
+                }}
+                className="w-full flex items-center gap-2 px-3 py-2 text-sm font-medium text-primary hover:bg-primary/10 transition-all rounded-md"
+              >
+                <div className="flex size-7 items-center justify-center rounded-full bg-primary text-white shadow-sm shadow-primary/20">
+                  <PlusIcon className="size-4" />
+                </div>
+                Add new department
+              </button>
+            </>
           </ComboboxList>
         </ComboboxContent>
       </Combobox>

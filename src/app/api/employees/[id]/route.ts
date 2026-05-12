@@ -173,6 +173,7 @@ export async function PATCH(
         ...(passwordHash && body.password?.trim() && {
           passwordEncrypted: encryptPassword(body.password.trim()),
         }),
+        reportingToId: body.reportingToId !== undefined ? (body.reportingToId || null) : undefined,
       },
     });
 

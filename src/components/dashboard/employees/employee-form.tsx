@@ -26,6 +26,8 @@ import {
   ZapIcon,
 } from "lucide-react";
 import { DepartmentSelect } from "@/components/dashboard/employees/department-select";
+import { PositionSelect } from "@/components/dashboard/employees/position-select";
+import { LeadSelect } from "@/components/dashboard/employees/lead-select";
 
 import { getPasswordStrength } from "@/lib/password-generator";
 
@@ -43,6 +45,7 @@ interface EmployeeData {
   designation: string;
   department: string;
   position: string;
+  reportingToId: string;
   employmentType: string;
   status: string;
   joiningDate: string;
@@ -67,6 +70,7 @@ interface EmployeeRecord {
   employeeId?: string | null;
   department?: string | null;
   position?: string | null;
+  reportingToId?: string | null;
   employmentType?: string | null;
   status?: string | null;
   joiningDate?: Date | null;
@@ -275,6 +279,7 @@ export function EmployeeForm({ mode, employee }: EmployeeFormProps) {
     designation: employee?.designation ?? "",
     department: employee?.department ?? "",
     position: employee?.position ?? "",
+    reportingToId: employee?.reportingToId ?? "",
     employmentType: employee?.employmentType ?? "FULL_TIME",
     status: employee?.status ?? "ACTIVE",
     joiningDate: formatDateForInput(employee?.joiningDate),
@@ -674,23 +679,43 @@ export function EmployeeForm({ mode, employee }: EmployeeFormProps) {
 
                     <Field>
                       <FieldLabel htmlFor="position">Position / Level</FieldLabel>
-                      <Input
-                        id="position"
-                        placeholder="Team Lead"
-                        value={data.position}
-                        onChange={(e) => set("position", e.target.value)}
-                      />
+                      <div className="group/select relative">
+                        <PositionSelect
+                          value={data.position}
+                          onChange={(v) => set("position", v)}
+                          disabled={loading}
+                          placeholder="Select a position…"
+                        />
+                        <div className="absolute inset-0 rounded-md ring-1 ring-primary/20 opacity-0 group-focus-within/select:opacity-100 transition-opacity pointer-events-none" />
+                      </div>
+                    </Field>
+
+                    <Field>
+                      <FieldLabel htmlFor="lead">Reporting Lead</FieldLabel>
+                      <div className="group/select relative">
+                        <LeadSelect
+                          value={data.reportingToId}
+                          onChange={(v) => set("reportingToId", v)}
+                          disabled={loading}
+                          excludeId={employee?.id}
+                          placeholder="Select a lead…"
+                        />
+                        <div className="absolute inset-0 rounded-md ring-1 ring-primary/20 opacity-0 group-focus-within/select:opacity-100 transition-opacity pointer-events-none" />
+                      </div>
                     </Field>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <Field>
                       <FieldLabel htmlFor="department">Department</FieldLabel>
-                      <DepartmentSelect
-                        value={data.department}
-                        onChange={(v) => set("department", v)}
-                        disabled={loading}
-                      />
+                      <div className="group/select relative">
+                        <DepartmentSelect
+                          value={data.department}
+                          onChange={(v) => set("department", v)}
+                          disabled={loading}
+                        />
+                        <div className="absolute inset-0 rounded-md ring-1 ring-primary/20 opacity-0 group-focus-within/select:opacity-100 transition-opacity pointer-events-none" />
+                      </div>
                     </Field>
 
                     <Field>

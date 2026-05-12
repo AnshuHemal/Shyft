@@ -21,6 +21,7 @@ export default async function EmployeeDashboardPage() {
       joiningDate: true,
       employmentType: true,
       status: true,
+      position: true,
       organization: { select: { name: true } },
     },
   });

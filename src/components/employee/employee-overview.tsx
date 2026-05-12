@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { ProjectList } from "@/components/employee/project-list";
 import {
   CalendarDaysIcon,
   ClockIcon,
@@ -54,6 +55,7 @@ interface EmployeeOverviewProps {
     joiningDate: Date | null;
     employmentType: string;
     status: string;
+    position: string | null;
     organization: { name: string };
   };
   timesheet: {
@@ -95,6 +97,19 @@ export function EmployeeOverview({
     if (h < 17) return "Good afternoon";
     return "Good evening";
   };
+
+  const isSenior = React.useMemo(() => {
+    const p = employee.position?.toLowerCase() || "";
+    return (
+      p.includes("senior") ||
+      p.includes("lead") ||
+      p.includes("manager") ||
+      p.includes("head") ||
+      p.includes("architect") ||
+      p.includes("vp") ||
+      p.includes("director")
+    );
+  }, [employee.position]);
 
   return (
     <div
@@ -233,6 +248,14 @@ export function EmployeeOverview({
           </div>
         </CardContent>
       </Card>
+
+      {/* Projects Section */}
+      <div className={cn(
+        "transition-all duration-500 delay-500",
+        mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+      )}>
+        <ProjectList isSenior={isSenior} />
+      </div>
     </div>
   );
 }

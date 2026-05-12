@@ -90,8 +90,10 @@ model Organization {
 
   employees   Employee[]
   departments Department[]
+  positions   Position[]
   holidays    Holiday[]
   timesheets  Timesheet[]
+  projects    Project[]
 
   @@map("organization")
 }
@@ -112,6 +114,25 @@ model Department {
 
   @@unique([name, organizationId])
   @@map("department")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Position — job levels/titles within an organization
+// ─────────────────────────────────────────────────────────────────────────────
+
+model Position {
+  id             String       @id @default(cuid())
+  name           String       // e.g. "Team Lead", "Senior Developer", "Manager"
+  description    String?
+  level          Int?         // hierarchy level (1=entry, 2=mid, 3=senior, etc)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([name, organizationId])
+  @@map("position")
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -192,7 +213,14 @@ model Employee {
   userId         String?        @unique
   user           User?          @relation("EmployeeUser", fields: [userId], references: [id], onDelete: SetNull)
 
+  // Reporting line
+  reportingToId  String?
+  reportingTo    Employee?      @relation("ReportingLine", fields: [reportingToId], references: [id], onDelete: SetNull)
+  subordinates   Employee[]     @relation("ReportingLine")
+
   timesheets     Timesheet[]
+  ledProjects    Project[]      @relation("ProjectLead")
+  projects       ProjectMember[]
 
   @@unique([email, organizationId])
   @@map("employee")
@@ -332,4 +360,50 @@ model Verification {
   updatedAt  DateTime  @updatedAt
 
   @@map("verification")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Project — work containers
+// ─────────────────────────────────────────────────────────────────────────────
+
+model Project {
+  id             String       @id @default(cuid())
+  name           String
+  description    String?
+  client         String?
+  status         String       @default("active") // active, completed, paused
+  color          String?      @default("bg-primary")
+  budget         Float?       // in hours
+  
+  startDate      DateTime?
+  endDate        DateTime?
+  
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  
+  // Who created it / owns it
+  leadId         String?
+  lead           Employee?    @relation("ProjectLead", fields: [leadId], references: [id], onDelete: SetNull)
+  
+  // Members of the project
+  members        ProjectMember[]
+
+  @@map("project")
+}
+
+model ProjectMember {
+  id        String   @id @default(cuid())
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  
+  employeeId String
+  employee   Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  
+  role       String?  // e.g. "Developer", "Designer"
+  
+  @@unique([projectId, employeeId])
+  @@map("project_member")
 }
