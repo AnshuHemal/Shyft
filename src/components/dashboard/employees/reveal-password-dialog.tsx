@@ -24,11 +24,13 @@ import {
   KeyRoundIcon,
   ArrowLeftIcon,
   RefreshCwIcon,
+  AlertCircleIcon,
+  PencilIcon,
 } from "lucide-react";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
-type Step = "confirm" | "otp" | "revealed";
+type Step = "confirm" | "otp" | "revealed" | "no-password";
 
 interface RevealPasswordDialogProps {
   open: boolean;
@@ -92,7 +94,12 @@ export function RevealPasswordDialog({
       const json = await res.json();
 
       if (!res.ok) {
-        toast.error(json.error ?? "Failed to send verification code.");
+        if (json.code === "NO_ENCRYPTED_PASSWORD") {
+          // Show a specific step for this case
+          setStep("no-password");
+        } else {
+          toast.error(json.error ?? "Failed to send verification code.");
+        }
         return;
       }
 
@@ -343,6 +350,54 @@ export function RevealPasswordDialog({
             <DialogFooter>
               <Button onClick={onClose} className="w-full">
                 Done
+              </Button>
+            </DialogFooter>
+          </>
+        )}
+
+        {/* ── Step: No encrypted password ───────────────────────────────── */}
+        {step === "no-password" && (
+          <>
+            <DialogHeader>
+              <div className="flex justify-center mb-4">
+                <div className="flex size-14 items-center justify-center rounded-2xl bg-yellow-500/10 text-yellow-600 dark:text-yellow-400 ring-8 ring-yellow-500/5">
+                  <AlertCircleIcon className="size-7" />
+                </div>
+              </div>
+              <DialogTitle className="text-center">Password reveal unavailable</DialogTitle>
+              <DialogDescription className="text-center">
+                <span className="font-medium text-foreground">{employeeName}</span>'s
+                password was set before the secure reveal feature was enabled.
+              </DialogDescription>
+            </DialogHeader>
+
+            <div className="rounded-xl border border-yellow-500/20 bg-yellow-500/5 px-4 py-3 my-2 space-y-1.5">
+              <p className="text-sm font-medium text-yellow-700 dark:text-yellow-400 flex items-center gap-2">
+                <AlertCircleIcon className="size-4 shrink-0" />
+                Action required
+              </p>
+              <p className="text-sm text-muted-foreground">
+                To enable password reveal for this employee, open their profile and
+                set a new password. Future passwords will be securely stored for reveal.
+              </p>
+            </div>
+
+            <DialogFooter className="flex-col sm:flex-row gap-2">
+              <Button variant="outline" onClick={onClose} className="w-full sm:w-auto">
+                Close
+              </Button>
+              <Button
+                className="w-full sm:w-auto gap-2"
+                nativeButton={false}
+                render={
+                  <a
+                    href={`/dashboard/employees/${employeeId}`}
+                    onClick={onClose}
+                  />
+                }
+              >
+                <PencilIcon className="size-4" />
+                Edit employee
               </Button>
             </DialogFooter>
           </>

@@ -81,6 +81,29 @@ export async function POST(
 
   // ── Step 1: Send OTP to admin's email ──────────────────────────────────────
   if (action === "send-otp") {
+    // Check upfront whether the employee has a revealable password
+    // so the admin doesn't waste an OTP on an employee that can't be revealed
+    const employeeCheck = await prisma.employee.findFirst({
+      where: { id, organizationId: ctx.orgId },
+      select: { id: true, passwordEncrypted: true },
+    });
+
+    if (!employeeCheck) {
+      return NextResponse.json({ error: "Employee not found." }, { status: 404 });
+    }
+
+    if (!employeeCheck.passwordEncrypted) {
+      return NextResponse.json(
+        {
+          error:
+            "This employee's password cannot be revealed because it was set before the secure reveal feature was enabled. " +
+            "Please edit the employee and set a new password to enable this feature.",
+          code: "NO_ENCRYPTED_PASSWORD",
+        },
+        { status: 404 }
+      );
+    }
+
     try {
       await auth.api.sendVerificationOTP({
         body: {
