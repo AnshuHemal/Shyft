@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
-import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
+import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
 import {
   MONTH_NAMES,
   DAY_NAMES,
@@ -147,7 +147,7 @@ function RowDisplay({ entry, onEdit, readOnly, holidayName }: RowDisplayProps) {
                   </div>
                 }
               />
-              <TooltipContent side="top" className="max-w-xs">
+              <TooltipContent side="top">
                 <p className="text-sm font-medium">{holidayName}</p>
               </TooltipContent>
             </Tooltip>
@@ -421,12 +421,13 @@ export function TimesheetView() {
   const canSubmitToHR = status === "APPROVED";
 
   return (
-    <div
-      className={cn(
-        "space-y-6 transition-all duration-500",
-        mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-      )}
-    >
+    <TooltipProvider>
+      <div
+        className={cn(
+          "space-y-6 transition-all duration-500",
+          mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+        )}
+      >
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
@@ -696,11 +697,11 @@ export function TimesheetView() {
                     readOnly={!canEdit}
                     holidayName={
                       entry.dayType === "HOLIDAY"
-                        ? holidays.find(
-                          (h) =>
-                            h.date.split("T")[0] ===
-                            entry.date.split("T")[0]
-                        )?.name
+                        ? holidays.find((h) => {
+                            const hDate = new Date(h.date).toISOString().split("T")[0];
+                            const eDate = new Date(entry.date).toISOString().split("T")[0];
+                            return hDate === eDate;
+                          })?.name
                         : undefined
                     }
                   />
@@ -799,6 +800,7 @@ export function TimesheetView() {
           </div>
         </DialogContent>
       </Dialog>
-    </div>
+      </div>
+    </TooltipProvider>
   );
 }

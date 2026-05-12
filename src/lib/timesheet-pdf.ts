@@ -292,9 +292,25 @@ export function generateTimesheetPDF(opts: TimesheetPDFOptions): void {
       if (data.section === "body" && data.column.index === 6 && data.cell.text[0] !== "—") {
         const entry = entries[data.row.index];
         const links = entry.tasks.flatMap((t) => t.links ?? []);
+        
         if (links.length > 0) {
-          // For simplicity, we link the whole cell to the first one if multiple exist
-          doc.link(data.cell.x, data.cell.y, data.cell.width, data.cell.height, { url: links[0].url });
+          const cell = data.cell;
+          const padding = cell.styles.cellPadding as any;
+          const startX = cell.x + padding.left;
+          let currentY = cell.y + padding.top;
+          
+          // jspdf-autotable splits text into lines. We map each link to its line.
+          const textLines = cell.text;
+          
+          textLines.forEach((line, i) => {
+            if (links[i]) {
+              const textWidth = doc.getTextWidth(line);
+              // Link only the text area for each specific link
+              doc.link(startX, currentY, textWidth, 4, { url: links[i].url });
+            }
+            // Move to next line (autotable default line height for 8pt is approx 4.2mm)
+            currentY += 4.2; 
+          });
         }
       }
     },
