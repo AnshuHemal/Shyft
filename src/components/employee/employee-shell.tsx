@@ -45,6 +45,7 @@ import {
   BellIcon,
   CalendarDaysIcon,
   CheckCircle2Icon,
+  BrainCircuitIcon,
 } from "lucide-react";
 import { NavBreadcrumbs } from "@/components/shared/nav-breadcrumbs";
 
@@ -66,6 +67,11 @@ const NAV_ITEMS: NavItem[] = [
     label: "Timesheet",
     href: "/employee/timesheet",
     icon: CalendarDaysIcon,
+  },
+  {
+    label: "Skill Map",
+    href: "/employee/skill-map",
+    icon: BrainCircuitIcon,
   },
   {
     label: "Profile",

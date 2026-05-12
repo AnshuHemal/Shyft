@@ -111,3 +111,13 @@ export type Project = Prisma.ProjectModel
  * 
  */
 export type ProjectMember = Prisma.ProjectMemberModel
+/**
+ * Model Skill
+ * 
+ */
+export type Skill = Prisma.SkillModel
+/**
+ * Model EmployeeSkill
+ * 
+ */
+export type EmployeeSkill = Prisma.EmployeeSkillModel

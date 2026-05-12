@@ -50,6 +50,7 @@ import {
   BellIcon,
   BuildingIcon,
   CalendarDaysIcon,
+  BrainCircuitIcon,
 } from "lucide-react";
 import { NavBreadcrumbs } from "@/components/shared/nav-breadcrumbs";
 
@@ -79,6 +80,11 @@ const NAV_MAIN = [
     label: "Projects",
     href: "/dashboard/projects",
     icon: FolderIcon,
+  },
+  {
+    label: "Skills",
+    href: "/dashboard/skills",
+    icon: BrainCircuitIcon,
   },
   {
     label: "Reports",

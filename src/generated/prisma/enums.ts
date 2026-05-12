@@ -80,3 +80,12 @@ export const TimesheetStatus = {
 } as const
 
 export type TimesheetStatus = (typeof TimesheetStatus)[keyof typeof TimesheetStatus]
+
+
+export const SkillProficiency = {
+  BEGINNER: 'BEGINNER',
+  INTERMEDIATE: 'INTERMEDIATE',
+  PROFICIENT: 'PROFICIENT'
+} as const
+
+export type SkillProficiency = (typeof SkillProficiency)[keyof typeof SkillProficiency]
