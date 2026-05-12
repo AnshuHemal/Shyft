@@ -20,6 +20,9 @@ export default async function DashboardLayout({
   // SuperAdmin goes to their own console
   if (user.role === "SUPERADMIN") redirect("/admin");
 
+  // Employees have their own portal
+  if (user.role === "EMPLOYEE") redirect("/employee");
+
   // Must be approved to access the dashboard
   if (user.accountStatus !== "APPROVED") redirect("/under-review");
 

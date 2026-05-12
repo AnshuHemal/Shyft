@@ -198,6 +198,28 @@ export async function POST(request: Request) {
   }
 
   try {
+    // Create the User account for employee login first
+    const userRecord = await prisma.user.create({
+      data: {
+        name: `${firstName.trim()} ${lastName.trim()}`,
+        email: email.trim().toLowerCase(),
+        emailVerified: true,          // pre-verified — HR set the account
+        role: "EMPLOYEE",
+        accountStatus: "APPROVED",    // employees don't go through review
+        onboardingCompleted: true,    // no onboarding wizard for employees
+      },
+    });
+
+    // Create the credential account so better-auth can verify the password
+    await prisma.account.create({
+      data: {
+        userId: userRecord.id,
+        accountId: userRecord.id,
+        providerId: "credential",
+        password: hashedPassword,
+      },
+    });
+
     const employee = await prisma.employee.create({
       data: {
         firstName: firstName.trim(),
@@ -221,6 +243,7 @@ export async function POST(request: Request) {
         passwordEncrypted: encryptPassword(password.trim()),
         notes: body.notes?.trim() || null,
         organizationId: ctx.orgId,
+        userId: userRecord.id,        // link to the User account
       },
     });
 

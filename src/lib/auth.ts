@@ -119,5 +119,5 @@ export const auth = betterAuth({
 
 export type Session = typeof auth.$Infer.Session;
 export type User = typeof auth.$Infer.Session.user;
-export type UserRole = "USER" | "SUPERADMIN";
+export type UserRole = "USER" | "EMPLOYEE" | "SUPERADMIN";
 export type AccountStatus = "PENDING_REVIEW" | "APPROVED" | "REJECTED";

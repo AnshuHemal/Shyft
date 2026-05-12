@@ -11,6 +11,7 @@
 
 export const UserRole = {
   USER: 'USER',
+  EMPLOYEE: 'EMPLOYEE',
   SUPERADMIN: 'SUPERADMIN'
 } as const
 
@@ -56,3 +57,24 @@ export const EmployeeStatus = {
 } as const
 
 export type EmployeeStatus = (typeof EmployeeStatus)[keyof typeof EmployeeStatus]
+
+
+export const DayType = {
+  WORKING: 'WORKING',
+  HOLIDAY: 'HOLIDAY',
+  LEAVE: 'LEAVE',
+  HALF_DAY: 'HALF_DAY',
+  WEEKEND: 'WEEKEND'
+} as const
+
+export type DayType = (typeof DayType)[keyof typeof DayType]
+
+
+export const TimesheetStatus = {
+  DRAFT: 'DRAFT',
+  SUBMITTED: 'SUBMITTED',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+} as const
+
+export type TimesheetStatus = (typeof TimesheetStatus)[keyof typeof TimesheetStatus]

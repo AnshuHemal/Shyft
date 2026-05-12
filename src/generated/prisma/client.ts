@@ -52,10 +52,25 @@ export type Organization = Prisma.OrganizationModel
  */
 export type Department = Prisma.DepartmentModel
 /**
+ * Model Holiday
+ * 
+ */
+export type Holiday = Prisma.HolidayModel
+/**
  * Model Employee
  * 
  */
 export type Employee = Prisma.EmployeeModel
+/**
+ * Model Timesheet
+ * 
+ */
+export type Timesheet = Prisma.TimesheetModel
+/**
+ * Model TimesheetEntry
+ * 
+ */
+export type TimesheetEntry = Prisma.TimesheetEntryModel
 /**
  * Model User
  * 

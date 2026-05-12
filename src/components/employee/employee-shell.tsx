@@ -25,7 +25,6 @@ import {
 } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
 import { ThemeToggle } from "@/components/shared/theme-toggle";
 import {
   DropdownMenu,
@@ -39,63 +38,30 @@ import {
 import {
   LayoutDashboardIcon,
   ClockIcon,
-  BarChart3Icon,
-  UsersIcon,
-  FolderIcon,
-  SettingsIcon,
+  UserIcon,
   ZapIcon,
   LogOutIcon,
-  UserIcon,
   ChevronsUpDownIcon,
   BellIcon,
-  BuildingIcon,
   CalendarDaysIcon,
 } from "lucide-react";
 
-const NAV_MAIN = [
+const NAV_ITEMS = [
   {
     label: "Overview",
-    href: "/dashboard",
+    href: "/employee",
     icon: LayoutDashboardIcon,
     exact: true,
   },
   {
-    label: "Employees",
-    href: "/dashboard/employees",
-    icon: UsersIcon,
-  },
-  {
-    label: "Timesheets",
-    href: "/dashboard/timesheets",
+    label: "Timesheet",
+    href: "/employee/timesheet",
     icon: CalendarDaysIcon,
   },
   {
-    label: "Time Tracker",
-    href: "/dashboard/tracker",
-    icon: ClockIcon,
-  },
-  {
-    label: "Projects",
-    href: "/dashboard/projects",
-    icon: FolderIcon,
-  },
-  {
-    label: "Reports",
-    href: "/dashboard/reports",
-    icon: BarChart3Icon,
-  },
-];
-
-const NAV_SECONDARY = [
-  {
-    label: "Organisation",
-    href: "/dashboard/settings/organisation",
-    icon: BuildingIcon,
-  },
-  {
-    label: "Settings",
-    href: "/dashboard/settings",
-    icon: SettingsIcon,
+    label: "Profile",
+    href: "/employee/profile",
+    icon: UserIcon,
   },
 ];
 
@@ -108,13 +74,25 @@ function getInitials(name: string) {
     .toUpperCase();
 }
 
-interface DashboardShellProps {
+interface EmployeeShellProps {
   children: React.ReactNode;
   user: User;
-  org?: { id: string; name: string; logo: string | null; slug: string } | null;
+  orgName: string;
+  employeeProfile: {
+    firstName: string;
+    lastName: string;
+    designation: string;
+    department: string | null;
+    employeeId: string | null;
+  };
 }
 
-export function DashboardShell({ children, user, org }: DashboardShellProps) {
+export function EmployeeShell({
+  children,
+  user,
+  orgName,
+  employeeProfile,
+}: EmployeeShellProps) {
   const pathname = usePathname();
   const router = useRouter();
   const [signingOut, setSigningOut] = React.useState(false);
@@ -126,7 +104,7 @@ export function DashboardShell({ children, user, org }: DashboardShellProps) {
       router.push("/");
       router.refresh();
     } catch {
-      toast.error("Failed to sign out. Please try again.");
+      toast.error("Failed to sign out.");
       setSigningOut(false);
     }
   }
@@ -136,25 +114,22 @@ export function DashboardShell({ children, user, org }: DashboardShellProps) {
     return pathname.startsWith(href);
   }
 
+  const displayName = `${employeeProfile.firstName} ${employeeProfile.lastName}`;
+
   return (
     <SidebarProvider defaultOpen>
       <Sidebar collapsible="icon" variant="sidebar">
-        {/* Sidebar header — logo */}
+        {/* Header */}
         <SidebarHeader>
           <SidebarMenu>
             <SidebarMenuItem>
-              <SidebarMenuButton
-                size="lg"
-                render={<Link href="/dashboard" />}
-                className="gap-3"
-              >                <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+              <SidebarMenuButton size="lg" render={<Link href="/employee" />} className="gap-3">
+                <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground">
                   <ZapIcon className="size-4" />
                 </div>
                 <div className="flex flex-col leading-none">
-                  <span className="font-semibold text-sm">{org?.name ?? "SHYFT"}</span>
-                  <span className="text-xs text-muted-foreground truncate">
-                    {org ? "Workspace" : "Work tracked."}
-                  </span>
+                  <span className="font-semibold text-sm truncate">{orgName}</span>
+                  <span className="text-xs text-muted-foreground">Employee Portal</span>
                 </div>
               </SidebarMenuButton>
             </SidebarMenuItem>
@@ -162,12 +137,11 @@ export function DashboardShell({ children, user, org }: DashboardShellProps) {
         </SidebarHeader>
 
         <SidebarContent>
-          {/* Main nav */}
           <SidebarGroup>
-            <SidebarGroupLabel>Workspace</SidebarGroupLabel>
+            <SidebarGroupLabel>My Workspace</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
-                {NAV_MAIN.map((item) => (
+                {NAV_ITEMS.map((item) => (
                   <SidebarMenuItem key={item.href}>
                     <SidebarMenuButton
                       render={<Link href={item.href} />}
@@ -182,75 +156,51 @@ export function DashboardShell({ children, user, org }: DashboardShellProps) {
               </SidebarMenu>
             </SidebarGroupContent>
           </SidebarGroup>
-
-          {/* Secondary nav */}
-          <SidebarGroup className="mt-auto">
-            <SidebarGroupContent>
-              <SidebarMenu>
-                {NAV_SECONDARY.map((item) => (
-                  <SidebarMenuItem key={item.href}>
-                    <SidebarMenuButton
-                      render={<Link href={item.href} />}
-                      isActive={isActive(item.href)}
-                      tooltip={item.label}
-                    >
-                      <item.icon />
-                      <span>{item.label}</span>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
         </SidebarContent>
 
-        {/* Sidebar footer — user menu */}
+        {/* Footer — user menu */}
         <SidebarFooter>
           <SidebarMenu>
             <SidebarMenuItem>
               <DropdownMenu>
-                <DropdownMenuTrigger render={
-                  <SidebarMenuButton
-                    size="lg"
-                    className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
-                  >
-                    <Avatar size="sm">
-                      <AvatarImage src={user.image ?? undefined} alt={user.name} />
-                      <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
-                    </Avatar>
-                    <div className="flex flex-col leading-none min-w-0">
-                      <span className="font-medium text-sm truncate">{user.name}</span>
-                      <span className="text-sm text-muted-foreground truncate">
-                        {user.email}
-                      </span>
-                    </div>
-                    <ChevronsUpDownIcon className="ml-auto size-4 shrink-0" />
-                  </SidebarMenuButton>
-                } />
-                <DropdownMenuContent
-                  side="top"
-                  align="start"
-                  className="w-56"
-                  sideOffset={4}
-                >
+                <DropdownMenuTrigger
+                  render={
+                    <SidebarMenuButton
+                      size="lg"
+                      className="data-[state=open]:bg-sidebar-accent"
+                    >
+                      <Avatar size="sm">
+                        <AvatarImage src={user.image ?? undefined} alt={displayName} />
+                        <AvatarFallback>{getInitials(displayName)}</AvatarFallback>
+                      </Avatar>
+                      <div className="flex flex-col leading-none min-w-0">
+                        <span className="font-medium text-sm truncate">{displayName}</span>
+                        <span className="text-xs text-muted-foreground truncate">
+                          {employeeProfile.designation}
+                        </span>
+                      </div>
+                      <ChevronsUpDownIcon className="ml-auto size-4 shrink-0" />
+                    </SidebarMenuButton>
+                  }
+                />
+                <DropdownMenuContent side="top" align="start" className="w-56" sideOffset={4}>
                   <DropdownMenuGroup>
                     <DropdownMenuLabel className="font-normal">
                       <div className="flex flex-col gap-0.5">
-                        <span className="font-medium text-sm">{user.name}</span>
-                        <span className="text-sm text-muted-foreground truncate">
-                          {user.email}
-                        </span>
+                        <span className="font-medium text-sm">{displayName}</span>
+                        <span className="text-xs text-muted-foreground truncate">{user.email}</span>
+                        {employeeProfile.employeeId && (
+                          <span className="text-xs font-mono text-muted-foreground">
+                            {employeeProfile.employeeId}
+                          </span>
+                        )}
                       </div>
                     </DropdownMenuLabel>
                   </DropdownMenuGroup>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={() => router.push("/dashboard/settings")}>
+                  <DropdownMenuItem onClick={() => router.push("/employee/profile")}>
                     <UserIcon className="size-4" />
-                    Profile
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => router.push("/dashboard/settings")}>
-                    <SettingsIcon className="size-4" />
-                    Settings
+                    My Profile
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
@@ -270,17 +220,12 @@ export function DashboardShell({ children, user, org }: DashboardShellProps) {
         <SidebarRail />
       </Sidebar>
 
-      {/* Main content area */}
       <SidebarInset>
         {/* Top bar */}
         <header className="sticky top-0 z-40 flex h-14 shrink-0 items-center gap-2 border-b border-border/60 bg-background/80 backdrop-blur-sm px-4">
           <SidebarTrigger className="-ml-1" />
           <Separator orientation="vertical" className="h-4" />
-
-          {/* Breadcrumb placeholder — pages can override via portal if needed */}
           <div className="flex-1" />
-
-          {/* Header actions */}
           <div className="flex items-center gap-1">
             <ThemeToggle />
             <button
@@ -288,12 +233,10 @@ export function DashboardShell({ children, user, org }: DashboardShellProps) {
               aria-label="Notifications"
             >
               <BellIcon className="size-4" />
-              <span className="absolute top-1.5 right-1.5 size-1.5 rounded-full bg-primary" />
             </button>
           </div>
         </header>
 
-        {/* Page content */}
         <div className="flex flex-1 flex-col gap-6 p-6">{children}</div>
       </SidebarInset>
     </SidebarProvider>

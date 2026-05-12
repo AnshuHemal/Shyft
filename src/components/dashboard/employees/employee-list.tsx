@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
+import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -19,7 +20,17 @@ import {
   UserXIcon,
   ClockIcon,
   EyeIcon,
+  Trash2Icon,
 } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Spinner } from "@/components/ui/spinner";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -100,10 +111,41 @@ export function EmployeeList({ initialEmployees, departments, adminEmail }: Empl
     name: string;
   } | null>(null);
 
+  // Delete confirmation state
+  const [deleteTarget, setDeleteTarget] = React.useState<{
+    id: string;
+    name: string;
+  } | null>(null);
+  const [deleting, setDeleting] = React.useState(false);
+
   React.useEffect(() => {
     const t = setTimeout(() => setMounted(true), 50);
     return () => clearTimeout(t);
   }, []);
+
+  async function handleDelete() {
+    if (!deleteTarget) return;
+    setDeleting(true);
+    try {
+      const res = await fetch(`/api/employees/${deleteTarget.id}/delete`, {
+        method: "DELETE",
+      });
+      const json = await res.json();
+      if (!res.ok) {
+        toast.error(json.error ?? "Failed to delete employee.");
+        return;
+      }
+      // Remove from local list
+      setDeleteTarget(null);
+      toast.success(`${deleteTarget.name} has been permanently deleted.`);
+      // Refresh the page to update the list
+      window.location.reload();
+    } catch {
+      toast.error("Something went wrong. Please try again.");
+    } finally {
+      setDeleting(false);
+    }
+  }
 
   const filtered = initialEmployees.filter((e) => {
     const matchesSearch =
@@ -261,7 +303,7 @@ export function EmployeeList({ initialEmployees, departments, adminEmail }: Empl
                           {employee.designation}
                         </p>
                       </div>
-                      {/* Right column: status badge + eye button stacked */}
+                      {/* Right column: status badge + action buttons row */}
                       <div className="flex flex-col items-end gap-2 shrink-0">
                         <span
                           className={cn(
@@ -271,24 +313,49 @@ export function EmployeeList({ initialEmployees, departments, adminEmail }: Empl
                         >
                           {statusCfg.label}
                         </span>
-                        <button
-                          type="button"
-                          onClick={() =>
-                            setRevealTarget({
-                              id: employee.id,
-                              name: `${employee.firstName} ${employee.lastName}`,
-                            })
-                          }
-                          className={cn(
-                            "flex items-center gap-1 rounded-lg px-2 py-1 text-xs font-medium",
-                            "text-muted-foreground border border-border/60 bg-transparent",
-                            "hover:bg-muted/60 hover:text-foreground hover:border-border",
-                            "transition-all duration-200"
+                        {/* Action buttons — horizontal row below status */}
+                        <div className="flex items-center gap-1">
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setRevealTarget({
+                                id: employee.id,
+                                name: `${employee.firstName} ${employee.lastName}`,
+                              })
+                            }
+                            className={cn(
+                              "flex size-7 items-center justify-center rounded-lg",
+                              "text-muted-foreground border border-border/60 bg-transparent",
+                              "hover:bg-muted/60 hover:text-foreground hover:border-border",
+                              "transition-all duration-200"
+                            )}
+                            title="View employee password"
+                          >
+                            <EyeIcon className="size-3.5" />
+                          </button>
+
+                          {/* Delete — only shown for TERMINATED employees */}
+                          {employee.status === "TERMINATED" && (
+                            <button
+                              type="button"
+                              onClick={() =>
+                                setDeleteTarget({
+                                  id: employee.id,
+                                  name: `${employee.firstName} ${employee.lastName}`,
+                                })
+                              }
+                              className={cn(
+                                "flex size-7 items-center justify-center rounded-lg",
+                                "text-destructive/60 border border-destructive/20 bg-transparent",
+                                "hover:bg-destructive/10 hover:text-destructive hover:border-destructive/40",
+                                "transition-all duration-200"
+                              )}
+                              title="Permanently delete employee"
+                            >
+                              <Trash2Icon className="size-3.5" />
+                            </button>
                           )}
-                          title="View employee password"
-                        >
-                          <EyeIcon className="size-4" />
-                        </button>
+                        </div>
                       </div>
                     </div>
 
@@ -340,6 +407,56 @@ export function EmployeeList({ initialEmployees, departments, adminEmail }: Empl
         employeeName={revealTarget?.name ?? ""}
         adminEmail={adminEmail}
       />
+
+      {/* Delete confirmation dialog */}
+      <Dialog open={!!deleteTarget} onOpenChange={(o) => !o && !deleting && setDeleteTarget(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <div className="flex justify-center mb-4">
+              <div className="flex size-14 items-center justify-center rounded-2xl bg-destructive/10 text-destructive ring-8 ring-destructive/5">
+                <Trash2Icon className="size-7" />
+              </div>
+            </div>
+            <DialogTitle className="text-center">Delete employee permanently?</DialogTitle>
+            <DialogDescription className="text-center">
+              This will permanently delete{" "}
+              <span className="font-medium text-foreground">{deleteTarget?.name}</span>{" "}
+              and all their data including timesheets. This action{" "}
+              <span className="font-medium text-destructive">cannot be undone</span>.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="rounded-xl border border-destructive/20 bg-destructive/5 px-4 py-3 my-2">
+            <p className="text-sm text-destructive font-medium">
+              The following will be permanently deleted:
+            </p>
+            <ul className="mt-1.5 space-y-0.5 text-sm text-muted-foreground list-disc list-inside">
+              <li>Employee profile and all personal data</li>
+              <li>Login account and credentials</li>
+              <li>All timesheet entries</li>
+            </ul>
+          </div>
+
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setDeleteTarget(null)}
+              disabled={deleting}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={handleDelete}
+              disabled={deleting}
+              className="gap-2"
+            >
+              {deleting ? <Spinner className="size-4" /> : <Trash2Icon className="size-4" />}
+              {deleting ? "Deleting…" : "Delete permanently"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

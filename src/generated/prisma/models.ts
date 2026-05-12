@@ -10,7 +10,10 @@
  */
 export type * from './models/Organization'
 export type * from './models/Department'
+export type * from './models/Holiday'
 export type * from './models/Employee'
+export type * from './models/Timesheet'
+export type * from './models/TimesheetEntry'
 export type * from './models/User'
 export type * from './models/Session'
 export type * from './models/Account'

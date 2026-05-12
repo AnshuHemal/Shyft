@@ -40,7 +40,6 @@ export async function proxy(request: NextRequest) {
   }
 
   // /under-review and /onboarding are accessible to any authenticated user
-  // (the pages themselves handle role/status checks)
   if (
     pathname.startsWith("/under-review") ||
     pathname.startsWith("/onboarding")
@@ -48,8 +47,7 @@ export async function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // /admin routes — role check happens in the admin layout (server component)
-  // The proxy only checks for a valid session token here
+  // /admin, /dashboard, /employee — role checks happen in their layouts
   return NextResponse.next();
 }
 

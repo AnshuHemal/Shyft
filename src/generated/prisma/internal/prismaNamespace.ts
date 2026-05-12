@@ -386,7 +386,10 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 export const ModelName = {
   Organization: 'Organization',
   Department: 'Department',
+  Holiday: 'Holiday',
   Employee: 'Employee',
+  Timesheet: 'Timesheet',
+  TimesheetEntry: 'TimesheetEntry',
   User: 'User',
   Session: 'Session',
   Account: 'Account',
@@ -406,7 +409,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "organization" | "department" | "employee" | "user" | "session" | "account" | "verification"
+    modelProps: "organization" | "department" | "holiday" | "employee" | "timesheet" | "timesheetEntry" | "user" | "session" | "account" | "verification"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -558,6 +561,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Holiday: {
+      payload: Prisma.$HolidayPayload<ExtArgs>
+      fields: Prisma.HolidayFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.HolidayFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HolidayPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.HolidayFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HolidayPayload>
+        }
+        findFirst: {
+          args: Prisma.HolidayFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HolidayPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.HolidayFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HolidayPayload>
+        }
+        findMany: {
+          args: Prisma.HolidayFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HolidayPayload>[]
+        }
+        create: {
+          args: Prisma.HolidayCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HolidayPayload>
+        }
+        createMany: {
+          args: Prisma.HolidayCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.HolidayCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HolidayPayload>[]
+        }
+        delete: {
+          args: Prisma.HolidayDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HolidayPayload>
+        }
+        update: {
+          args: Prisma.HolidayUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HolidayPayload>
+        }
+        deleteMany: {
+          args: Prisma.HolidayDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.HolidayUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.HolidayUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HolidayPayload>[]
+        }
+        upsert: {
+          args: Prisma.HolidayUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HolidayPayload>
+        }
+        aggregate: {
+          args: Prisma.HolidayAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateHoliday>
+        }
+        groupBy: {
+          args: Prisma.HolidayGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HolidayGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.HolidayCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HolidayCountAggregateOutputType> | number
+        }
+      }
+    }
     Employee: {
       payload: Prisma.$EmployeePayload<ExtArgs>
       fields: Prisma.EmployeeFieldRefs
@@ -629,6 +706,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.EmployeeCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.EmployeeCountAggregateOutputType> | number
+        }
+      }
+    }
+    Timesheet: {
+      payload: Prisma.$TimesheetPayload<ExtArgs>
+      fields: Prisma.TimesheetFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.TimesheetFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimesheetPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.TimesheetFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimesheetPayload>
+        }
+        findFirst: {
+          args: Prisma.TimesheetFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimesheetPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.TimesheetFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimesheetPayload>
+        }
+        findMany: {
+          args: Prisma.TimesheetFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimesheetPayload>[]
+        }
+        create: {
+          args: Prisma.TimesheetCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimesheetPayload>
+        }
+        createMany: {
+          args: Prisma.TimesheetCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.TimesheetCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimesheetPayload>[]
+        }
+        delete: {
+          args: Prisma.TimesheetDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimesheetPayload>
+        }
+        update: {
+          args: Prisma.TimesheetUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimesheetPayload>
+        }
+        deleteMany: {
+          args: Prisma.TimesheetDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.TimesheetUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.TimesheetUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimesheetPayload>[]
+        }
+        upsert: {
+          args: Prisma.TimesheetUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimesheetPayload>
+        }
+        aggregate: {
+          args: Prisma.TimesheetAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTimesheet>
+        }
+        groupBy: {
+          args: Prisma.TimesheetGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TimesheetGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.TimesheetCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TimesheetCountAggregateOutputType> | number
+        }
+      }
+    }
+    TimesheetEntry: {
+      payload: Prisma.$TimesheetEntryPayload<ExtArgs>
+      fields: Prisma.TimesheetEntryFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.TimesheetEntryFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimesheetEntryPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.TimesheetEntryFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimesheetEntryPayload>
+        }
+        findFirst: {
+          args: Prisma.TimesheetEntryFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimesheetEntryPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.TimesheetEntryFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimesheetEntryPayload>
+        }
+        findMany: {
+          args: Prisma.TimesheetEntryFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimesheetEntryPayload>[]
+        }
+        create: {
+          args: Prisma.TimesheetEntryCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimesheetEntryPayload>
+        }
+        createMany: {
+          args: Prisma.TimesheetEntryCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.TimesheetEntryCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimesheetEntryPayload>[]
+        }
+        delete: {
+          args: Prisma.TimesheetEntryDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimesheetEntryPayload>
+        }
+        update: {
+          args: Prisma.TimesheetEntryUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimesheetEntryPayload>
+        }
+        deleteMany: {
+          args: Prisma.TimesheetEntryDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.TimesheetEntryUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.TimesheetEntryUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimesheetEntryPayload>[]
+        }
+        upsert: {
+          args: Prisma.TimesheetEntryUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TimesheetEntryPayload>
+        }
+        aggregate: {
+          args: Prisma.TimesheetEntryAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTimesheetEntry>
+        }
+        groupBy: {
+          args: Prisma.TimesheetEntryGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TimesheetEntryGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.TimesheetEntryCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TimesheetEntryCountAggregateOutputType> | number
         }
       }
     }
@@ -1000,6 +1225,20 @@ export const DepartmentScalarFieldEnum = {
 export type DepartmentScalarFieldEnum = (typeof DepartmentScalarFieldEnum)[keyof typeof DepartmentScalarFieldEnum]
 
 
+export const HolidayScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  date: 'date',
+  description: 'description',
+  isRecurring: 'isRecurring',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  organizationId: 'organizationId'
+} as const
+
+export type HolidayScalarFieldEnum = (typeof HolidayScalarFieldEnum)[keyof typeof HolidayScalarFieldEnum]
+
+
 export const EmployeeScalarFieldEnum = {
   id: 'id',
   firstName: 'firstName',
@@ -1029,10 +1268,46 @@ export const EmployeeScalarFieldEnum = {
   notes: 'notes',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  organizationId: 'organizationId'
+  organizationId: 'organizationId',
+  userId: 'userId'
 } as const
 
 export type EmployeeScalarFieldEnum = (typeof EmployeeScalarFieldEnum)[keyof typeof EmployeeScalarFieldEnum]
+
+
+export const TimesheetScalarFieldEnum = {
+  id: 'id',
+  month: 'month',
+  year: 'year',
+  status: 'status',
+  submittedAt: 'submittedAt',
+  reviewedAt: 'reviewedAt',
+  reviewedBy: 'reviewedBy',
+  rejectionNote: 'rejectionNote',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  employeeId: 'employeeId',
+  organizationId: 'organizationId'
+} as const
+
+export type TimesheetScalarFieldEnum = (typeof TimesheetScalarFieldEnum)[keyof typeof TimesheetScalarFieldEnum]
+
+
+export const TimesheetEntryScalarFieldEnum = {
+  id: 'id',
+  date: 'date',
+  dayType: 'dayType',
+  startTime: 'startTime',
+  endTime: 'endTime',
+  breakMinutes: 'breakMinutes',
+  workDone: 'workDone',
+  links: 'links',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  timesheetId: 'timesheetId'
+} as const
+
+export type TimesheetEntryScalarFieldEnum = (typeof TimesheetEntryScalarFieldEnum)[keyof typeof TimesheetEntryScalarFieldEnum]
 
 
 export const UserScalarFieldEnum = {
@@ -1172,6 +1447,13 @@ export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaM
 
 
 /**
+ * Reference to a field of type 'Boolean'
+ */
+export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+/**
  * Reference to a field of type 'EmploymentType'
  */
 export type EnumEmploymentTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EmploymentType'>
@@ -1214,9 +1496,44 @@ export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaMode
 
 
 /**
- * Reference to a field of type 'Boolean'
+ * Reference to a field of type 'Int'
  */
-export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+    
+
+
+/**
+ * Reference to a field of type 'Int[]'
+ */
+export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+/**
+ * Reference to a field of type 'TimesheetStatus'
+ */
+export type EnumTimesheetStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TimesheetStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'TimesheetStatus[]'
+ */
+export type ListEnumTimesheetStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TimesheetStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'DayType'
+ */
+export type EnumDayTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DayType'>
+    
+
+
+/**
+ * Reference to a field of type 'DayType[]'
+ */
+export type ListEnumDayTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DayType[]'>
     
 
 
@@ -1245,20 +1562,6 @@ export type EnumAccountStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$Pr
  * Reference to a field of type 'AccountStatus[]'
  */
 export type ListEnumAccountStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AccountStatus[]'>
-    
-
-
-/**
- * Reference to a field of type 'Int'
- */
-export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
-    
-
-
-/**
- * Reference to a field of type 'Int[]'
- */
-export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
     
 
 /**
@@ -1373,7 +1676,10 @@ export type PrismaClientOptions = ({
 export type GlobalOmitConfig = {
   organization?: Prisma.OrganizationOmit
   department?: Prisma.DepartmentOmit
+  holiday?: Prisma.HolidayOmit
   employee?: Prisma.EmployeeOmit
+  timesheet?: Prisma.TimesheetOmit
+  timesheetEntry?: Prisma.TimesheetEntryOmit
   user?: Prisma.UserOmit
   session?: Prisma.SessionOmit
   account?: Prisma.AccountOmit

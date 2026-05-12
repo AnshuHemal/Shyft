@@ -15,7 +15,8 @@ datasource db {
 // ─────────────────────────────────────────────────────────────────────────────
 
 enum UserRole {
-  USER
+  USER        // HR / Admin (org owner)
+  EMPLOYEE    // Employee created by HR
   SUPERADMIN
 }
 
@@ -48,6 +49,21 @@ enum EmployeeStatus {
   TERMINATED
 }
 
+enum DayType {
+  WORKING
+  HOLIDAY
+  LEAVE
+  HALF_DAY
+  WEEKEND
+}
+
+enum TimesheetStatus {
+  DRAFT
+  SUBMITTED
+  APPROVED
+  REJECTED
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 // Organization — created by Admin during onboarding
 // ─────────────────────────────────────────────────────────────────────────────
@@ -74,12 +90,14 @@ model Organization {
 
   employees   Employee[]
   departments Department[]
+  holidays    Holiday[]
+  timesheets  Timesheet[]
 
   @@map("organization")
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Department — managed by Admin, used as dropdown in employee form
+// Department
 // ─────────────────────────────────────────────────────────────────────────────
 
 model Department {
@@ -94,6 +112,27 @@ model Department {
 
   @@unique([name, organizationId])
   @@map("department")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Holiday — custom holidays set by HR for the organisation
+// ─────────────────────────────────────────────────────────────────────────────
+
+model Holiday {
+  id             String       @id @default(cuid())
+  name           String       // e.g. "Diwali", "Republic Day"
+  date           DateTime     // the holiday date
+  description    String?
+  isRecurring    Boolean      @default(false) // repeats every year on same date
+
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([date, organizationId])
+  @@map("holiday")
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -114,10 +153,10 @@ model Employee {
   address        String?
 
   // ── Professional info ──────────────────────────────────────────────────────
-  employeeId     String?        // company's internal ID e.g. "EMP-001"
-  designation    String         // job title e.g. "Senior Developer"
-  department     String?        // e.g. "Engineering"
-  position       String?        // e.g. "Team Lead"
+  employeeId     String?
+  designation    String
+  department     String?
+  position       String?
   employmentType EmploymentType @default(FULL_TIME)
   status         EmployeeStatus @default(ACTIVE)
 
@@ -127,17 +166,17 @@ model Employee {
 
   // ── Compensation ───────────────────────────────────────────────────────────
   salary         Float?
-  currency       String?        @default("USD")
+  currency       String?        @default("INR")
 
   // ── Emergency contact ──────────────────────────────────────────────────────
   emergencyName  String?
   emergencyPhone String?
-  emergencyRel   String?        // relationship
+  emergencyRel   String?
 
   // ── Access ─────────────────────────────────────────────────────────────────
-  password           String?        // set by Admin, hashed before storage (scrypt)
-  passwordCheck      String?        // SHA-256 of plaintext — used only for org-level uniqueness check
-  passwordEncrypted  String?        // AES-256-GCM encrypted plaintext — used for admin password reveal
+  password           String?
+  passwordCheck      String?
+  passwordEncrypted  String?
 
   // ── Notes ──────────────────────────────────────────────────────────────────
   notes          String?
@@ -149,8 +188,73 @@ model Employee {
   organizationId String
   organization   Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 
+  // Link to User account for login
+  userId         String?        @unique
+  user           User?          @relation("EmployeeUser", fields: [userId], references: [id], onDelete: SetNull)
+
+  timesheets     Timesheet[]
+
   @@unique([email, organizationId])
   @@map("employee")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Timesheet — monthly container per employee
+// ─────────────────────────────────────────────────────────────────────────────
+
+model Timesheet {
+  id             String          @id @default(cuid())
+  month          Int             // 1–12
+  year           Int
+  status         TimesheetStatus @default(DRAFT)
+  submittedAt    DateTime?
+  reviewedAt     DateTime?
+  reviewedBy     String?         // HR/Admin user id
+  rejectionNote  String?
+
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+
+  employeeId     String
+  employee       Employee        @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+
+  organizationId String
+  organization   Organization    @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  entries        TimesheetEntry[]
+
+  @@unique([employeeId, month, year])
+  @@map("timesheet")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// TimesheetEntry — one row per day in the timesheet
+// ─────────────────────────────────────────────────────────────────────────────
+
+model TimesheetEntry {
+  id             String     @id @default(cuid())
+  date           DateTime   // the specific day (date only, time = 00:00:00 UTC)
+  dayType        DayType    @default(WORKING)
+
+  // ── Time fields (only for WORKING / HALF_DAY) ──────────────────────────────
+  startTime      String?    // "HH:MM" 24h format e.g. "10:00"
+  endTime        String?    // "HH:MM" 24h format e.g. "19:30"
+  breakMinutes   Int?       @default(0)
+
+  // ── Work description ───────────────────────────────────────────────────────
+  workDone       String?    // plain text, can be multi-line
+
+  // ── Reference links ────────────────────────────────────────────────────────
+  links          String[]   // array of URLs
+
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+
+  timesheetId    String
+  timesheet      Timesheet  @relation(fields: [timesheetId], references: [id], onDelete: Cascade)
+
+  @@unique([timesheetId, date])
+  @@map("timesheet_entry")
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -174,6 +278,9 @@ model User {
   reviewedBy           String?
 
   organization         Organization? @relation("OrgOwner")
+
+  // Employee account link
+  employeeProfile      Employee?     @relation("EmployeeUser")
 
   sessions             Session[]
   accounts             Account[]

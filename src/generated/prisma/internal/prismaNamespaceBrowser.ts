@@ -53,7 +53,10 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   Organization: 'Organization',
   Department: 'Department',
+  Holiday: 'Holiday',
   Employee: 'Employee',
+  Timesheet: 'Timesheet',
+  TimesheetEntry: 'TimesheetEntry',
   User: 'User',
   Session: 'Session',
   Account: 'Account',
@@ -109,6 +112,20 @@ export const DepartmentScalarFieldEnum = {
 export type DepartmentScalarFieldEnum = (typeof DepartmentScalarFieldEnum)[keyof typeof DepartmentScalarFieldEnum]
 
 
+export const HolidayScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  date: 'date',
+  description: 'description',
+  isRecurring: 'isRecurring',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  organizationId: 'organizationId'
+} as const
+
+export type HolidayScalarFieldEnum = (typeof HolidayScalarFieldEnum)[keyof typeof HolidayScalarFieldEnum]
+
+
 export const EmployeeScalarFieldEnum = {
   id: 'id',
   firstName: 'firstName',
@@ -138,10 +155,46 @@ export const EmployeeScalarFieldEnum = {
   notes: 'notes',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  organizationId: 'organizationId'
+  organizationId: 'organizationId',
+  userId: 'userId'
 } as const
 
 export type EmployeeScalarFieldEnum = (typeof EmployeeScalarFieldEnum)[keyof typeof EmployeeScalarFieldEnum]
+
+
+export const TimesheetScalarFieldEnum = {
+  id: 'id',
+  month: 'month',
+  year: 'year',
+  status: 'status',
+  submittedAt: 'submittedAt',
+  reviewedAt: 'reviewedAt',
+  reviewedBy: 'reviewedBy',
+  rejectionNote: 'rejectionNote',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  employeeId: 'employeeId',
+  organizationId: 'organizationId'
+} as const
+
+export type TimesheetScalarFieldEnum = (typeof TimesheetScalarFieldEnum)[keyof typeof TimesheetScalarFieldEnum]
+
+
+export const TimesheetEntryScalarFieldEnum = {
+  id: 'id',
+  date: 'date',
+  dayType: 'dayType',
+  startTime: 'startTime',
+  endTime: 'endTime',
+  breakMinutes: 'breakMinutes',
+  workDone: 'workDone',
+  links: 'links',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  timesheetId: 'timesheetId'
+} as const
+
+export type TimesheetEntryScalarFieldEnum = (typeof TimesheetEntryScalarFieldEnum)[keyof typeof TimesheetEntryScalarFieldEnum]
 
 
 export const UserScalarFieldEnum = {
