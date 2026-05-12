@@ -51,6 +51,7 @@ import {
   BuildingIcon,
   CalendarDaysIcon,
 } from "lucide-react";
+import { NavBreadcrumbs } from "@/components/shared/nav-breadcrumbs";
 
 const NAV_MAIN = [
   {
@@ -272,12 +273,12 @@ export function DashboardShell({ children, user, org }: DashboardShellProps) {
 
       {/* Main content area */}
       <SidebarInset>
-        {/* Top bar */}
-        <header className="sticky top-0 z-40 flex h-14 shrink-0 items-center gap-2 border-b border-border/60 bg-background/80 backdrop-blur-sm px-4">
-          <SidebarTrigger className="-ml-1" />
-          <Separator orientation="vertical" className="h-4" />
-
-          {/* Breadcrumb placeholder — pages can override via portal if needed */}
+        <header className="sticky top-0 z-40 flex h-14 shrink-0 items-center gap-4 border-b border-border/60 bg-background/80 backdrop-blur-sm px-4">
+          <div className="flex items-center gap-2">
+            <SidebarTrigger className="-ml-1" />
+            <Separator orientation="vertical" className="h-4" />
+            <NavBreadcrumbs />
+          </div>
           <div className="flex-1" />
 
           {/* Header actions */}

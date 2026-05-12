@@ -38,9 +38,13 @@ const MONTH_NAMES = [
 const STATUS_CONFIG = {
   DRAFT: { label: "Draft", color: "bg-muted text-muted-foreground border-border" },
   SUBMITTED: { label: "Submitted", color: "bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20" },
-  APPROVED: { label: "Approved", color: "bg-green-500/10 text-green-600 dark:text-green-400 border-green-500/20" },
+  APPROVED: { label: "Lead Approved", color: "bg-green-500/10 text-green-600 dark:text-green-400 border-green-500/20" },
   REJECTED: { label: "Rejected", color: "bg-destructive/10 text-destructive border-destructive/20" },
+  HR_SUBMITTED: { label: "Pending HR", color: "bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border-indigo-500/20" },
+  HR_APPROVED: { label: "HR Approved", color: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20" },
 };
+
+const DEFAULT_STATUS = { label: "Unknown", color: "bg-muted text-muted-foreground border-border" };
 
 // ── Component ─────────────────────────────────────────────────────────────────
 
@@ -89,7 +93,7 @@ export function EmployeeOverview({
 
   const daysLogged = timesheet?.entries.filter((e) => e.startTime && e.endTime).length ?? 0;
   const timesheetStatus = (timesheet?.status ?? "DRAFT") as keyof typeof STATUS_CONFIG;
-  const statusCfg = STATUS_CONFIG[timesheetStatus];
+  const statusCfg = STATUS_CONFIG[timesheetStatus] || DEFAULT_STATUS;
 
   const greeting = () => {
     const h = new Date().getHours();

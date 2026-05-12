@@ -617,7 +617,37 @@ export function EmployeeForm({ mode, employee }: EmployeeFormProps) {
                         type="tel"
                         placeholder="+91 98765 43210"
                         value={data.phone}
-                        onChange={(e) => set("phone", e.target.value)}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          // If deleting, just allow it
+                          if (val.length < data.phone.length) {
+                            set("phone", val);
+                            return;
+                          }
+
+                          // Extract digits
+                          const digits = val.replace(/\D/g, "");
+                          
+                          // Skip formatting if it doesn't look like a standard 10-digit number
+                          // or if they are explicitly trying to type a different country code
+                          if (val.startsWith("+") && !val.startsWith("+91")) {
+                            set("phone", val);
+                            return;
+                          }
+
+                          let main = digits;
+                          if (digits.startsWith("91")) {
+                            main = digits.slice(2);
+                          }
+                          
+                          main = main.slice(0, 10);
+                          
+                          let formatted = "+91";
+                          if (main.length > 0) formatted += " " + main.slice(0, 5);
+                          if (main.length > 5) formatted += " " + main.slice(5);
+                          
+                          set("phone", formatted);
+                        }}
                       />
                     </Field>
                   </div>
