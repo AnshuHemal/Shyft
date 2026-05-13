@@ -51,8 +51,10 @@ import {
   BuildingIcon,
   CalendarDaysIcon,
   BrainCircuitIcon,
+  CalendarOffIcon,
 } from "lucide-react";
 import { NavBreadcrumbs } from "@/components/shared/nav-breadcrumbs";
+import { NotificationBell } from "@/components/shared/notification-bell";
 
 const NAV_MAIN = [
   {
@@ -85,6 +87,11 @@ const NAV_MAIN = [
     label: "Skills",
     href: "/dashboard/skills",
     icon: BrainCircuitIcon,
+  },
+  {
+    label: "Leave",
+    href: "/dashboard/leave",
+    icon: CalendarOffIcon,
   },
   {
     label: "Reports",
@@ -290,13 +297,7 @@ export function DashboardShell({ children, user, org }: DashboardShellProps) {
           {/* Header actions */}
           <div className="flex items-center gap-1">
             <ThemeToggle />
-            <button
-              className="relative flex size-8 items-center justify-center rounded-md text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
-              aria-label="Notifications"
-            >
-              <BellIcon className="size-4" />
-              <span className="absolute top-1.5 right-1.5 size-1.5 rounded-full bg-primary" />
-            </button>
+            <NotificationBell />
           </div>
         </header>
 

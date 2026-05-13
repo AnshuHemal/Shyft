@@ -97,3 +97,13 @@ export type Skill = Prisma.SkillModel
  * 
  */
 export type EmployeeSkill = Prisma.EmployeeSkillModel
+/**
+ * Model LeaveApplication
+ * 
+ */
+export type LeaveApplication = Prisma.LeaveApplicationModel
+/**
+ * Model Notification
+ * 
+ */
+export type Notification = Prisma.NotificationModel

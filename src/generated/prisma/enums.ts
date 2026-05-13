@@ -89,3 +89,38 @@ export const SkillProficiency = {
 } as const
 
 export type SkillProficiency = (typeof SkillProficiency)[keyof typeof SkillProficiency]
+
+
+export const LeaveType = {
+  FULL_DAY: 'FULL_DAY',
+  HALF_DAY: 'HALF_DAY',
+  MULTI_DAY: 'MULTI_DAY'
+} as const
+
+export type LeaveType = (typeof LeaveType)[keyof typeof LeaveType]
+
+
+export const HalfDaySession = {
+  MORNING: 'MORNING',
+  AFTERNOON: 'AFTERNOON'
+} as const
+
+export type HalfDaySession = (typeof HalfDaySession)[keyof typeof HalfDaySession]
+
+
+export const LeaveStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+} as const
+
+export type LeaveStatus = (typeof LeaveStatus)[keyof typeof LeaveStatus]
+
+
+export const NotificationType = {
+  LEAVE_SUBMITTED: 'LEAVE_SUBMITTED',
+  LEAVE_APPROVED: 'LEAVE_APPROVED',
+  LEAVE_REJECTED: 'LEAVE_REJECTED'
+} as const
+
+export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType]

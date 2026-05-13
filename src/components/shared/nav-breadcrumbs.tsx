@@ -17,6 +17,10 @@ const ROUTE_MAP: Record<string, string> = {
   settings: "Settings",
   create: "Add New",
   edit: "Edit",
+  leave: "Leave",
+  "team-leave": "Team Leave",
+  "team-skills": "Team Skills",
+  skills: "Skills",
 };
 
 export function NavBreadcrumbs() {

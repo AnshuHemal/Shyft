@@ -97,6 +97,7 @@ model Organization {
   timesheets  Timesheet[]
   projects    Project[]
   skills      Skill[]
+  leaves      LeaveApplication[]
 
   @@map("organization")
 }
@@ -226,6 +227,8 @@ model Employee {
   ledProjects    Project[]      @relation("ProjectLead")
   projects       ProjectMember[]
   skills         EmployeeSkill[]
+  leaves         LeaveApplication[] @relation("EmployeeLeaves")
+  leavesAsReporter LeaveApplication[] @relation("LeaveReportingTo")
 
   @@unique([email, organizationId])
   @@map("employee")
@@ -486,4 +489,88 @@ model EmployeeSkill {
 
   @@unique([employeeId, skillId])
   @@map("employee_skill")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Leave Application
+// ─────────────────────────────────────────────────────────────────────────────
+
+enum LeaveType {
+  FULL_DAY
+  HALF_DAY
+  MULTI_DAY
+}
+
+enum HalfDaySession {
+  MORNING
+  AFTERNOON
+}
+
+enum LeaveStatus {
+  PENDING   // Submitted by employee, awaiting HR action
+  APPROVED  // HR approved
+  REJECTED  // HR rejected
+}
+
+model LeaveApplication {
+  id               String          @id @default(cuid())
+  leaveType        LeaveType
+  halfDaySession   HalfDaySession?  // Only set when leaveType = HALF_DAY
+  startDate        DateTime
+  endDate          DateTime         // Same as startDate for FULL_DAY / HALF_DAY
+  reason           String
+  status           LeaveStatus     @default(PENDING)
+  hrNote           String?          // HR comment on approval/rejection
+
+  submittedAt      DateTime        @default(now())
+  reviewedAt       DateTime?
+  reviewedById     String?          // User id of the HR who acted
+
+  // Denormalized at time of submission (historical accuracy)
+  reportingToId    String?
+  reportingTo      Employee?       @relation("LeaveReportingTo", fields: [reportingToId], references: [id], onDelete: SetNull)
+
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+
+  employeeId       String
+  employee         Employee        @relation("EmployeeLeaves", fields: [employeeId], references: [id], onDelete: Cascade)
+
+  organizationId   String
+  organization     Organization    @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  notifications    Notification[]
+
+  @@map("leave_application")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Notification
+// ─────────────────────────────────────────────────────────────────────────────
+
+enum NotificationType {
+  LEAVE_SUBMITTED
+  LEAVE_APPROVED
+  LEAVE_REJECTED
+}
+
+model Notification {
+  id          String           @id @default(cuid())
+  type        NotificationType
+  title       String
+  message     String
+  isRead      Boolean          @default(false)
+
+  // Recipient: stored as userId (works for both USER and EMPLOYEE roles)
+  recipientId String
+
+  // Optional deep-link to the leave application
+  leaveId     String?
+  leave       LeaveApplication? @relation(fields: [leaveId], references: [id], onDelete: Cascade)
+
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  @@index([recipientId, isRead])
+  @@map("notification")
 }

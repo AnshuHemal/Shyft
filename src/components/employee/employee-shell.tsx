@@ -46,8 +46,10 @@ import {
   CalendarDaysIcon,
   CheckCircle2Icon,
   BrainCircuitIcon,
+  CalendarOffIcon,
 } from "lucide-react";
 import { NavBreadcrumbs } from "@/components/shared/nav-breadcrumbs";
+import { NotificationBell } from "@/components/shared/notification-bell";
 
 interface NavItem {
   label: string;
@@ -74,6 +76,11 @@ const NAV_ITEMS: NavItem[] = [
     icon: BrainCircuitIcon,
   },
   {
+    label: "Leave",
+    href: "/employee/leave",
+    icon: CalendarOffIcon,
+  },
+  {
     label: "Profile",
     href: "/employee/profile",
     icon: UserIcon,
@@ -90,6 +97,11 @@ const LEAD_NAV_ITEMS: NavItem[] = [
     label: "Team Skills",
     href: "/employee/team-skills",
     icon: BrainCircuitIcon,
+  },
+  {
+    label: "Team Leave",
+    href: "/employee/team-leave",
+    icon: CalendarOffIcon,
   },
 ];
 
@@ -283,12 +295,7 @@ export function EmployeeShell({
           <div className="flex-1" />
           <div className="flex items-center gap-1">
             <ThemeToggle />
-            <button
-              className="relative flex size-8 items-center justify-center rounded-md text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
-              aria-label="Notifications"
-            >
-              <BellIcon className="size-4" />
-            </button>
+            <NotificationBell />
           </div>
         </header>
 

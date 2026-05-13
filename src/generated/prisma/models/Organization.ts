@@ -270,6 +270,7 @@ export type OrganizationWhereInput = {
   timesheets?: Prisma.TimesheetListRelationFilter
   projects?: Prisma.ProjectListRelationFilter
   skills?: Prisma.SkillListRelationFilter
+  leaves?: Prisma.LeaveApplicationListRelationFilter
 }
 
 export type OrganizationOrderByWithRelationInput = {
@@ -296,6 +297,7 @@ export type OrganizationOrderByWithRelationInput = {
   timesheets?: Prisma.TimesheetOrderByRelationAggregateInput
   projects?: Prisma.ProjectOrderByRelationAggregateInput
   skills?: Prisma.SkillOrderByRelationAggregateInput
+  leaves?: Prisma.LeaveApplicationOrderByRelationAggregateInput
 }
 
 export type OrganizationWhereUniqueInput = Prisma.AtLeast<{
@@ -325,6 +327,7 @@ export type OrganizationWhereUniqueInput = Prisma.AtLeast<{
   timesheets?: Prisma.TimesheetListRelationFilter
   projects?: Prisma.ProjectListRelationFilter
   skills?: Prisma.SkillListRelationFilter
+  leaves?: Prisma.LeaveApplicationListRelationFilter
 }, "id" | "slug" | "ownerId">
 
 export type OrganizationOrderByWithAggregationInput = {
@@ -392,6 +395,7 @@ export type OrganizationCreateInput = {
   timesheets?: Prisma.TimesheetCreateNestedManyWithoutOrganizationInput
   projects?: Prisma.ProjectCreateNestedManyWithoutOrganizationInput
   skills?: Prisma.SkillCreateNestedManyWithoutOrganizationInput
+  leaves?: Prisma.LeaveApplicationCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateInput = {
@@ -417,6 +421,7 @@ export type OrganizationUncheckedCreateInput = {
   timesheets?: Prisma.TimesheetUncheckedCreateNestedManyWithoutOrganizationInput
   projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutOrganizationInput
   skills?: Prisma.SkillUncheckedCreateNestedManyWithoutOrganizationInput
+  leaves?: Prisma.LeaveApplicationUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUpdateInput = {
@@ -442,6 +447,7 @@ export type OrganizationUpdateInput = {
   timesheets?: Prisma.TimesheetUpdateManyWithoutOrganizationNestedInput
   projects?: Prisma.ProjectUpdateManyWithoutOrganizationNestedInput
   skills?: Prisma.SkillUpdateManyWithoutOrganizationNestedInput
+  leaves?: Prisma.LeaveApplicationUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateInput = {
@@ -467,6 +473,7 @@ export type OrganizationUncheckedUpdateInput = {
   timesheets?: Prisma.TimesheetUncheckedUpdateManyWithoutOrganizationNestedInput
   projects?: Prisma.ProjectUncheckedUpdateManyWithoutOrganizationNestedInput
   skills?: Prisma.SkillUncheckedUpdateManyWithoutOrganizationNestedInput
+  leaves?: Prisma.LeaveApplicationUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateManyInput = {
@@ -732,6 +739,20 @@ export type OrganizationUpdateOneRequiredWithoutSkillsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutSkillsInput, Prisma.OrganizationUpdateWithoutSkillsInput>, Prisma.OrganizationUncheckedUpdateWithoutSkillsInput>
 }
 
+export type OrganizationCreateNestedOneWithoutLeavesInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutLeavesInput, Prisma.OrganizationUncheckedCreateWithoutLeavesInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutLeavesInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+}
+
+export type OrganizationUpdateOneRequiredWithoutLeavesNestedInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutLeavesInput, Prisma.OrganizationUncheckedCreateWithoutLeavesInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutLeavesInput
+  upsert?: Prisma.OrganizationUpsertWithoutLeavesInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutLeavesInput, Prisma.OrganizationUpdateWithoutLeavesInput>, Prisma.OrganizationUncheckedUpdateWithoutLeavesInput>
+}
+
 export type OrganizationCreateWithoutDepartmentsInput = {
   id?: string
   name: string
@@ -754,6 +775,7 @@ export type OrganizationCreateWithoutDepartmentsInput = {
   timesheets?: Prisma.TimesheetCreateNestedManyWithoutOrganizationInput
   projects?: Prisma.ProjectCreateNestedManyWithoutOrganizationInput
   skills?: Prisma.SkillCreateNestedManyWithoutOrganizationInput
+  leaves?: Prisma.LeaveApplicationCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutDepartmentsInput = {
@@ -778,6 +800,7 @@ export type OrganizationUncheckedCreateWithoutDepartmentsInput = {
   timesheets?: Prisma.TimesheetUncheckedCreateNestedManyWithoutOrganizationInput
   projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutOrganizationInput
   skills?: Prisma.SkillUncheckedCreateNestedManyWithoutOrganizationInput
+  leaves?: Prisma.LeaveApplicationUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutDepartmentsInput = {
@@ -818,6 +841,7 @@ export type OrganizationUpdateWithoutDepartmentsInput = {
   timesheets?: Prisma.TimesheetUpdateManyWithoutOrganizationNestedInput
   projects?: Prisma.ProjectUpdateManyWithoutOrganizationNestedInput
   skills?: Prisma.SkillUpdateManyWithoutOrganizationNestedInput
+  leaves?: Prisma.LeaveApplicationUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutDepartmentsInput = {
@@ -842,6 +866,7 @@ export type OrganizationUncheckedUpdateWithoutDepartmentsInput = {
   timesheets?: Prisma.TimesheetUncheckedUpdateManyWithoutOrganizationNestedInput
   projects?: Prisma.ProjectUncheckedUpdateManyWithoutOrganizationNestedInput
   skills?: Prisma.SkillUncheckedUpdateManyWithoutOrganizationNestedInput
+  leaves?: Prisma.LeaveApplicationUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutPositionsInput = {
@@ -866,6 +891,7 @@ export type OrganizationCreateWithoutPositionsInput = {
   timesheets?: Prisma.TimesheetCreateNestedManyWithoutOrganizationInput
   projects?: Prisma.ProjectCreateNestedManyWithoutOrganizationInput
   skills?: Prisma.SkillCreateNestedManyWithoutOrganizationInput
+  leaves?: Prisma.LeaveApplicationCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutPositionsInput = {
@@ -890,6 +916,7 @@ export type OrganizationUncheckedCreateWithoutPositionsInput = {
   timesheets?: Prisma.TimesheetUncheckedCreateNestedManyWithoutOrganizationInput
   projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutOrganizationInput
   skills?: Prisma.SkillUncheckedCreateNestedManyWithoutOrganizationInput
+  leaves?: Prisma.LeaveApplicationUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutPositionsInput = {
@@ -930,6 +957,7 @@ export type OrganizationUpdateWithoutPositionsInput = {
   timesheets?: Prisma.TimesheetUpdateManyWithoutOrganizationNestedInput
   projects?: Prisma.ProjectUpdateManyWithoutOrganizationNestedInput
   skills?: Prisma.SkillUpdateManyWithoutOrganizationNestedInput
+  leaves?: Prisma.LeaveApplicationUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutPositionsInput = {
@@ -954,6 +982,7 @@ export type OrganizationUncheckedUpdateWithoutPositionsInput = {
   timesheets?: Prisma.TimesheetUncheckedUpdateManyWithoutOrganizationNestedInput
   projects?: Prisma.ProjectUncheckedUpdateManyWithoutOrganizationNestedInput
   skills?: Prisma.SkillUncheckedUpdateManyWithoutOrganizationNestedInput
+  leaves?: Prisma.LeaveApplicationUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutHolidaysInput = {
@@ -978,6 +1007,7 @@ export type OrganizationCreateWithoutHolidaysInput = {
   timesheets?: Prisma.TimesheetCreateNestedManyWithoutOrganizationInput
   projects?: Prisma.ProjectCreateNestedManyWithoutOrganizationInput
   skills?: Prisma.SkillCreateNestedManyWithoutOrganizationInput
+  leaves?: Prisma.LeaveApplicationCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutHolidaysInput = {
@@ -1002,6 +1032,7 @@ export type OrganizationUncheckedCreateWithoutHolidaysInput = {
   timesheets?: Prisma.TimesheetUncheckedCreateNestedManyWithoutOrganizationInput
   projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutOrganizationInput
   skills?: Prisma.SkillUncheckedCreateNestedManyWithoutOrganizationInput
+  leaves?: Prisma.LeaveApplicationUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutHolidaysInput = {
@@ -1042,6 +1073,7 @@ export type OrganizationUpdateWithoutHolidaysInput = {
   timesheets?: Prisma.TimesheetUpdateManyWithoutOrganizationNestedInput
   projects?: Prisma.ProjectUpdateManyWithoutOrganizationNestedInput
   skills?: Prisma.SkillUpdateManyWithoutOrganizationNestedInput
+  leaves?: Prisma.LeaveApplicationUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutHolidaysInput = {
@@ -1066,6 +1098,7 @@ export type OrganizationUncheckedUpdateWithoutHolidaysInput = {
   timesheets?: Prisma.TimesheetUncheckedUpdateManyWithoutOrganizationNestedInput
   projects?: Prisma.ProjectUncheckedUpdateManyWithoutOrganizationNestedInput
   skills?: Prisma.SkillUncheckedUpdateManyWithoutOrganizationNestedInput
+  leaves?: Prisma.LeaveApplicationUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutEmployeesInput = {
@@ -1090,6 +1123,7 @@ export type OrganizationCreateWithoutEmployeesInput = {
   timesheets?: Prisma.TimesheetCreateNestedManyWithoutOrganizationInput
   projects?: Prisma.ProjectCreateNestedManyWithoutOrganizationInput
   skills?: Prisma.SkillCreateNestedManyWithoutOrganizationInput
+  leaves?: Prisma.LeaveApplicationCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutEmployeesInput = {
@@ -1114,6 +1148,7 @@ export type OrganizationUncheckedCreateWithoutEmployeesInput = {
   timesheets?: Prisma.TimesheetUncheckedCreateNestedManyWithoutOrganizationInput
   projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutOrganizationInput
   skills?: Prisma.SkillUncheckedCreateNestedManyWithoutOrganizationInput
+  leaves?: Prisma.LeaveApplicationUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutEmployeesInput = {
@@ -1154,6 +1189,7 @@ export type OrganizationUpdateWithoutEmployeesInput = {
   timesheets?: Prisma.TimesheetUpdateManyWithoutOrganizationNestedInput
   projects?: Prisma.ProjectUpdateManyWithoutOrganizationNestedInput
   skills?: Prisma.SkillUpdateManyWithoutOrganizationNestedInput
+  leaves?: Prisma.LeaveApplicationUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutEmployeesInput = {
@@ -1178,6 +1214,7 @@ export type OrganizationUncheckedUpdateWithoutEmployeesInput = {
   timesheets?: Prisma.TimesheetUncheckedUpdateManyWithoutOrganizationNestedInput
   projects?: Prisma.ProjectUncheckedUpdateManyWithoutOrganizationNestedInput
   skills?: Prisma.SkillUncheckedUpdateManyWithoutOrganizationNestedInput
+  leaves?: Prisma.LeaveApplicationUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutTimesheetsInput = {
@@ -1202,6 +1239,7 @@ export type OrganizationCreateWithoutTimesheetsInput = {
   holidays?: Prisma.HolidayCreateNestedManyWithoutOrganizationInput
   projects?: Prisma.ProjectCreateNestedManyWithoutOrganizationInput
   skills?: Prisma.SkillCreateNestedManyWithoutOrganizationInput
+  leaves?: Prisma.LeaveApplicationCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutTimesheetsInput = {
@@ -1226,6 +1264,7 @@ export type OrganizationUncheckedCreateWithoutTimesheetsInput = {
   holidays?: Prisma.HolidayUncheckedCreateNestedManyWithoutOrganizationInput
   projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutOrganizationInput
   skills?: Prisma.SkillUncheckedCreateNestedManyWithoutOrganizationInput
+  leaves?: Prisma.LeaveApplicationUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutTimesheetsInput = {
@@ -1266,6 +1305,7 @@ export type OrganizationUpdateWithoutTimesheetsInput = {
   holidays?: Prisma.HolidayUpdateManyWithoutOrganizationNestedInput
   projects?: Prisma.ProjectUpdateManyWithoutOrganizationNestedInput
   skills?: Prisma.SkillUpdateManyWithoutOrganizationNestedInput
+  leaves?: Prisma.LeaveApplicationUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutTimesheetsInput = {
@@ -1290,6 +1330,7 @@ export type OrganizationUncheckedUpdateWithoutTimesheetsInput = {
   holidays?: Prisma.HolidayUncheckedUpdateManyWithoutOrganizationNestedInput
   projects?: Prisma.ProjectUncheckedUpdateManyWithoutOrganizationNestedInput
   skills?: Prisma.SkillUncheckedUpdateManyWithoutOrganizationNestedInput
+  leaves?: Prisma.LeaveApplicationUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutOwnerInput = {
@@ -1314,6 +1355,7 @@ export type OrganizationCreateWithoutOwnerInput = {
   timesheets?: Prisma.TimesheetCreateNestedManyWithoutOrganizationInput
   projects?: Prisma.ProjectCreateNestedManyWithoutOrganizationInput
   skills?: Prisma.SkillCreateNestedManyWithoutOrganizationInput
+  leaves?: Prisma.LeaveApplicationCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutOwnerInput = {
@@ -1338,6 +1380,7 @@ export type OrganizationUncheckedCreateWithoutOwnerInput = {
   timesheets?: Prisma.TimesheetUncheckedCreateNestedManyWithoutOrganizationInput
   projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutOrganizationInput
   skills?: Prisma.SkillUncheckedCreateNestedManyWithoutOrganizationInput
+  leaves?: Prisma.LeaveApplicationUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutOwnerInput = {
@@ -1378,6 +1421,7 @@ export type OrganizationUpdateWithoutOwnerInput = {
   timesheets?: Prisma.TimesheetUpdateManyWithoutOrganizationNestedInput
   projects?: Prisma.ProjectUpdateManyWithoutOrganizationNestedInput
   skills?: Prisma.SkillUpdateManyWithoutOrganizationNestedInput
+  leaves?: Prisma.LeaveApplicationUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutOwnerInput = {
@@ -1402,6 +1446,7 @@ export type OrganizationUncheckedUpdateWithoutOwnerInput = {
   timesheets?: Prisma.TimesheetUncheckedUpdateManyWithoutOrganizationNestedInput
   projects?: Prisma.ProjectUncheckedUpdateManyWithoutOrganizationNestedInput
   skills?: Prisma.SkillUncheckedUpdateManyWithoutOrganizationNestedInput
+  leaves?: Prisma.LeaveApplicationUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutProjectsInput = {
@@ -1426,6 +1471,7 @@ export type OrganizationCreateWithoutProjectsInput = {
   holidays?: Prisma.HolidayCreateNestedManyWithoutOrganizationInput
   timesheets?: Prisma.TimesheetCreateNestedManyWithoutOrganizationInput
   skills?: Prisma.SkillCreateNestedManyWithoutOrganizationInput
+  leaves?: Prisma.LeaveApplicationCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutProjectsInput = {
@@ -1450,6 +1496,7 @@ export type OrganizationUncheckedCreateWithoutProjectsInput = {
   holidays?: Prisma.HolidayUncheckedCreateNestedManyWithoutOrganizationInput
   timesheets?: Prisma.TimesheetUncheckedCreateNestedManyWithoutOrganizationInput
   skills?: Prisma.SkillUncheckedCreateNestedManyWithoutOrganizationInput
+  leaves?: Prisma.LeaveApplicationUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutProjectsInput = {
@@ -1490,6 +1537,7 @@ export type OrganizationUpdateWithoutProjectsInput = {
   holidays?: Prisma.HolidayUpdateManyWithoutOrganizationNestedInput
   timesheets?: Prisma.TimesheetUpdateManyWithoutOrganizationNestedInput
   skills?: Prisma.SkillUpdateManyWithoutOrganizationNestedInput
+  leaves?: Prisma.LeaveApplicationUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutProjectsInput = {
@@ -1514,6 +1562,7 @@ export type OrganizationUncheckedUpdateWithoutProjectsInput = {
   holidays?: Prisma.HolidayUncheckedUpdateManyWithoutOrganizationNestedInput
   timesheets?: Prisma.TimesheetUncheckedUpdateManyWithoutOrganizationNestedInput
   skills?: Prisma.SkillUncheckedUpdateManyWithoutOrganizationNestedInput
+  leaves?: Prisma.LeaveApplicationUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutSkillsInput = {
@@ -1538,6 +1587,7 @@ export type OrganizationCreateWithoutSkillsInput = {
   holidays?: Prisma.HolidayCreateNestedManyWithoutOrganizationInput
   timesheets?: Prisma.TimesheetCreateNestedManyWithoutOrganizationInput
   projects?: Prisma.ProjectCreateNestedManyWithoutOrganizationInput
+  leaves?: Prisma.LeaveApplicationCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutSkillsInput = {
@@ -1562,6 +1612,7 @@ export type OrganizationUncheckedCreateWithoutSkillsInput = {
   holidays?: Prisma.HolidayUncheckedCreateNestedManyWithoutOrganizationInput
   timesheets?: Prisma.TimesheetUncheckedCreateNestedManyWithoutOrganizationInput
   projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutOrganizationInput
+  leaves?: Prisma.LeaveApplicationUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutSkillsInput = {
@@ -1602,6 +1653,7 @@ export type OrganizationUpdateWithoutSkillsInput = {
   holidays?: Prisma.HolidayUpdateManyWithoutOrganizationNestedInput
   timesheets?: Prisma.TimesheetUpdateManyWithoutOrganizationNestedInput
   projects?: Prisma.ProjectUpdateManyWithoutOrganizationNestedInput
+  leaves?: Prisma.LeaveApplicationUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutSkillsInput = {
@@ -1626,6 +1678,123 @@ export type OrganizationUncheckedUpdateWithoutSkillsInput = {
   holidays?: Prisma.HolidayUncheckedUpdateManyWithoutOrganizationNestedInput
   timesheets?: Prisma.TimesheetUncheckedUpdateManyWithoutOrganizationNestedInput
   projects?: Prisma.ProjectUncheckedUpdateManyWithoutOrganizationNestedInput
+  leaves?: Prisma.LeaveApplicationUncheckedUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationCreateWithoutLeavesInput = {
+  id?: string
+  name: string
+  slug: string
+  logo?: string | null
+  website?: string | null
+  industry?: string | null
+  size?: $Enums.CompanySize | null
+  description?: string | null
+  address?: string | null
+  city?: string | null
+  country?: string | null
+  phone?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  owner: Prisma.UserCreateNestedOneWithoutOrganizationInput
+  employees?: Prisma.EmployeeCreateNestedManyWithoutOrganizationInput
+  departments?: Prisma.DepartmentCreateNestedManyWithoutOrganizationInput
+  positions?: Prisma.PositionCreateNestedManyWithoutOrganizationInput
+  holidays?: Prisma.HolidayCreateNestedManyWithoutOrganizationInput
+  timesheets?: Prisma.TimesheetCreateNestedManyWithoutOrganizationInput
+  projects?: Prisma.ProjectCreateNestedManyWithoutOrganizationInput
+  skills?: Prisma.SkillCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationUncheckedCreateWithoutLeavesInput = {
+  id?: string
+  name: string
+  slug: string
+  logo?: string | null
+  website?: string | null
+  industry?: string | null
+  size?: $Enums.CompanySize | null
+  description?: string | null
+  address?: string | null
+  city?: string | null
+  country?: string | null
+  phone?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  ownerId: string
+  employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutOrganizationInput
+  departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutOrganizationInput
+  positions?: Prisma.PositionUncheckedCreateNestedManyWithoutOrganizationInput
+  holidays?: Prisma.HolidayUncheckedCreateNestedManyWithoutOrganizationInput
+  timesheets?: Prisma.TimesheetUncheckedCreateNestedManyWithoutOrganizationInput
+  projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutOrganizationInput
+  skills?: Prisma.SkillUncheckedCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationCreateOrConnectWithoutLeavesInput = {
+  where: Prisma.OrganizationWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutLeavesInput, Prisma.OrganizationUncheckedCreateWithoutLeavesInput>
+}
+
+export type OrganizationUpsertWithoutLeavesInput = {
+  update: Prisma.XOR<Prisma.OrganizationUpdateWithoutLeavesInput, Prisma.OrganizationUncheckedUpdateWithoutLeavesInput>
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutLeavesInput, Prisma.OrganizationUncheckedCreateWithoutLeavesInput>
+  where?: Prisma.OrganizationWhereInput
+}
+
+export type OrganizationUpdateToOneWithWhereWithoutLeavesInput = {
+  where?: Prisma.OrganizationWhereInput
+  data: Prisma.XOR<Prisma.OrganizationUpdateWithoutLeavesInput, Prisma.OrganizationUncheckedUpdateWithoutLeavesInput>
+}
+
+export type OrganizationUpdateWithoutLeavesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  industry?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.NullableEnumCompanySizeFieldUpdateOperationsInput | $Enums.CompanySize | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneRequiredWithoutOrganizationNestedInput
+  employees?: Prisma.EmployeeUpdateManyWithoutOrganizationNestedInput
+  departments?: Prisma.DepartmentUpdateManyWithoutOrganizationNestedInput
+  positions?: Prisma.PositionUpdateManyWithoutOrganizationNestedInput
+  holidays?: Prisma.HolidayUpdateManyWithoutOrganizationNestedInput
+  timesheets?: Prisma.TimesheetUpdateManyWithoutOrganizationNestedInput
+  projects?: Prisma.ProjectUpdateManyWithoutOrganizationNestedInput
+  skills?: Prisma.SkillUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationUncheckedUpdateWithoutLeavesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  industry?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.NullableEnumCompanySizeFieldUpdateOperationsInput | $Enums.CompanySize | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  employees?: Prisma.EmployeeUncheckedUpdateManyWithoutOrganizationNestedInput
+  departments?: Prisma.DepartmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  positions?: Prisma.PositionUncheckedUpdateManyWithoutOrganizationNestedInput
+  holidays?: Prisma.HolidayUncheckedUpdateManyWithoutOrganizationNestedInput
+  timesheets?: Prisma.TimesheetUncheckedUpdateManyWithoutOrganizationNestedInput
+  projects?: Prisma.ProjectUncheckedUpdateManyWithoutOrganizationNestedInput
+  skills?: Prisma.SkillUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 
@@ -1641,6 +1810,7 @@ export type OrganizationCountOutputType = {
   timesheets: number
   projects: number
   skills: number
+  leaves: number
 }
 
 export type OrganizationCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1651,6 +1821,7 @@ export type OrganizationCountOutputTypeSelect<ExtArgs extends runtime.Types.Exte
   timesheets?: boolean | OrganizationCountOutputTypeCountTimesheetsArgs
   projects?: boolean | OrganizationCountOutputTypeCountProjectsArgs
   skills?: boolean | OrganizationCountOutputTypeCountSkillsArgs
+  leaves?: boolean | OrganizationCountOutputTypeCountLeavesArgs
 }
 
 /**
@@ -1712,6 +1883,13 @@ export type OrganizationCountOutputTypeCountSkillsArgs<ExtArgs extends runtime.T
   where?: Prisma.SkillWhereInput
 }
 
+/**
+ * OrganizationCountOutputType without action
+ */
+export type OrganizationCountOutputTypeCountLeavesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LeaveApplicationWhereInput
+}
+
 
 export type OrganizationSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1737,6 +1915,7 @@ export type OrganizationSelect<ExtArgs extends runtime.Types.Extensions.Internal
   timesheets?: boolean | Prisma.Organization$timesheetsArgs<ExtArgs>
   projects?: boolean | Prisma.Organization$projectsArgs<ExtArgs>
   skills?: boolean | Prisma.Organization$skillsArgs<ExtArgs>
+  leaves?: boolean | Prisma.Organization$leavesArgs<ExtArgs>
   _count?: boolean | Prisma.OrganizationCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["organization"]>
 
@@ -1806,6 +1985,7 @@ export type OrganizationInclude<ExtArgs extends runtime.Types.Extensions.Interna
   timesheets?: boolean | Prisma.Organization$timesheetsArgs<ExtArgs>
   projects?: boolean | Prisma.Organization$projectsArgs<ExtArgs>
   skills?: boolean | Prisma.Organization$skillsArgs<ExtArgs>
+  leaves?: boolean | Prisma.Organization$leavesArgs<ExtArgs>
   _count?: boolean | Prisma.OrganizationCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type OrganizationIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1826,6 +2006,7 @@ export type $OrganizationPayload<ExtArgs extends runtime.Types.Extensions.Intern
     timesheets: Prisma.$TimesheetPayload<ExtArgs>[]
     projects: Prisma.$ProjectPayload<ExtArgs>[]
     skills: Prisma.$SkillPayload<ExtArgs>[]
+    leaves: Prisma.$LeaveApplicationPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2245,6 +2426,7 @@ export interface Prisma__OrganizationClient<T, Null = never, ExtArgs extends run
   timesheets<T extends Prisma.Organization$timesheetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$timesheetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TimesheetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   projects<T extends Prisma.Organization$projectsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$projectsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   skills<T extends Prisma.Organization$skillsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$skillsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SkillPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  leaves<T extends Prisma.Organization$leavesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$leavesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LeaveApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2855,6 +3037,30 @@ export type Organization$skillsArgs<ExtArgs extends runtime.Types.Extensions.Int
   take?: number
   skip?: number
   distinct?: Prisma.SkillScalarFieldEnum | Prisma.SkillScalarFieldEnum[]
+}
+
+/**
+ * Organization.leaves
+ */
+export type Organization$leavesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the LeaveApplication
+   */
+  select?: Prisma.LeaveApplicationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the LeaveApplication
+   */
+  omit?: Prisma.LeaveApplicationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LeaveApplicationInclude<ExtArgs> | null
+  where?: Prisma.LeaveApplicationWhereInput
+  orderBy?: Prisma.LeaveApplicationOrderByWithRelationInput | Prisma.LeaveApplicationOrderByWithRelationInput[]
+  cursor?: Prisma.LeaveApplicationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.LeaveApplicationScalarFieldEnum | Prisma.LeaveApplicationScalarFieldEnum[]
 }
 
 /**

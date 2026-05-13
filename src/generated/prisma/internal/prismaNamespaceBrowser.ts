@@ -66,7 +66,9 @@ export const ModelName = {
   Project: 'Project',
   ProjectMember: 'ProjectMember',
   Skill: 'Skill',
-  EmployeeSkill: 'EmployeeSkill'
+  EmployeeSkill: 'EmployeeSkill',
+  LeaveApplication: 'LeaveApplication',
+  Notification: 'Notification'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -355,6 +357,43 @@ export const EmployeeSkillScalarFieldEnum = {
 } as const
 
 export type EmployeeSkillScalarFieldEnum = (typeof EmployeeSkillScalarFieldEnum)[keyof typeof EmployeeSkillScalarFieldEnum]
+
+
+export const LeaveApplicationScalarFieldEnum = {
+  id: 'id',
+  leaveType: 'leaveType',
+  halfDaySession: 'halfDaySession',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  reason: 'reason',
+  status: 'status',
+  hrNote: 'hrNote',
+  submittedAt: 'submittedAt',
+  reviewedAt: 'reviewedAt',
+  reviewedById: 'reviewedById',
+  reportingToId: 'reportingToId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  employeeId: 'employeeId',
+  organizationId: 'organizationId'
+} as const
+
+export type LeaveApplicationScalarFieldEnum = (typeof LeaveApplicationScalarFieldEnum)[keyof typeof LeaveApplicationScalarFieldEnum]
+
+
+export const NotificationScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  title: 'title',
+  message: 'message',
+  isRead: 'isRead',
+  recipientId: 'recipientId',
+  leaveId: 'leaveId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
 
 
 export const SortOrder = {
