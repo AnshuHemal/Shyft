@@ -86,6 +86,11 @@ const LEAD_NAV_ITEMS: NavItem[] = [
     href: "/employee/approvals",
     icon: CheckCircle2Icon,
   },
+  {
+    label: "Team Skills",
+    href: "/employee/team-skills",
+    icon: BrainCircuitIcon,
+  },
 ];
 
 function getInitials(name: string) {

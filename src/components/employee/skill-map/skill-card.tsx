@@ -38,9 +38,10 @@ interface SkillCardProps {
   onRemove: (skillId: string) => void;
   isDragging?: boolean;
   overlay?: boolean;
+  isReadOnly?: boolean;
 }
 
-export function SkillCard({ card, onRemove, overlay = false }: SkillCardProps) {
+export function SkillCard({ card, onRemove, overlay = false, isReadOnly = false }: SkillCardProps) {
   const {
     attributes,
     listeners,
@@ -60,14 +61,16 @@ export function SkillCard({ card, onRemove, overlay = false }: SkillCardProps) {
     <div
       ref={setNodeRef}
       style={style}
-      {...attributes}
-      {...listeners}
+      {...(!isReadOnly ? attributes : {})}
+      {...(!isReadOnly ? listeners : {})}
       className={cn(
         "group relative flex items-center gap-3 rounded-xl border bg-card px-3.5 py-3 shadow-xs",
         "transition-all duration-300 select-none",
         overlay
           ? "shadow-2xl border-primary/40 bg-card scale-105 rotate-2 cursor-grabbing ring-4 ring-primary/5"
-          : "hover:border-primary/30 hover:shadow-md hover:shadow-primary/5 cursor-grab active:cursor-grabbing",
+          : isReadOnly
+            ? "hover:border-primary/10 cursor-default"
+            : "hover:border-primary/30 hover:shadow-md hover:shadow-primary/5 cursor-grab active:cursor-grabbing",
         isDragging && "opacity-20 grayscale-50"
       )}
     >
@@ -91,29 +94,31 @@ export function SkillCard({ card, onRemove, overlay = false }: SkillCardProps) {
       </div>
 
       {/* Remove button */}
-      <Tooltip>
-        <TooltipTrigger
-          render={
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onRemove(card.skillId);
-              }}
-              className={cn(
-                "shrink-0 flex size-6 items-center justify-center rounded-lg",
-                "text-muted-foreground/0 group-hover:text-muted-foreground/40",
-                "hover:text-destructive! hover:bg-destructive/10 transition-all duration-200"
-              )}
-              aria-label={`Remove ${card.name}`}
-            />
-          }
-        >
-          <XIcon className="size-3.5" />
-        </TooltipTrigger>
-        <TooltipContent side="top" className="bg-destructive text-destructive-foreground border-none">
-          <p className="text-[10px] font-bold uppercase tracking-widest">Remove Skill</p>
-        </TooltipContent>
-      </Tooltip>
+      {!isReadOnly && (
+        <Tooltip>
+          <TooltipTrigger
+            render={
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onRemove(card.skillId);
+                }}
+                className={cn(
+                  "shrink-0 flex size-6 items-center justify-center rounded-lg",
+                  "text-muted-foreground/0 group-hover:text-muted-foreground/40",
+                  "hover:text-destructive! hover:bg-destructive/10 transition-all duration-200"
+                )}
+                aria-label={`Remove ${card.name}`}
+              />
+            }
+          >
+            <XIcon className="size-3.5" />
+          </TooltipTrigger>
+          <TooltipContent side="top" className="bg-destructive text-destructive-foreground border-none">
+            <p className="text-[10px] font-bold uppercase tracking-widest">Remove Skill</p>
+          </TooltipContent>
+        </Tooltip>
+      )}
     </div>
   );
 }

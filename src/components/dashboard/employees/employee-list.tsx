@@ -21,6 +21,7 @@ import {
   ClockIcon,
   EyeIcon,
   Trash2Icon,
+  BrainCircuitIcon,
 } from "lucide-react";
 import {
   Dialog,
@@ -324,7 +325,7 @@ export function EmployeeList({ initialEmployees, departments, adminEmail }: Empl
                               })
                             }
                             className={cn(
-                              "flex size-7 items-center justify-center rounded-lg",
+                              "flex size-7 items-center justify-center rounded-lg cursor-pointer",
                               "text-muted-foreground border border-border/60 bg-transparent",
                               "hover:bg-muted/60 hover:text-foreground hover:border-border",
                               "transition-all duration-200"
@@ -334,6 +335,20 @@ export function EmployeeList({ initialEmployees, departments, adminEmail }: Empl
                             <EyeIcon className="size-3.5" />
                           </button>
 
+                          {/* Skill Map link */}
+                          <Link
+                            href={`/dashboard/employees/${employee.id}/skills`}
+                            className={cn(
+                              "flex size-7 items-center justify-center rounded-lg cursor-pointer",
+                              "text-muted-foreground border border-border/60 bg-transparent",
+                              "hover:bg-primary/10 hover:text-primary hover:border-primary/30",
+                              "transition-all duration-200"
+                            )}
+                            title="View employee skill map"
+                          >
+                            <BrainCircuitIcon className="size-3.5" />
+                          </Link>
+
                           {/* Delete — only shown for TERMINATED employees */}
                           {employee.status === "TERMINATED" && (
                             <button
@@ -342,10 +357,10 @@ export function EmployeeList({ initialEmployees, departments, adminEmail }: Empl
                                 setDeleteTarget({
                                   id: employee.id,
                                   name: `${employee.firstName} ${employee.lastName}`,
-                                })
+                                  })
                               }
                               className={cn(
-                                "flex size-7 items-center justify-center rounded-lg",
+                                "flex size-7 items-center justify-center rounded-lg cursor-pointer",
                                 "text-destructive/60 border border-destructive/20 bg-transparent",
                                 "hover:bg-destructive/10 hover:text-destructive hover:border-destructive/40",
                                 "transition-all duration-200"

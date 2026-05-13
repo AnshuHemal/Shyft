@@ -63,9 +63,10 @@ interface SkillColumnProps {
   onRemove: (skillId: string) => void;
   onAddClick: (level: ProficiencyLevel) => void;
   isOver?: boolean;
+  isReadOnly?: boolean;
 }
 
-export function SkillColumn({ level, cards, onRemove, onAddClick }: SkillColumnProps) {
+export function SkillColumn({ level, cards, onRemove, onAddClick, isReadOnly = false }: SkillColumnProps) {
   const config = COLUMN_CONFIG[level];
   const { setNodeRef, isOver } = useDroppable({ id: level });
 
@@ -111,7 +112,7 @@ export function SkillColumn({ level, cards, onRemove, onAddClick }: SkillColumnP
         <SortableContext items={cardIds} strategy={verticalListSortingStrategy}>
           <div className="space-y-2">
             {cards.map((card) => (
-              <SkillCard key={card.id} card={card} onRemove={onRemove} />
+              <SkillCard key={card.id} card={card} onRemove={onRemove} isReadOnly={isReadOnly} />
             ))}
           </div>
         </SortableContext>
@@ -132,17 +133,19 @@ export function SkillColumn({ level, cards, onRemove, onAddClick }: SkillColumnP
         )}
 
         {/* Add skill button */}
-        <button
-          onClick={() => onAddClick(level)}
-          className={cn(
-            "mt-3 w-full flex items-center justify-center gap-1.5 rounded-xl border border-dashed py-3",
-            "text-[11px] font-bold uppercase tracking-wider text-muted-foreground/50 hover:text-primary",
-            "hover:border-primary/50 hover:bg-primary/5 transition-all duration-200 group"
-          )}
-        >
-          <PlusIcon className="size-3.5 group-hover:rotate-90 transition-transform duration-300" />
-          Add skill
-        </button>
+        {!isReadOnly && (
+          <button
+            onClick={() => onAddClick(level)}
+            className={cn(
+              "mt-3 w-full flex items-center justify-center gap-1.5 rounded-xl border border-dashed py-3",
+              "text-[11px] font-bold uppercase tracking-wider text-muted-foreground/50 hover:text-primary",
+              "hover:border-primary/50 hover:bg-primary/5 transition-all duration-200 group"
+            )}
+          >
+            <PlusIcon className="size-3.5 group-hover:rotate-90 transition-transform duration-300" />
+            Add skill
+          </button>
+        )}
       </div>
     </div>
   );

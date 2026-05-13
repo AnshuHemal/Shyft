@@ -47,8 +47,25 @@ export async function GET(
 
   const { id } = await params;
 
-  // Employees can only view their own skills; HR can view any
-  if (ctx.role === "EMPLOYEE" && ctx.employeeId !== id) {
+  // Authorization logic:
+  // 1. HR Admins (ctx.role === "ADMIN") can view any employee in their org.
+  // 2. Employees (ctx.role === "EMPLOYEE") can view:
+  //    a. Their own skills (ctx.employeeId === id)
+  //    b. Skills of employees reporting to them (direct reports)
+  
+  const isSelf = ctx.role === "EMPLOYEE" && ctx.employeeId === id;
+  const isAdmin = ctx.role === "ADMIN";
+  
+  let isLead = false;
+  if (ctx.role === "EMPLOYEE" && !isSelf) {
+    const report = await prisma.employee.findFirst({
+      where: { id, reportingToId: ctx.employeeId! },
+      select: { id: true },
+    });
+    if (report) isLead = true;
+  }
+
+  if (!isAdmin && !isSelf && !isLead) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 

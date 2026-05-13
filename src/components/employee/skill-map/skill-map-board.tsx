@@ -95,9 +95,11 @@ function StatsBar({ columns }: { columns: ColumnMap }) {
 
 interface SkillMapBoardProps {
   employeeId: string;
+  isReadOnly?: boolean;
+  employeeName?: string;
 }
 
-export function SkillMapBoard({ employeeId }: SkillMapBoardProps) {
+export function SkillMapBoard({ employeeId, isReadOnly = false, employeeName }: SkillMapBoardProps) {
   const [columns, setColumns] = React.useState<ColumnMap>({
     BEGINNER: [],
     INTERMEDIATE: [],
@@ -169,6 +171,7 @@ export function SkillMapBoard({ employeeId }: SkillMapBoardProps) {
   }
 
   function handleDragStart(event: DragStartEvent) {
+    if (isReadOnly) return;
     const { active } = event;
     const card = findCard(String(active.id));
     setActiveCard(card);
@@ -181,6 +184,7 @@ export function SkillMapBoard({ employeeId }: SkillMapBoardProps) {
   }
 
   function handleDragOver(event: DragOverEvent) {
+    if (isReadOnly) return;
     const { active, over } = event;
     if (!over) return;
 
@@ -227,6 +231,7 @@ export function SkillMapBoard({ employeeId }: SkillMapBoardProps) {
   }
 
   async function handleDragEnd(event: DragEndEvent) {
+    if (isReadOnly) return;
     const { active, over } = event;
     const activeId = String(active.id);
     const overId = over ? String(over.id) : null;
@@ -379,9 +384,14 @@ export function SkillMapBoard({ employeeId }: SkillMapBoardProps) {
             <BrainCircuitIcon className="size-5" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold tracking-tight">Skill Map</h1>
+            <h1 className="text-2xl font-bold tracking-tight">
+              {isReadOnly ? `${employeeName ?? 'Employee'}'s Skill Map` : 'My Skill Map'}
+            </h1>
             <p className="text-xs text-muted-foreground mt-0.5">
-              Visualize and manage your professional skill set.
+              {isReadOnly 
+                ? `Visualizing ${employeeName ?? 'this employee'}'s professional skill set.`
+                : 'Visualize and manage your professional skill set.'
+              }
             </p>
           </div>
         </div>
@@ -403,18 +413,20 @@ export function SkillMapBoard({ employeeId }: SkillMapBoardProps) {
       <StatsBar columns={columns} />
 
       {/* Hint banner */}
-      <div className="group flex items-center gap-4 rounded-2xl border border-primary/15 bg-primary/5 p-4 transition-all duration-300 hover:bg-primary/8">
-        <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-lg shadow-primary/20">
-          <ZapIcon className="size-5" />
+      {!isReadOnly && (
+        <div className="group flex items-center gap-4 rounded-2xl border border-primary/15 bg-primary/5 p-4 transition-all duration-300 hover:bg-primary/8">
+          <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-lg shadow-primary/20">
+            <ZapIcon className="size-5" />
+          </div>
+          <div className="flex-1">
+            <p className="text-sm font-semibold text-foreground">Optimize your profile</p>
+            <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">
+              Drag skills across levels to reflect your growth. Maintaining an accurate skill map helps your organization allocate projects more effectively.
+            </p>
+          </div>
+          <ArrowRightIcon className="size-4 text-primary/40 group-hover:translate-x-1 transition-transform hidden sm:block" />
         </div>
-        <div className="flex-1">
-          <p className="text-sm font-semibold text-foreground">Optimize your profile</p>
-          <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">
-            Drag skills across levels to reflect your growth. Maintaining an accurate skill map helps your organization allocate projects more effectively.
-          </p>
-        </div>
-        <ArrowRightIcon className="size-4 text-primary/40 group-hover:translate-x-1 transition-transform hidden sm:block" />
-      </div>
+      )}
 
       {/* Kanban board */}
       {loading ? (
@@ -438,6 +450,7 @@ export function SkillMapBoard({ employeeId }: SkillMapBoardProps) {
                 cards={columns[level]}
                 onRemove={handleRemove}
                 onAddClick={handleAddClick}
+                isReadOnly={isReadOnly}
               />
             ))}
           </div>
