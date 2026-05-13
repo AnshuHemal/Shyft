@@ -60,25 +60,22 @@ export function SkillCard({ card, onRemove, overlay = false }: SkillCardProps) {
     <div
       ref={setNodeRef}
       style={style}
+      {...attributes}
+      {...listeners}
       className={cn(
-        "group relative flex items-center gap-2.5 rounded-xl border bg-card px-3 py-2.5 shadow-xs",
-        "transition-all duration-200 select-none",
+        "group relative flex items-center gap-3 rounded-xl border bg-card px-3.5 py-3 shadow-xs",
+        "transition-all duration-300 select-none",
         overlay
-          ? "shadow-2xl border-primary/30 bg-card scale-105 rotate-1 cursor-grabbing"
-          : "hover:border-border hover:shadow-sm cursor-grab active:cursor-grabbing",
-        isDragging && "opacity-40"
+          ? "shadow-2xl border-primary/40 bg-card scale-105 rotate-2 cursor-grabbing ring-4 ring-primary/5"
+          : "hover:border-primary/30 hover:shadow-md hover:shadow-primary/5 cursor-grab active:cursor-grabbing",
+        isDragging && "opacity-20 grayscale-50"
       )}
     >
-      {/* Drag handle */}
-      <button
-        {...attributes}
-        {...listeners}
-        className="shrink-0 text-muted-foreground/30 hover:text-muted-foreground transition-colors touch-none"
-        tabIndex={-1}
-        aria-label="Drag to reorder"
-      >
-        <GripVerticalIcon className="size-3.5" />
-      </button>
+      <div className="absolute inset-y-0 left-0 w-1 bg-primary/0 group-hover:bg-primary/40 transition-all rounded-l-xl" />
+      {/* Visual handle hint */}
+      <div className="shrink-0 text-muted-foreground/20 group-hover:text-primary/60 transition-colors">
+        <GripVerticalIcon className="size-4" />
+      </div>
 
       {/* Skill name */}
       <div className="flex-1 min-w-0">
@@ -103,18 +100,18 @@ export function SkillCard({ card, onRemove, overlay = false }: SkillCardProps) {
                 onRemove(card.skillId);
               }}
               className={cn(
-                "shrink-0 flex size-5 items-center justify-center rounded-full",
-                "text-muted-foreground/0 group-hover:text-muted-foreground/60",
-                "hover:text-destructive! hover:bg-destructive/10 transition-all duration-150"
+                "shrink-0 flex size-6 items-center justify-center rounded-lg",
+                "text-muted-foreground/0 group-hover:text-muted-foreground/40",
+                "hover:text-destructive! hover:bg-destructive/10 transition-all duration-200"
               )}
               aria-label={`Remove ${card.name}`}
             />
           }
         >
-          <XIcon className="size-3" />
+          <XIcon className="size-3.5" />
         </TooltipTrigger>
-        <TooltipContent side="top">
-          <p className="text-xs">Remove from skill map</p>
+        <TooltipContent side="top" className="bg-destructive text-destructive-foreground border-none">
+          <p className="text-[10px] font-bold uppercase tracking-widest">Remove Skill</p>
         </TooltipContent>
       </Tooltip>
     </div>
@@ -127,11 +124,16 @@ export function SkillCardOverlay({ card }: { card: SkillCardData }) {
   return (
     <div
       className={cn(
-        "flex items-center gap-2.5 rounded-xl border border-primary/30 bg-card px-3 py-2.5",
-        "shadow-2xl scale-105 rotate-1 cursor-grabbing"
+        "flex items-center gap-3 rounded-xl border border-primary/40 bg-card px-3.5 py-3 shadow-2xl",
+        "scale-105 rotate-2 cursor-grabbing ring-4 ring-primary/5 w-[var(--card-width)]"
       )}
+      style={{
+        // @ts-ignore
+        "--card-width": "inherit"
+      }}
     >
-      <GripVerticalIcon className="size-3.5 text-muted-foreground/50 shrink-0" />
+      <div className="absolute inset-y-0 left-0 w-1 bg-primary/40 rounded-l-xl" />
+      <GripVerticalIcon className="size-4 text-primary/60 shrink-0" />
       <div className="flex-1 min-w-0">
         <p className="text-sm font-semibold truncate leading-tight">{card.name}</p>
         <span

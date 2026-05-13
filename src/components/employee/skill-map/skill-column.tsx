@@ -102,9 +102,9 @@ export function SkillColumn({ level, cards, onRemove, onAddClick }: SkillColumnP
       <div
         ref={setNodeRef}
         className={cn(
-          "flex-1 rounded-b-2xl border border-t-0 p-3 transition-all duration-200",
+          "flex-1 rounded-b-2xl border border-t-0 p-3 transition-all duration-300",
           isOver
-            ? cn("border-2", config.dropClass, config.accentClass)
+            ? cn("border-b-2", config.dropClass, config.accentClass, "ring-2 ring-primary/10 ring-inset")
             : "border-border/60 bg-muted/20"
         )}
       >
@@ -120,12 +120,12 @@ export function SkillColumn({ level, cards, onRemove, onAddClick }: SkillColumnP
         {cards.length === 0 && (
           <div
             className={cn(
-              "flex flex-col items-center justify-center py-10 rounded-xl border-2 border-dashed mt-1 transition-all duration-200",
-              isOver ? cn(config.accentClass, "scale-[1.02]") : "border-border/40"
+              "flex flex-col items-center justify-center py-12 rounded-xl border-2 border-dashed mt-1 transition-all duration-300",
+              isOver ? cn(config.accentClass, "scale-[1.02] bg-background/50 shadow-inner") : "border-border/40 bg-background/20"
             )}
           >
-            <span className="text-3xl mb-2 select-none">{config.emptyIcon}</span>
-            <p className="text-xs font-semibold text-muted-foreground/60">
+            <span className="text-4xl mb-3 select-none opacity-80 group-hover:scale-110 transition-transform">{config.emptyIcon}</span>
+            <p className="text-[11px] font-bold text-muted-foreground/50 uppercase tracking-wider">
               Drop skills here
             </p>
           </div>
@@ -135,12 +135,12 @@ export function SkillColumn({ level, cards, onRemove, onAddClick }: SkillColumnP
         <button
           onClick={() => onAddClick(level)}
           className={cn(
-            "mt-3 w-full flex items-center justify-center gap-1.5 rounded-xl border border-dashed py-2.5",
-            "text-xs font-semibold text-muted-foreground/60 hover:text-muted-foreground",
-            "hover:border-border hover:bg-muted/40 transition-all duration-200 group"
+            "mt-3 w-full flex items-center justify-center gap-1.5 rounded-xl border border-dashed py-3",
+            "text-[11px] font-bold uppercase tracking-wider text-muted-foreground/50 hover:text-primary",
+            "hover:border-primary/50 hover:bg-primary/5 transition-all duration-200 group"
           )}
         >
-          <PlusIcon className="size-3.5 group-hover:scale-110 transition-transform" />
+          <PlusIcon className="size-3.5 group-hover:rotate-90 transition-transform duration-300" />
           Add skill
         </button>
       </div>

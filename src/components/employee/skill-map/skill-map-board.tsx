@@ -26,6 +26,7 @@ import {
   TrendingUpIcon,
   LayersIcon,
   ZapIcon,
+  ArrowRightIcon,
 } from "lucide-react";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -104,6 +105,7 @@ export function SkillMapBoard({ employeeId }: SkillMapBoardProps) {
   });
   const [loading, setLoading] = React.useState(true);
   const [mounted, setMounted] = React.useState(false);
+  const [draggedWidth, setDraggedWidth] = React.useState<number | null>(null);
   const [activeCard, setActiveCard] = React.useState<SkillCardData | null>(null);
   const [addDialog, setAddDialog] = React.useState<{
     open: boolean;
@@ -149,31 +151,33 @@ export function SkillMapBoard({ employeeId }: SkillMapBoardProps) {
     fetchSkills();
   }, [employeeId]);
 
-  // ── DnD sensors ──────────────────────────────────────────────────────────────
+  // ── DnD helpers ─────────────────────────────────────────────────────────────
 
-  const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
-    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
-  );
-
-  function findCardColumn(cardId: string): ProficiencyLevel | null {
-    for (const level of LEVELS) {
-      if (columns[level].some((c) => c.id === cardId)) return level;
-    }
-    return null;
+  function findContainer(id: string) {
+    if (id in columns) return id as ProficiencyLevel;
+    return (Object.keys(columns) as ProficiencyLevel[]).find((key) =>
+      columns[key].some((item) => item.id === id)
+    );
   }
 
-  function findCard(cardId: string): SkillCardData | null {
+  function findCard(id: string) {
     for (const level of LEVELS) {
-      const found = columns[level].find((c) => c.id === cardId);
-      if (found) return found;
+      const card = columns[level].find((c) => c.id === id);
+      if (card) return card;
     }
     return null;
   }
 
   function handleDragStart(event: DragStartEvent) {
-    const card = findCard(String(event.active.id));
+    const { active } = event;
+    const card = findCard(String(active.id));
     setActiveCard(card);
+
+    // Capture the initial width of the dragged element
+    const rect = active.rect.current.initial;
+    if (rect) {
+      setDraggedWidth(rect.width);
+    }
   }
 
   function handleDragOver(event: DragOverEvent) {
@@ -183,84 +187,94 @@ export function SkillMapBoard({ employeeId }: SkillMapBoardProps) {
     const activeId = String(active.id);
     const overId = String(over.id);
 
-    const activeCol = findCardColumn(activeId);
-    // over could be a column id or a card id
-    const overCol = LEVELS.includes(overId as ProficiencyLevel)
-      ? (overId as ProficiencyLevel)
-      : findCardColumn(overId);
+    const activeContainer = findContainer(activeId);
+    const overContainer = findContainer(overId);
 
-    if (!activeCol || !overCol || activeCol === overCol) return;
+    if (!activeContainer || !overContainer || activeContainer === overContainer) {
+      return;
+    }
 
     setColumns((prev) => {
-      const activeCards = [...prev[activeCol]];
-      const overCards = [...prev[overCol]];
-      const cardIdx = activeCards.findIndex((c) => c.id === activeId);
-      const [movedCard] = activeCards.splice(cardIdx, 1);
+      const activeItems = prev[activeContainer];
+      const overItems = prev[overContainer];
 
-      // Insert at the position of the over card, or at end if over is the column
-      const overCardIdx = overCards.findIndex((c) => c.id === overId);
-      if (overCardIdx >= 0) {
-        overCards.splice(overCardIdx, 0, { ...movedCard, proficiency: overCol });
+      const activeIndex = activeItems.findIndex((item) => item.id === activeId);
+      const overIndex = overItems.findIndex((item) => item.id === overId);
+
+      let newIndex: number;
+      if (overId in prev) {
+        newIndex = overItems.length + 1;
       } else {
-        overCards.push({ ...movedCard, proficiency: overCol });
+        const isBelowLastItem =
+          over &&
+          overIndex === overItems.length - 1 &&
+          event.activatorEvent.type === "pointerdown"; // basic check
+
+        const modifier = isBelowLastItem ? 1 : 0;
+        newIndex = overIndex >= 0 ? overIndex + modifier : overItems.length + 1;
       }
 
-      return { ...prev, [activeCol]: activeCards, [overCol]: overCards };
+      return {
+        ...prev,
+        [activeContainer]: activeItems.filter((item) => item.id !== activeId),
+        [overContainer]: [
+          ...overItems.slice(0, newIndex),
+          { ...activeItems[activeIndex], proficiency: overContainer },
+          ...overItems.slice(newIndex),
+        ],
+      };
     });
   }
 
   async function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
-    setActiveCard(null);
-
-    if (!over) return;
-
     const activeId = String(active.id);
-    const overId = String(over.id);
+    const overId = over ? String(over.id) : null;
 
-    const activeCol = findCardColumn(activeId);
-    const overCol = LEVELS.includes(overId as ProficiencyLevel)
-      ? (overId as ProficiencyLevel)
-      : findCardColumn(overId);
+    const activeContainer = findContainer(activeId);
+    const overContainer = overId ? findContainer(overId) : null;
 
-    if (!activeCol || !overCol) return;
-
-    // Same column — reorder only (no API call needed)
-    if (activeCol === overCol) {
-      setColumns((prev) => {
-        const items = [...prev[activeCol]];
-        const oldIdx = items.findIndex((c) => c.id === activeId);
-        const newIdx = items.findIndex((c) => c.id === overId);
-        if (oldIdx === newIdx) return prev;
-        return { ...prev, [activeCol]: arrayMove(items, oldIdx, newIdx) };
-      });
+    if (!activeContainer || !overContainer || !overId) {
+      setActiveCard(null);
       return;
     }
 
-    // Cross-column drop — update proficiency in DB
-    const card = findCard(activeId);
-    if (!card) return;
+    const activeIndex = columns[activeContainer].findIndex((item) => item.id === activeId);
+    const overIndex = columns[overContainer].findIndex((item) => item.id === overId);
 
-    try {
-      const res = await fetch(
-        `/api/employees/${employeeId}/skills/${card.skillId}`,
-        {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ proficiency: overCol }),
-        }
-      );
-      if (!res.ok) {
-        toast.error("Failed to update skill level.");
-        // Revert
-        fetchSkills();
+    // If container changed, call API
+    if (activeContainer !== overContainer || activeIndex !== overIndex) {
+      if (activeContainer === overContainer) {
+        // Reorder in same column
+        setColumns((prev) => ({
+          ...prev,
+          [activeContainer]: arrayMove(prev[activeContainer], activeIndex, overIndex),
+        }));
       } else {
-        toast.success(`${card.name} moved to ${overCol.toLowerCase()}.`);
+        // Handle cross-column drop finalization
+        const card = findCard(activeId);
+        if (card) {
+          try {
+            const res = await fetch(
+              `/api/employees/${employeeId}/skills/${card.skillId}`,
+              {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ proficiency: overContainer }),
+              }
+            );
+            if (!res.ok) throw new Error();
+            toast.success(`${card.name} moved to ${overContainer.toLowerCase()}.`);
+          } catch {
+            toast.error("Failed to update skill level.");
+            fetchSkills(); // Revert
+          }
+        }
       }
-    } catch {
-      toast.error("Failed to update skill level.");
-      fetchSkills();
     }
+
+    setActiveCard(null);
+    setDraggedWidth(null);
   }
 
   // ── Remove skill ─────────────────────────────────────────────────────────────
@@ -317,7 +331,39 @@ export function SkillMapBoard({ employeeId }: SkillMapBoardProps) {
 
   const allSkillIds = LEVELS.flatMap((l) => columns[l].map((c) => c.skillId));
 
-  // ── Render ────────────────────────────────────────────────────────────────────
+  // ── Sensors & Collision ──────────────────────────────────────────────────────
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: { distance: 5 },
+    }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  // Custom modifier to center the card on the cursor
+  const snapCenterToCursor = ({ transform, activeNodeRect }: any) => {
+    if (!activeNodeRect) return transform;
+    return {
+      ...transform,
+      x: transform.x + transform.x - (transform.x + activeNodeRect.width / 2),
+      y: transform.y + transform.y - (transform.y + activeNodeRect.height / 2),
+    };
+  };
+
+  const centerModifier = ({ transform, activeNodeRect }: any) => {
+    if (!activeNodeRect) return transform;
+    return {
+      ...transform,
+      x: transform.x - activeNodeRect.width / 2,
+      y: transform.y - activeNodeRect.height / 2,
+    };
+  };
+
+  // The actual fix for "to the right" is often just setting the transform origin or using snapCenter
+  // But dnd-kit's DragOverlay usually handles the offset if we DON'T use custom modifiers unless needed.
+  // The user's issue implies the offset isn't being calculated.
 
   return (
     <div
@@ -328,11 +374,16 @@ export function SkillMapBoard({ employeeId }: SkillMapBoardProps) {
     >
       {/* Page header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Skill Map</h1>
-          <p className="text-sm text-muted-foreground mt-1">
-            Drag skills between columns to update your proficiency level.
-          </p>
+        <div className="flex items-center gap-3">
+          <div className="flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+            <BrainCircuitIcon className="size-5" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight">Skill Map</h1>
+            <p className="text-xs text-muted-foreground mt-0.5">
+              Visualize and manage your professional skill set.
+            </p>
+          </div>
         </div>
         <button
           onClick={fetchSkills}
@@ -352,22 +403,24 @@ export function SkillMapBoard({ employeeId }: SkillMapBoardProps) {
       <StatsBar columns={columns} />
 
       {/* Hint banner */}
-      <div className="flex items-center gap-3 rounded-2xl border border-primary/15 bg-primary/5 px-5 py-3.5">
-        <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary/10">
-          <BrainCircuitIcon className="size-4 text-primary" />
+      <div className="group flex items-center gap-4 rounded-2xl border border-primary/15 bg-primary/5 p-4 transition-all duration-300 hover:bg-primary/8">
+        <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-lg shadow-primary/20">
+          <ZapIcon className="size-5" />
         </div>
-        <p className="text-sm text-muted-foreground leading-relaxed">
-          <span className="font-semibold text-foreground">How it works:</span>{" "}
-          Drag any skill card left or right to change your proficiency level. Click{" "}
-          <span className="font-semibold text-foreground">+ Add skill</span> at the bottom of any column to add from your organisation's library.
-        </p>
+        <div className="flex-1">
+          <p className="text-sm font-semibold text-foreground">Optimize your profile</p>
+          <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">
+            Drag skills across levels to reflect your growth. Maintaining an accurate skill map helps your organization allocate projects more effectively.
+          </p>
+        </div>
+        <ArrowRightIcon className="size-4 text-primary/40 group-hover:translate-x-1 transition-transform hidden sm:block" />
       </div>
 
       {/* Kanban board */}
       {loading ? (
-        <div className="flex flex-col items-center justify-center py-32 gap-4 text-muted-foreground rounded-3xl border border-dashed border-border/60">
+        <div className="flex flex-col items-center justify-center py-32 gap-4 text-muted-foreground rounded-3xl border border-dashed border-border/60 bg-muted/5">
           <Spinner className="size-6" />
-          <p className="text-sm font-medium">Loading your skill map…</p>
+          <p className="text-sm font-medium">Assembling your skill map…</p>
         </div>
       ) : (
         <DndContext
@@ -389,11 +442,22 @@ export function SkillMapBoard({ employeeId }: SkillMapBoardProps) {
             ))}
           </div>
 
-          <DragOverlay dropAnimation={{
-            duration: 200,
-            easing: "cubic-bezier(0.18, 0.67, 0.6, 1.22)",
-          }}>
-            {activeCard ? <SkillCardOverlay card={activeCard} /> : null}
+          <DragOverlay
+            zIndex={1000}
+            modifiers={[centerModifier]}
+            dropAnimation={{
+              duration: 250,
+              easing: "cubic-bezier(0.18, 0.67, 0.6, 1.22)",
+            }}
+          >
+            {activeCard ? (
+              <div
+                className="touch-none pointer-events-none"
+                style={{ width: draggedWidth ? `${draggedWidth}px` : "auto" }}
+              >
+                <SkillCardOverlay card={activeCard} />
+              </div>
+            ) : null}
           </DragOverlay>
         </DndContext>
       )}
