@@ -14,7 +14,8 @@ import {
 type NotificationType = 
   | "LEAVE_SUBMITTED" | "LEAVE_APPROVED" | "LEAVE_REJECTED"
   | "COMP_OFF_SUBMITTED" | "COMP_OFF_ACKNOWLEDGED" | "COMP_OFF_REJECTED"
-  | "REIMBURSEMENT_SUBMITTED" | "REIMBURSEMENT_APPROVED" | "REIMBURSEMENT_REJECTED" | "REIMBURSEMENT_PAID";
+  | "REIMBURSEMENT_SUBMITTED" | "REIMBURSEMENT_APPROVED" | "REIMBURSEMENT_REJECTED" | "REIMBURSEMENT_PAID"
+  | "ASSET_REQUEST_SUBMITTED" | "ASSET_REQUEST_APPROVED" | "ASSET_REQUEST_REJECTED";
 
 interface Notification {
   id: string;
@@ -76,6 +77,21 @@ const TYPE_CONFIG: Record<NotificationType, { icon: React.ElementType; color: st
     icon: CheckCircle2Icon,
     color: "text-emerald-500",
     bg: "bg-emerald-500/10",
+  },
+  ASSET_REQUEST_SUBMITTED: {
+    icon: CalendarDaysIcon, // Or a better icon if imported
+    color: "text-amber-500",
+    bg: "bg-amber-500/10",
+  },
+  ASSET_REQUEST_APPROVED: {
+    icon: CheckCircle2Icon,
+    color: "text-emerald-500",
+    bg: "bg-emerald-500/10",
+  },
+  ASSET_REQUEST_REJECTED: {
+    icon: XCircleIcon,
+    color: "text-destructive",
+    bg: "bg-destructive/10",
   },
 };
 

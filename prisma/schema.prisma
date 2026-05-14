@@ -100,6 +100,8 @@ model Organization {
   leaves      LeaveApplication[]
   compOffs    LeaveCompensation[]
   reimbursements Reimbursement[]
+  assets      Asset[]
+  assetRequests AssetRequest[]
 
   @@map("organization")
 }
@@ -234,6 +236,8 @@ model Employee {
   compOffs         LeaveCompensation[] @relation("EmployeeCompOff")
   compOffsAsReporter LeaveCompensation[] @relation("CompOffReportingTo")
   reimbursements   Reimbursement[] @relation("EmployeeReimbursements")
+  assignedAssets   Asset[]
+  assetRequests    AssetRequest[] @relation("EmployeeAssetRequests")
 
   @@unique([email, organizationId])
   @@map("employee")
@@ -564,6 +568,9 @@ enum NotificationType {
   REIMBURSEMENT_APPROVED
   REIMBURSEMENT_REJECTED
   REIMBURSEMENT_PAID
+  ASSET_REQUEST_SUBMITTED
+  ASSET_REQUEST_APPROVED
+  ASSET_REQUEST_REJECTED
 }
 
 enum CompDuration {
@@ -599,6 +606,10 @@ model Notification {
   // Optional deep-link to a reimbursement request
   reimbursementId String?
   reimbursement   Reimbursement? @relation(fields: [reimbursementId], references: [id], onDelete: Cascade)
+
+  // Optional deep-link to an asset request
+  assetRequestId  String?
+  assetRequest    AssetRequest? @relation(fields: [assetRequestId], references: [id], onDelete: Cascade)
 
   createdAt   DateTime         @default(now())
   updatedAt   DateTime         @updatedAt
@@ -724,5 +735,87 @@ model Reimbursement {
   notifications   Notification[]
 
   @@map("reimbursement")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Asset Management & Requests
+// ─────────────────────────────────────────────────────────────────────────────
+
+enum AssetStatus {
+  AVAILABLE
+  ASSIGNED
+  MAINTENANCE
+  RETIRED
+}
+
+model Asset {
+  id              String        @id @default(cuid())
+  name            String        // "MacBook Pro M2", "Dell Ultrasharp"
+  prodId          String        // The "Prod ID"
+  type            String?       // "Laptop", "Monitor", "Phone"
+  
+  status          AssetStatus   @default(AVAILABLE)
+
+  // Assignment
+  assignedToId    String?
+  assignedTo      Employee?     @relation(fields: [assignedToId], references: [id], onDelete: SetNull)
+  assignedAt      DateTime?
+
+  organizationId  String
+  organization    Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  
+  requests        AssetRequest[]
+
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@unique([organizationId, prodId])
+  @@map("asset")
+}
+
+enum AssetAction {
+  ACQUIRE
+  REPLACE
+  RETURN
+}
+
+enum AssetRequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model AssetRequest {
+  id              String             @id @default(cuid())
+  action          AssetAction
+  
+  // For ACQUIRE (free text of what they want)
+  requestedAsset  String?            
+  
+  // For REPLACE or RETURN (must link to existing asset they are returning)
+  assetId         String?
+  asset           Asset?             @relation(fields: [assetId], references: [id], onDelete: SetNull)
+
+  reason          String
+  duration        String?            // "Permanent", "3 months"
+
+  status          AssetRequestStatus @default(PENDING)
+  hrNote          String?            // Reason for rejection or notes
+  reviewedAt      DateTime?
+  reviewedById    String?            // userId of HR
+
+  employeeId      String
+  employee        Employee           @relation("EmployeeAssetRequests", fields: [employeeId], references: [id], onDelete: Cascade)
+
+  organizationId  String
+  organization    Organization       @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  notifications   Notification[]
+
+  submittedAt     DateTime           @default(now())
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+
+  @@map("asset_request")
 }
 

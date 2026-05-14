@@ -146,3 +146,13 @@ export type ReimbursementProof = Prisma.ReimbursementProofModel
  * 
  */
 export type Reimbursement = Prisma.ReimbursementModel
+/**
+ * Model Asset
+ * 
+ */
+export type Asset = Prisma.AssetModel
+/**
+ * Model AssetRequest
+ * 
+ */
+export type AssetRequest = Prisma.AssetRequestModel

@@ -34,6 +34,7 @@ export type NotificationMinAggregateOutputType = {
   leaveId: string | null
   compOffId: string | null
   reimbursementId: string | null
+  assetRequestId: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -48,6 +49,7 @@ export type NotificationMaxAggregateOutputType = {
   leaveId: string | null
   compOffId: string | null
   reimbursementId: string | null
+  assetRequestId: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -62,6 +64,7 @@ export type NotificationCountAggregateOutputType = {
   leaveId: number
   compOffId: number
   reimbursementId: number
+  assetRequestId: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -78,6 +81,7 @@ export type NotificationMinAggregateInputType = {
   leaveId?: true
   compOffId?: true
   reimbursementId?: true
+  assetRequestId?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -92,6 +96,7 @@ export type NotificationMaxAggregateInputType = {
   leaveId?: true
   compOffId?: true
   reimbursementId?: true
+  assetRequestId?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -106,6 +111,7 @@ export type NotificationCountAggregateInputType = {
   leaveId?: true
   compOffId?: true
   reimbursementId?: true
+  assetRequestId?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -193,6 +199,7 @@ export type NotificationGroupByOutputType = {
   leaveId: string | null
   compOffId: string | null
   reimbursementId: string | null
+  assetRequestId: string | null
   createdAt: Date
   updatedAt: Date
   _count: NotificationCountAggregateOutputType | null
@@ -228,11 +235,13 @@ export type NotificationWhereInput = {
   leaveId?: Prisma.StringNullableFilter<"Notification"> | string | null
   compOffId?: Prisma.StringNullableFilter<"Notification"> | string | null
   reimbursementId?: Prisma.StringNullableFilter<"Notification"> | string | null
+  assetRequestId?: Prisma.StringNullableFilter<"Notification"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Notification"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Notification"> | Date | string
   leave?: Prisma.XOR<Prisma.LeaveApplicationNullableScalarRelationFilter, Prisma.LeaveApplicationWhereInput> | null
   compOff?: Prisma.XOR<Prisma.LeaveCompensationNullableScalarRelationFilter, Prisma.LeaveCompensationWhereInput> | null
   reimbursement?: Prisma.XOR<Prisma.ReimbursementNullableScalarRelationFilter, Prisma.ReimbursementWhereInput> | null
+  assetRequest?: Prisma.XOR<Prisma.AssetRequestNullableScalarRelationFilter, Prisma.AssetRequestWhereInput> | null
 }
 
 export type NotificationOrderByWithRelationInput = {
@@ -245,11 +254,13 @@ export type NotificationOrderByWithRelationInput = {
   leaveId?: Prisma.SortOrderInput | Prisma.SortOrder
   compOffId?: Prisma.SortOrderInput | Prisma.SortOrder
   reimbursementId?: Prisma.SortOrderInput | Prisma.SortOrder
+  assetRequestId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   leave?: Prisma.LeaveApplicationOrderByWithRelationInput
   compOff?: Prisma.LeaveCompensationOrderByWithRelationInput
   reimbursement?: Prisma.ReimbursementOrderByWithRelationInput
+  assetRequest?: Prisma.AssetRequestOrderByWithRelationInput
 }
 
 export type NotificationWhereUniqueInput = Prisma.AtLeast<{
@@ -265,11 +276,13 @@ export type NotificationWhereUniqueInput = Prisma.AtLeast<{
   leaveId?: Prisma.StringNullableFilter<"Notification"> | string | null
   compOffId?: Prisma.StringNullableFilter<"Notification"> | string | null
   reimbursementId?: Prisma.StringNullableFilter<"Notification"> | string | null
+  assetRequestId?: Prisma.StringNullableFilter<"Notification"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Notification"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Notification"> | Date | string
   leave?: Prisma.XOR<Prisma.LeaveApplicationNullableScalarRelationFilter, Prisma.LeaveApplicationWhereInput> | null
   compOff?: Prisma.XOR<Prisma.LeaveCompensationNullableScalarRelationFilter, Prisma.LeaveCompensationWhereInput> | null
   reimbursement?: Prisma.XOR<Prisma.ReimbursementNullableScalarRelationFilter, Prisma.ReimbursementWhereInput> | null
+  assetRequest?: Prisma.XOR<Prisma.AssetRequestNullableScalarRelationFilter, Prisma.AssetRequestWhereInput> | null
 }, "id">
 
 export type NotificationOrderByWithAggregationInput = {
@@ -282,6 +295,7 @@ export type NotificationOrderByWithAggregationInput = {
   leaveId?: Prisma.SortOrderInput | Prisma.SortOrder
   compOffId?: Prisma.SortOrderInput | Prisma.SortOrder
   reimbursementId?: Prisma.SortOrderInput | Prisma.SortOrder
+  assetRequestId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.NotificationCountOrderByAggregateInput
@@ -302,6 +316,7 @@ export type NotificationScalarWhereWithAggregatesInput = {
   leaveId?: Prisma.StringNullableWithAggregatesFilter<"Notification"> | string | null
   compOffId?: Prisma.StringNullableWithAggregatesFilter<"Notification"> | string | null
   reimbursementId?: Prisma.StringNullableWithAggregatesFilter<"Notification"> | string | null
+  assetRequestId?: Prisma.StringNullableWithAggregatesFilter<"Notification"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Notification"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Notification"> | Date | string
 }
@@ -318,6 +333,7 @@ export type NotificationCreateInput = {
   leave?: Prisma.LeaveApplicationCreateNestedOneWithoutNotificationsInput
   compOff?: Prisma.LeaveCompensationCreateNestedOneWithoutNotificationsInput
   reimbursement?: Prisma.ReimbursementCreateNestedOneWithoutNotificationsInput
+  assetRequest?: Prisma.AssetRequestCreateNestedOneWithoutNotificationsInput
 }
 
 export type NotificationUncheckedCreateInput = {
@@ -330,6 +346,7 @@ export type NotificationUncheckedCreateInput = {
   leaveId?: string | null
   compOffId?: string | null
   reimbursementId?: string | null
+  assetRequestId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -346,6 +363,7 @@ export type NotificationUpdateInput = {
   leave?: Prisma.LeaveApplicationUpdateOneWithoutNotificationsNestedInput
   compOff?: Prisma.LeaveCompensationUpdateOneWithoutNotificationsNestedInput
   reimbursement?: Prisma.ReimbursementUpdateOneWithoutNotificationsNestedInput
+  assetRequest?: Prisma.AssetRequestUpdateOneWithoutNotificationsNestedInput
 }
 
 export type NotificationUncheckedUpdateInput = {
@@ -358,6 +376,7 @@ export type NotificationUncheckedUpdateInput = {
   leaveId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   compOffId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reimbursementId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assetRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -372,6 +391,7 @@ export type NotificationCreateManyInput = {
   leaveId?: string | null
   compOffId?: string | null
   reimbursementId?: string | null
+  assetRequestId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -397,6 +417,7 @@ export type NotificationUncheckedUpdateManyInput = {
   leaveId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   compOffId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reimbursementId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assetRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -421,6 +442,7 @@ export type NotificationCountOrderByAggregateInput = {
   leaveId?: Prisma.SortOrder
   compOffId?: Prisma.SortOrder
   reimbursementId?: Prisma.SortOrder
+  assetRequestId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -435,6 +457,7 @@ export type NotificationMaxOrderByAggregateInput = {
   leaveId?: Prisma.SortOrder
   compOffId?: Prisma.SortOrder
   reimbursementId?: Prisma.SortOrder
+  assetRequestId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -449,6 +472,7 @@ export type NotificationMinOrderByAggregateInput = {
   leaveId?: Prisma.SortOrder
   compOffId?: Prisma.SortOrder
   reimbursementId?: Prisma.SortOrder
+  assetRequestId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -583,6 +607,48 @@ export type NotificationUncheckedUpdateManyWithoutReimbursementNestedInput = {
   deleteMany?: Prisma.NotificationScalarWhereInput | Prisma.NotificationScalarWhereInput[]
 }
 
+export type NotificationCreateNestedManyWithoutAssetRequestInput = {
+  create?: Prisma.XOR<Prisma.NotificationCreateWithoutAssetRequestInput, Prisma.NotificationUncheckedCreateWithoutAssetRequestInput> | Prisma.NotificationCreateWithoutAssetRequestInput[] | Prisma.NotificationUncheckedCreateWithoutAssetRequestInput[]
+  connectOrCreate?: Prisma.NotificationCreateOrConnectWithoutAssetRequestInput | Prisma.NotificationCreateOrConnectWithoutAssetRequestInput[]
+  createMany?: Prisma.NotificationCreateManyAssetRequestInputEnvelope
+  connect?: Prisma.NotificationWhereUniqueInput | Prisma.NotificationWhereUniqueInput[]
+}
+
+export type NotificationUncheckedCreateNestedManyWithoutAssetRequestInput = {
+  create?: Prisma.XOR<Prisma.NotificationCreateWithoutAssetRequestInput, Prisma.NotificationUncheckedCreateWithoutAssetRequestInput> | Prisma.NotificationCreateWithoutAssetRequestInput[] | Prisma.NotificationUncheckedCreateWithoutAssetRequestInput[]
+  connectOrCreate?: Prisma.NotificationCreateOrConnectWithoutAssetRequestInput | Prisma.NotificationCreateOrConnectWithoutAssetRequestInput[]
+  createMany?: Prisma.NotificationCreateManyAssetRequestInputEnvelope
+  connect?: Prisma.NotificationWhereUniqueInput | Prisma.NotificationWhereUniqueInput[]
+}
+
+export type NotificationUpdateManyWithoutAssetRequestNestedInput = {
+  create?: Prisma.XOR<Prisma.NotificationCreateWithoutAssetRequestInput, Prisma.NotificationUncheckedCreateWithoutAssetRequestInput> | Prisma.NotificationCreateWithoutAssetRequestInput[] | Prisma.NotificationUncheckedCreateWithoutAssetRequestInput[]
+  connectOrCreate?: Prisma.NotificationCreateOrConnectWithoutAssetRequestInput | Prisma.NotificationCreateOrConnectWithoutAssetRequestInput[]
+  upsert?: Prisma.NotificationUpsertWithWhereUniqueWithoutAssetRequestInput | Prisma.NotificationUpsertWithWhereUniqueWithoutAssetRequestInput[]
+  createMany?: Prisma.NotificationCreateManyAssetRequestInputEnvelope
+  set?: Prisma.NotificationWhereUniqueInput | Prisma.NotificationWhereUniqueInput[]
+  disconnect?: Prisma.NotificationWhereUniqueInput | Prisma.NotificationWhereUniqueInput[]
+  delete?: Prisma.NotificationWhereUniqueInput | Prisma.NotificationWhereUniqueInput[]
+  connect?: Prisma.NotificationWhereUniqueInput | Prisma.NotificationWhereUniqueInput[]
+  update?: Prisma.NotificationUpdateWithWhereUniqueWithoutAssetRequestInput | Prisma.NotificationUpdateWithWhereUniqueWithoutAssetRequestInput[]
+  updateMany?: Prisma.NotificationUpdateManyWithWhereWithoutAssetRequestInput | Prisma.NotificationUpdateManyWithWhereWithoutAssetRequestInput[]
+  deleteMany?: Prisma.NotificationScalarWhereInput | Prisma.NotificationScalarWhereInput[]
+}
+
+export type NotificationUncheckedUpdateManyWithoutAssetRequestNestedInput = {
+  create?: Prisma.XOR<Prisma.NotificationCreateWithoutAssetRequestInput, Prisma.NotificationUncheckedCreateWithoutAssetRequestInput> | Prisma.NotificationCreateWithoutAssetRequestInput[] | Prisma.NotificationUncheckedCreateWithoutAssetRequestInput[]
+  connectOrCreate?: Prisma.NotificationCreateOrConnectWithoutAssetRequestInput | Prisma.NotificationCreateOrConnectWithoutAssetRequestInput[]
+  upsert?: Prisma.NotificationUpsertWithWhereUniqueWithoutAssetRequestInput | Prisma.NotificationUpsertWithWhereUniqueWithoutAssetRequestInput[]
+  createMany?: Prisma.NotificationCreateManyAssetRequestInputEnvelope
+  set?: Prisma.NotificationWhereUniqueInput | Prisma.NotificationWhereUniqueInput[]
+  disconnect?: Prisma.NotificationWhereUniqueInput | Prisma.NotificationWhereUniqueInput[]
+  delete?: Prisma.NotificationWhereUniqueInput | Prisma.NotificationWhereUniqueInput[]
+  connect?: Prisma.NotificationWhereUniqueInput | Prisma.NotificationWhereUniqueInput[]
+  update?: Prisma.NotificationUpdateWithWhereUniqueWithoutAssetRequestInput | Prisma.NotificationUpdateWithWhereUniqueWithoutAssetRequestInput[]
+  updateMany?: Prisma.NotificationUpdateManyWithWhereWithoutAssetRequestInput | Prisma.NotificationUpdateManyWithWhereWithoutAssetRequestInput[]
+  deleteMany?: Prisma.NotificationScalarWhereInput | Prisma.NotificationScalarWhereInput[]
+}
+
 export type NotificationCreateWithoutLeaveInput = {
   id?: string
   type: $Enums.NotificationType
@@ -594,6 +660,7 @@ export type NotificationCreateWithoutLeaveInput = {
   updatedAt?: Date | string
   compOff?: Prisma.LeaveCompensationCreateNestedOneWithoutNotificationsInput
   reimbursement?: Prisma.ReimbursementCreateNestedOneWithoutNotificationsInput
+  assetRequest?: Prisma.AssetRequestCreateNestedOneWithoutNotificationsInput
 }
 
 export type NotificationUncheckedCreateWithoutLeaveInput = {
@@ -605,6 +672,7 @@ export type NotificationUncheckedCreateWithoutLeaveInput = {
   recipientId: string
   compOffId?: string | null
   reimbursementId?: string | null
+  assetRequestId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -648,6 +716,7 @@ export type NotificationScalarWhereInput = {
   leaveId?: Prisma.StringNullableFilter<"Notification"> | string | null
   compOffId?: Prisma.StringNullableFilter<"Notification"> | string | null
   reimbursementId?: Prisma.StringNullableFilter<"Notification"> | string | null
+  assetRequestId?: Prisma.StringNullableFilter<"Notification"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Notification"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Notification"> | Date | string
 }
@@ -663,6 +732,7 @@ export type NotificationCreateWithoutCompOffInput = {
   updatedAt?: Date | string
   leave?: Prisma.LeaveApplicationCreateNestedOneWithoutNotificationsInput
   reimbursement?: Prisma.ReimbursementCreateNestedOneWithoutNotificationsInput
+  assetRequest?: Prisma.AssetRequestCreateNestedOneWithoutNotificationsInput
 }
 
 export type NotificationUncheckedCreateWithoutCompOffInput = {
@@ -674,6 +744,7 @@ export type NotificationUncheckedCreateWithoutCompOffInput = {
   recipientId: string
   leaveId?: string | null
   reimbursementId?: string | null
+  assetRequestId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -715,6 +786,7 @@ export type NotificationCreateWithoutReimbursementInput = {
   updatedAt?: Date | string
   leave?: Prisma.LeaveApplicationCreateNestedOneWithoutNotificationsInput
   compOff?: Prisma.LeaveCompensationCreateNestedOneWithoutNotificationsInput
+  assetRequest?: Prisma.AssetRequestCreateNestedOneWithoutNotificationsInput
 }
 
 export type NotificationUncheckedCreateWithoutReimbursementInput = {
@@ -726,6 +798,7 @@ export type NotificationUncheckedCreateWithoutReimbursementInput = {
   recipientId: string
   leaveId?: string | null
   compOffId?: string | null
+  assetRequestId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -756,6 +829,60 @@ export type NotificationUpdateManyWithWhereWithoutReimbursementInput = {
   data: Prisma.XOR<Prisma.NotificationUpdateManyMutationInput, Prisma.NotificationUncheckedUpdateManyWithoutReimbursementInput>
 }
 
+export type NotificationCreateWithoutAssetRequestInput = {
+  id?: string
+  type: $Enums.NotificationType
+  title: string
+  message: string
+  isRead?: boolean
+  recipientId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  leave?: Prisma.LeaveApplicationCreateNestedOneWithoutNotificationsInput
+  compOff?: Prisma.LeaveCompensationCreateNestedOneWithoutNotificationsInput
+  reimbursement?: Prisma.ReimbursementCreateNestedOneWithoutNotificationsInput
+}
+
+export type NotificationUncheckedCreateWithoutAssetRequestInput = {
+  id?: string
+  type: $Enums.NotificationType
+  title: string
+  message: string
+  isRead?: boolean
+  recipientId: string
+  leaveId?: string | null
+  compOffId?: string | null
+  reimbursementId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type NotificationCreateOrConnectWithoutAssetRequestInput = {
+  where: Prisma.NotificationWhereUniqueInput
+  create: Prisma.XOR<Prisma.NotificationCreateWithoutAssetRequestInput, Prisma.NotificationUncheckedCreateWithoutAssetRequestInput>
+}
+
+export type NotificationCreateManyAssetRequestInputEnvelope = {
+  data: Prisma.NotificationCreateManyAssetRequestInput | Prisma.NotificationCreateManyAssetRequestInput[]
+  skipDuplicates?: boolean
+}
+
+export type NotificationUpsertWithWhereUniqueWithoutAssetRequestInput = {
+  where: Prisma.NotificationWhereUniqueInput
+  update: Prisma.XOR<Prisma.NotificationUpdateWithoutAssetRequestInput, Prisma.NotificationUncheckedUpdateWithoutAssetRequestInput>
+  create: Prisma.XOR<Prisma.NotificationCreateWithoutAssetRequestInput, Prisma.NotificationUncheckedCreateWithoutAssetRequestInput>
+}
+
+export type NotificationUpdateWithWhereUniqueWithoutAssetRequestInput = {
+  where: Prisma.NotificationWhereUniqueInput
+  data: Prisma.XOR<Prisma.NotificationUpdateWithoutAssetRequestInput, Prisma.NotificationUncheckedUpdateWithoutAssetRequestInput>
+}
+
+export type NotificationUpdateManyWithWhereWithoutAssetRequestInput = {
+  where: Prisma.NotificationScalarWhereInput
+  data: Prisma.XOR<Prisma.NotificationUpdateManyMutationInput, Prisma.NotificationUncheckedUpdateManyWithoutAssetRequestInput>
+}
+
 export type NotificationCreateManyLeaveInput = {
   id?: string
   type: $Enums.NotificationType
@@ -765,6 +892,7 @@ export type NotificationCreateManyLeaveInput = {
   recipientId: string
   compOffId?: string | null
   reimbursementId?: string | null
+  assetRequestId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -780,6 +908,7 @@ export type NotificationUpdateWithoutLeaveInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   compOff?: Prisma.LeaveCompensationUpdateOneWithoutNotificationsNestedInput
   reimbursement?: Prisma.ReimbursementUpdateOneWithoutNotificationsNestedInput
+  assetRequest?: Prisma.AssetRequestUpdateOneWithoutNotificationsNestedInput
 }
 
 export type NotificationUncheckedUpdateWithoutLeaveInput = {
@@ -791,6 +920,7 @@ export type NotificationUncheckedUpdateWithoutLeaveInput = {
   recipientId?: Prisma.StringFieldUpdateOperationsInput | string
   compOffId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reimbursementId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assetRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -804,6 +934,7 @@ export type NotificationUncheckedUpdateManyWithoutLeaveInput = {
   recipientId?: Prisma.StringFieldUpdateOperationsInput | string
   compOffId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reimbursementId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assetRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -817,6 +948,7 @@ export type NotificationCreateManyCompOffInput = {
   recipientId: string
   leaveId?: string | null
   reimbursementId?: string | null
+  assetRequestId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -832,6 +964,7 @@ export type NotificationUpdateWithoutCompOffInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   leave?: Prisma.LeaveApplicationUpdateOneWithoutNotificationsNestedInput
   reimbursement?: Prisma.ReimbursementUpdateOneWithoutNotificationsNestedInput
+  assetRequest?: Prisma.AssetRequestUpdateOneWithoutNotificationsNestedInput
 }
 
 export type NotificationUncheckedUpdateWithoutCompOffInput = {
@@ -843,6 +976,7 @@ export type NotificationUncheckedUpdateWithoutCompOffInput = {
   recipientId?: Prisma.StringFieldUpdateOperationsInput | string
   leaveId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reimbursementId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assetRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -856,6 +990,7 @@ export type NotificationUncheckedUpdateManyWithoutCompOffInput = {
   recipientId?: Prisma.StringFieldUpdateOperationsInput | string
   leaveId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reimbursementId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assetRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -869,6 +1004,7 @@ export type NotificationCreateManyReimbursementInput = {
   recipientId: string
   leaveId?: string | null
   compOffId?: string | null
+  assetRequestId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -884,6 +1020,7 @@ export type NotificationUpdateWithoutReimbursementInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   leave?: Prisma.LeaveApplicationUpdateOneWithoutNotificationsNestedInput
   compOff?: Prisma.LeaveCompensationUpdateOneWithoutNotificationsNestedInput
+  assetRequest?: Prisma.AssetRequestUpdateOneWithoutNotificationsNestedInput
 }
 
 export type NotificationUncheckedUpdateWithoutReimbursementInput = {
@@ -895,6 +1032,7 @@ export type NotificationUncheckedUpdateWithoutReimbursementInput = {
   recipientId?: Prisma.StringFieldUpdateOperationsInput | string
   leaveId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   compOffId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assetRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -908,6 +1046,63 @@ export type NotificationUncheckedUpdateManyWithoutReimbursementInput = {
   recipientId?: Prisma.StringFieldUpdateOperationsInput | string
   leaveId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   compOffId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assetRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type NotificationCreateManyAssetRequestInput = {
+  id?: string
+  type: $Enums.NotificationType
+  title: string
+  message: string
+  isRead?: boolean
+  recipientId: string
+  leaveId?: string | null
+  compOffId?: string | null
+  reimbursementId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type NotificationUpdateWithoutAssetRequestInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  message?: Prisma.StringFieldUpdateOperationsInput | string
+  isRead?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  recipientId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  leave?: Prisma.LeaveApplicationUpdateOneWithoutNotificationsNestedInput
+  compOff?: Prisma.LeaveCompensationUpdateOneWithoutNotificationsNestedInput
+  reimbursement?: Prisma.ReimbursementUpdateOneWithoutNotificationsNestedInput
+}
+
+export type NotificationUncheckedUpdateWithoutAssetRequestInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  message?: Prisma.StringFieldUpdateOperationsInput | string
+  isRead?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  recipientId?: Prisma.StringFieldUpdateOperationsInput | string
+  leaveId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  compOffId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reimbursementId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type NotificationUncheckedUpdateManyWithoutAssetRequestInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  message?: Prisma.StringFieldUpdateOperationsInput | string
+  isRead?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  recipientId?: Prisma.StringFieldUpdateOperationsInput | string
+  leaveId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  compOffId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reimbursementId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -924,11 +1119,13 @@ export type NotificationSelect<ExtArgs extends runtime.Types.Extensions.Internal
   leaveId?: boolean
   compOffId?: boolean
   reimbursementId?: boolean
+  assetRequestId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   leave?: boolean | Prisma.Notification$leaveArgs<ExtArgs>
   compOff?: boolean | Prisma.Notification$compOffArgs<ExtArgs>
   reimbursement?: boolean | Prisma.Notification$reimbursementArgs<ExtArgs>
+  assetRequest?: boolean | Prisma.Notification$assetRequestArgs<ExtArgs>
 }, ExtArgs["result"]["notification"]>
 
 export type NotificationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -941,11 +1138,13 @@ export type NotificationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   leaveId?: boolean
   compOffId?: boolean
   reimbursementId?: boolean
+  assetRequestId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   leave?: boolean | Prisma.Notification$leaveArgs<ExtArgs>
   compOff?: boolean | Prisma.Notification$compOffArgs<ExtArgs>
   reimbursement?: boolean | Prisma.Notification$reimbursementArgs<ExtArgs>
+  assetRequest?: boolean | Prisma.Notification$assetRequestArgs<ExtArgs>
 }, ExtArgs["result"]["notification"]>
 
 export type NotificationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -958,11 +1157,13 @@ export type NotificationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   leaveId?: boolean
   compOffId?: boolean
   reimbursementId?: boolean
+  assetRequestId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   leave?: boolean | Prisma.Notification$leaveArgs<ExtArgs>
   compOff?: boolean | Prisma.Notification$compOffArgs<ExtArgs>
   reimbursement?: boolean | Prisma.Notification$reimbursementArgs<ExtArgs>
+  assetRequest?: boolean | Prisma.Notification$assetRequestArgs<ExtArgs>
 }, ExtArgs["result"]["notification"]>
 
 export type NotificationSelectScalar = {
@@ -975,25 +1176,29 @@ export type NotificationSelectScalar = {
   leaveId?: boolean
   compOffId?: boolean
   reimbursementId?: boolean
+  assetRequestId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type NotificationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "type" | "title" | "message" | "isRead" | "recipientId" | "leaveId" | "compOffId" | "reimbursementId" | "createdAt" | "updatedAt", ExtArgs["result"]["notification"]>
+export type NotificationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "type" | "title" | "message" | "isRead" | "recipientId" | "leaveId" | "compOffId" | "reimbursementId" | "assetRequestId" | "createdAt" | "updatedAt", ExtArgs["result"]["notification"]>
 export type NotificationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   leave?: boolean | Prisma.Notification$leaveArgs<ExtArgs>
   compOff?: boolean | Prisma.Notification$compOffArgs<ExtArgs>
   reimbursement?: boolean | Prisma.Notification$reimbursementArgs<ExtArgs>
+  assetRequest?: boolean | Prisma.Notification$assetRequestArgs<ExtArgs>
 }
 export type NotificationIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   leave?: boolean | Prisma.Notification$leaveArgs<ExtArgs>
   compOff?: boolean | Prisma.Notification$compOffArgs<ExtArgs>
   reimbursement?: boolean | Prisma.Notification$reimbursementArgs<ExtArgs>
+  assetRequest?: boolean | Prisma.Notification$assetRequestArgs<ExtArgs>
 }
 export type NotificationIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   leave?: boolean | Prisma.Notification$leaveArgs<ExtArgs>
   compOff?: boolean | Prisma.Notification$compOffArgs<ExtArgs>
   reimbursement?: boolean | Prisma.Notification$reimbursementArgs<ExtArgs>
+  assetRequest?: boolean | Prisma.Notification$assetRequestArgs<ExtArgs>
 }
 
 export type $NotificationPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1002,6 +1207,7 @@ export type $NotificationPayload<ExtArgs extends runtime.Types.Extensions.Intern
     leave: Prisma.$LeaveApplicationPayload<ExtArgs> | null
     compOff: Prisma.$LeaveCompensationPayload<ExtArgs> | null
     reimbursement: Prisma.$ReimbursementPayload<ExtArgs> | null
+    assetRequest: Prisma.$AssetRequestPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1013,6 +1219,7 @@ export type $NotificationPayload<ExtArgs extends runtime.Types.Extensions.Intern
     leaveId: string | null
     compOffId: string | null
     reimbursementId: string | null
+    assetRequestId: string | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["notification"]>
@@ -1412,6 +1619,7 @@ export interface Prisma__NotificationClient<T, Null = never, ExtArgs extends run
   leave<T extends Prisma.Notification$leaveArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Notification$leaveArgs<ExtArgs>>): Prisma.Prisma__LeaveApplicationClient<runtime.Types.Result.GetResult<Prisma.$LeaveApplicationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   compOff<T extends Prisma.Notification$compOffArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Notification$compOffArgs<ExtArgs>>): Prisma.Prisma__LeaveCompensationClient<runtime.Types.Result.GetResult<Prisma.$LeaveCompensationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   reimbursement<T extends Prisma.Notification$reimbursementArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Notification$reimbursementArgs<ExtArgs>>): Prisma.Prisma__ReimbursementClient<runtime.Types.Result.GetResult<Prisma.$ReimbursementPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  assetRequest<T extends Prisma.Notification$assetRequestArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Notification$assetRequestArgs<ExtArgs>>): Prisma.Prisma__AssetRequestClient<runtime.Types.Result.GetResult<Prisma.$AssetRequestPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1450,6 +1658,7 @@ export interface NotificationFieldRefs {
   readonly leaveId: Prisma.FieldRef<"Notification", 'String'>
   readonly compOffId: Prisma.FieldRef<"Notification", 'String'>
   readonly reimbursementId: Prisma.FieldRef<"Notification", 'String'>
+  readonly assetRequestId: Prisma.FieldRef<"Notification", 'String'>
   readonly createdAt: Prisma.FieldRef<"Notification", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Notification", 'DateTime'>
 }
@@ -1907,6 +2116,25 @@ export type Notification$reimbursementArgs<ExtArgs extends runtime.Types.Extensi
    */
   include?: Prisma.ReimbursementInclude<ExtArgs> | null
   where?: Prisma.ReimbursementWhereInput
+}
+
+/**
+ * Notification.assetRequest
+ */
+export type Notification$assetRequestArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AssetRequest
+   */
+  select?: Prisma.AssetRequestSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AssetRequest
+   */
+  omit?: Prisma.AssetRequestOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AssetRequestInclude<ExtArgs> | null
+  where?: Prisma.AssetRequestWhereInput
 }
 
 /**

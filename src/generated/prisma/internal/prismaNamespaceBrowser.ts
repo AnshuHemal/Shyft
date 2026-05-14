@@ -71,7 +71,9 @@ export const ModelName = {
   Notification: 'Notification',
   LeaveCompensation: 'LeaveCompensation',
   ReimbursementProof: 'ReimbursementProof',
-  Reimbursement: 'Reimbursement'
+  Reimbursement: 'Reimbursement',
+  Asset: 'Asset',
+  AssetRequest: 'AssetRequest'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -394,6 +396,7 @@ export const NotificationScalarFieldEnum = {
   leaveId: 'leaveId',
   compOffId: 'compOffId',
   reimbursementId: 'reimbursementId',
+  assetRequestId: 'assetRequestId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -461,6 +464,43 @@ export const ReimbursementScalarFieldEnum = {
 } as const
 
 export type ReimbursementScalarFieldEnum = (typeof ReimbursementScalarFieldEnum)[keyof typeof ReimbursementScalarFieldEnum]
+
+
+export const AssetScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  prodId: 'prodId',
+  type: 'type',
+  status: 'status',
+  assignedToId: 'assignedToId',
+  assignedAt: 'assignedAt',
+  organizationId: 'organizationId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AssetScalarFieldEnum = (typeof AssetScalarFieldEnum)[keyof typeof AssetScalarFieldEnum]
+
+
+export const AssetRequestScalarFieldEnum = {
+  id: 'id',
+  action: 'action',
+  requestedAsset: 'requestedAsset',
+  assetId: 'assetId',
+  reason: 'reason',
+  duration: 'duration',
+  status: 'status',
+  hrNote: 'hrNote',
+  reviewedAt: 'reviewedAt',
+  reviewedById: 'reviewedById',
+  employeeId: 'employeeId',
+  organizationId: 'organizationId',
+  submittedAt: 'submittedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AssetRequestScalarFieldEnum = (typeof AssetRequestScalarFieldEnum)[keyof typeof AssetRequestScalarFieldEnum]
 
 
 export const SortOrder = {

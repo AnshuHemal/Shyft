@@ -127,7 +127,10 @@ export const NotificationType = {
   REIMBURSEMENT_SUBMITTED: 'REIMBURSEMENT_SUBMITTED',
   REIMBURSEMENT_APPROVED: 'REIMBURSEMENT_APPROVED',
   REIMBURSEMENT_REJECTED: 'REIMBURSEMENT_REJECTED',
-  REIMBURSEMENT_PAID: 'REIMBURSEMENT_PAID'
+  REIMBURSEMENT_PAID: 'REIMBURSEMENT_PAID',
+  ASSET_REQUEST_SUBMITTED: 'ASSET_REQUEST_SUBMITTED',
+  ASSET_REQUEST_APPROVED: 'ASSET_REQUEST_APPROVED',
+  ASSET_REQUEST_REJECTED: 'ASSET_REQUEST_REJECTED'
 } as const
 
 export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType]
@@ -170,3 +173,31 @@ export const ReimbursementCategory = {
 } as const
 
 export type ReimbursementCategory = (typeof ReimbursementCategory)[keyof typeof ReimbursementCategory]
+
+
+export const AssetStatus = {
+  AVAILABLE: 'AVAILABLE',
+  ASSIGNED: 'ASSIGNED',
+  MAINTENANCE: 'MAINTENANCE',
+  RETIRED: 'RETIRED'
+} as const
+
+export type AssetStatus = (typeof AssetStatus)[keyof typeof AssetStatus]
+
+
+export const AssetAction = {
+  ACQUIRE: 'ACQUIRE',
+  REPLACE: 'REPLACE',
+  RETURN: 'RETURN'
+} as const
+
+export type AssetAction = (typeof AssetAction)[keyof typeof AssetAction]
+
+
+export const AssetRequestStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+} as const
+
+export type AssetRequestStatus = (typeof AssetRequestStatus)[keyof typeof AssetRequestStatus]
