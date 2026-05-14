@@ -99,6 +99,7 @@ model Organization {
   skills      Skill[]
   leaves      LeaveApplication[]
   compOffs    LeaveCompensation[]
+  reimbursements Reimbursement[]
 
   @@map("organization")
 }
@@ -232,6 +233,7 @@ model Employee {
   leavesAsReporter LeaveApplication[] @relation("LeaveReportingTo")
   compOffs         LeaveCompensation[] @relation("EmployeeCompOff")
   compOffsAsReporter LeaveCompensation[] @relation("CompOffReportingTo")
+  reimbursements   Reimbursement[] @relation("EmployeeReimbursements")
 
   @@unique([email, organizationId])
   @@map("employee")
@@ -558,6 +560,10 @@ enum NotificationType {
   COMP_OFF_SUBMITTED
   COMP_OFF_ACKNOWLEDGED
   COMP_OFF_REJECTED
+  REIMBURSEMENT_SUBMITTED
+  REIMBURSEMENT_APPROVED
+  REIMBURSEMENT_REJECTED
+  REIMBURSEMENT_PAID
 }
 
 enum CompDuration {
@@ -589,6 +595,10 @@ model Notification {
   // Optional deep-link to a comp-off request
   compOffId   String?
   compOff     LeaveCompensation? @relation(fields: [compOffId], references: [id], onDelete: Cascade)
+
+  // Optional deep-link to a reimbursement request
+  reimbursementId String?
+  reimbursement   Reimbursement? @relation(fields: [reimbursementId], references: [id], onDelete: Cascade)
 
   createdAt   DateTime         @default(now())
   updatedAt   DateTime         @updatedAt
@@ -645,3 +655,74 @@ model LeaveCompensation {
   @@unique([employeeId, compensationFor]) // One comp-off per leave date per employee
   @@map("leave_compensation")
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Reimbursement Application
+// ─────────────────────────────────────────────────────────────────────────────
+
+enum ReimbursementStatus {
+  PENDING   // Submitted, awaiting HR review
+  APPROVED  // HR approved; pending finance payout
+  REJECTED  // HR rejected
+  PAID      // Finance confirmed payment to employee
+}
+
+enum ReimbursementCategory {
+  TRAVEL
+  FOOD
+  CLIENT_MEETING
+  EQUIPMENT
+  OTHER
+}
+
+model ReimbursementProof {
+  id               String          @id @default(cuid())
+  fileName         String          // Original file name
+  fileType         String          // MIME type
+  fileSize         Int             // File size in bytes
+  storageUrl       String          // Public URL from Cloudinary
+  storagePublicId  String?         // Cloudinary public_id
+
+  createdAt        DateTime        @default(now())
+
+  reimbursementId  String
+  reimbursement    Reimbursement   @relation(fields: [reimbursementId], references: [id], onDelete: Cascade)
+
+  @@map("reimbursement_proof")
+}
+
+model Reimbursement {
+  id              String                 @id @default(cuid())
+
+  // ── Core fields ────────────────────────────────────────────────────────────
+  amount          Float
+  currency        String                 @default("INR")
+  category        ReimbursementCategory  @default(OTHER)
+  purpose         String                 // Details of the expense
+  expenseDate     DateTime               // When the expense occurred
+
+  // ── Workflow ───────────────────────────────────────────────────────────────
+  status          ReimbursementStatus    @default(PENDING)
+  hrNote          String?                // HR comment
+  reviewedAt      DateTime?
+  reviewedById    String?
+  paidAt          DateTime?
+  paidById        String?
+
+  submittedAt     DateTime               @default(now())
+  createdAt       DateTime               @default(now())
+  updatedAt       DateTime               @updatedAt
+
+  // ── Relations ──────────────────────────────────────────────────────────────
+  employeeId      String
+  employee        Employee               @relation("EmployeeReimbursements", fields: [employeeId], references: [id], onDelete: Cascade)
+
+  organizationId  String
+  organization    Organization           @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  proofs          ReimbursementProof[]
+  notifications   Notification[]
+
+  @@map("reimbursement")
+}
+

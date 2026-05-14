@@ -112,3 +112,13 @@ export type Notification = Prisma.NotificationModel
  * 
  */
 export type LeaveCompensation = Prisma.LeaveCompensationModel
+/**
+ * Model ReimbursementProof
+ * 
+ */
+export type ReimbursementProof = Prisma.ReimbursementProofModel
+/**
+ * Model Reimbursement
+ * 
+ */
+export type Reimbursement = Prisma.ReimbursementModel

@@ -518,6 +518,67 @@ export type EnumCompOffStatusWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumCompOffStatusFilter<$PrismaModel>
 }
 
+export type FloatFilter<$PrismaModel = never> = {
+  equals?: number | Prisma.FloatFieldRefInput<$PrismaModel>
+  in?: number[] | Prisma.ListFloatFieldRefInput<$PrismaModel>
+  notIn?: number[] | Prisma.ListFloatFieldRefInput<$PrismaModel>
+  lt?: number | Prisma.FloatFieldRefInput<$PrismaModel>
+  lte?: number | Prisma.FloatFieldRefInput<$PrismaModel>
+  gt?: number | Prisma.FloatFieldRefInput<$PrismaModel>
+  gte?: number | Prisma.FloatFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedFloatFilter<$PrismaModel> | number
+}
+
+export type EnumReimbursementCategoryFilter<$PrismaModel = never> = {
+  equals?: $Enums.ReimbursementCategory | Prisma.EnumReimbursementCategoryFieldRefInput<$PrismaModel>
+  in?: $Enums.ReimbursementCategory[] | Prisma.ListEnumReimbursementCategoryFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ReimbursementCategory[] | Prisma.ListEnumReimbursementCategoryFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumReimbursementCategoryFilter<$PrismaModel> | $Enums.ReimbursementCategory
+}
+
+export type EnumReimbursementStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.ReimbursementStatus | Prisma.EnumReimbursementStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.ReimbursementStatus[] | Prisma.ListEnumReimbursementStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ReimbursementStatus[] | Prisma.ListEnumReimbursementStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumReimbursementStatusFilter<$PrismaModel> | $Enums.ReimbursementStatus
+}
+
+export type FloatWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: number | Prisma.FloatFieldRefInput<$PrismaModel>
+  in?: number[] | Prisma.ListFloatFieldRefInput<$PrismaModel>
+  notIn?: number[] | Prisma.ListFloatFieldRefInput<$PrismaModel>
+  lt?: number | Prisma.FloatFieldRefInput<$PrismaModel>
+  lte?: number | Prisma.FloatFieldRefInput<$PrismaModel>
+  gt?: number | Prisma.FloatFieldRefInput<$PrismaModel>
+  gte?: number | Prisma.FloatFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedFloatWithAggregatesFilter<$PrismaModel> | number
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _avg?: Prisma.NestedFloatFilter<$PrismaModel>
+  _sum?: Prisma.NestedFloatFilter<$PrismaModel>
+  _min?: Prisma.NestedFloatFilter<$PrismaModel>
+  _max?: Prisma.NestedFloatFilter<$PrismaModel>
+}
+
+export type EnumReimbursementCategoryWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ReimbursementCategory | Prisma.EnumReimbursementCategoryFieldRefInput<$PrismaModel>
+  in?: $Enums.ReimbursementCategory[] | Prisma.ListEnumReimbursementCategoryFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ReimbursementCategory[] | Prisma.ListEnumReimbursementCategoryFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumReimbursementCategoryWithAggregatesFilter<$PrismaModel> | $Enums.ReimbursementCategory
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumReimbursementCategoryFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumReimbursementCategoryFilter<$PrismaModel>
+}
+
+export type EnumReimbursementStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ReimbursementStatus | Prisma.EnumReimbursementStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.ReimbursementStatus[] | Prisma.ListEnumReimbursementStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ReimbursementStatus[] | Prisma.ListEnumReimbursementStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumReimbursementStatusWithAggregatesFilter<$PrismaModel> | $Enums.ReimbursementStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumReimbursementStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumReimbursementStatusFilter<$PrismaModel>
+}
+
 export type NestedStringFilter<$PrismaModel = never> = {
   equals?: string | Prisma.StringFieldRefInput<$PrismaModel>
   in?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
@@ -995,6 +1056,56 @@ export type NestedEnumCompOffStatusWithAggregatesFilter<$PrismaModel = never> = 
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumCompOffStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumCompOffStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumReimbursementCategoryFilter<$PrismaModel = never> = {
+  equals?: $Enums.ReimbursementCategory | Prisma.EnumReimbursementCategoryFieldRefInput<$PrismaModel>
+  in?: $Enums.ReimbursementCategory[] | Prisma.ListEnumReimbursementCategoryFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ReimbursementCategory[] | Prisma.ListEnumReimbursementCategoryFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumReimbursementCategoryFilter<$PrismaModel> | $Enums.ReimbursementCategory
+}
+
+export type NestedEnumReimbursementStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.ReimbursementStatus | Prisma.EnumReimbursementStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.ReimbursementStatus[] | Prisma.ListEnumReimbursementStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ReimbursementStatus[] | Prisma.ListEnumReimbursementStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumReimbursementStatusFilter<$PrismaModel> | $Enums.ReimbursementStatus
+}
+
+export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: number | Prisma.FloatFieldRefInput<$PrismaModel>
+  in?: number[] | Prisma.ListFloatFieldRefInput<$PrismaModel>
+  notIn?: number[] | Prisma.ListFloatFieldRefInput<$PrismaModel>
+  lt?: number | Prisma.FloatFieldRefInput<$PrismaModel>
+  lte?: number | Prisma.FloatFieldRefInput<$PrismaModel>
+  gt?: number | Prisma.FloatFieldRefInput<$PrismaModel>
+  gte?: number | Prisma.FloatFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedFloatWithAggregatesFilter<$PrismaModel> | number
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _avg?: Prisma.NestedFloatFilter<$PrismaModel>
+  _sum?: Prisma.NestedFloatFilter<$PrismaModel>
+  _min?: Prisma.NestedFloatFilter<$PrismaModel>
+  _max?: Prisma.NestedFloatFilter<$PrismaModel>
+}
+
+export type NestedEnumReimbursementCategoryWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ReimbursementCategory | Prisma.EnumReimbursementCategoryFieldRefInput<$PrismaModel>
+  in?: $Enums.ReimbursementCategory[] | Prisma.ListEnumReimbursementCategoryFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ReimbursementCategory[] | Prisma.ListEnumReimbursementCategoryFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumReimbursementCategoryWithAggregatesFilter<$PrismaModel> | $Enums.ReimbursementCategory
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumReimbursementCategoryFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumReimbursementCategoryFilter<$PrismaModel>
+}
+
+export type NestedEnumReimbursementStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ReimbursementStatus | Prisma.EnumReimbursementStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.ReimbursementStatus[] | Prisma.ListEnumReimbursementStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ReimbursementStatus[] | Prisma.ListEnumReimbursementStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumReimbursementStatusWithAggregatesFilter<$PrismaModel> | $Enums.ReimbursementStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumReimbursementStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumReimbursementStatusFilter<$PrismaModel>
 }
 
 

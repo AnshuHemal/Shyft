@@ -47,6 +47,7 @@ import {
   CheckCircle2Icon,
   BrainCircuitIcon,
   CalendarOffIcon,
+  BanknoteIcon,
 } from "lucide-react";
 import { NavBreadcrumbs } from "@/components/shared/nav-breadcrumbs";
 import { NotificationBell } from "@/components/shared/notification-bell";
@@ -79,6 +80,11 @@ const NAV_ITEMS: NavItem[] = [
     label: "Leave",
     href: "/employee/leave",
     icon: CalendarOffIcon,
+  },
+  {
+    label: "Reimbursements",
+    href: "/employee/reimbursements",
+    icon: BanknoteIcon,
   },
   {
     label: "Profile",

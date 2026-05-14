@@ -11,7 +11,10 @@ import {
   InboxIcon,
 } from "lucide-react";
 
-type NotificationType = "LEAVE_SUBMITTED" | "LEAVE_APPROVED" | "LEAVE_REJECTED";
+type NotificationType = 
+  | "LEAVE_SUBMITTED" | "LEAVE_APPROVED" | "LEAVE_REJECTED"
+  | "COMP_OFF_SUBMITTED" | "COMP_OFF_ACKNOWLEDGED" | "COMP_OFF_REJECTED"
+  | "REIMBURSEMENT_SUBMITTED" | "REIMBURSEMENT_APPROVED" | "REIMBURSEMENT_REJECTED" | "REIMBURSEMENT_PAID";
 
 interface Notification {
   id: string;
@@ -38,6 +41,41 @@ const TYPE_CONFIG: Record<NotificationType, { icon: React.ElementType; color: st
     icon: XCircleIcon,
     color: "text-destructive",
     bg: "bg-destructive/10",
+  },
+  COMP_OFF_SUBMITTED: {
+    icon: CalendarDaysIcon,
+    color: "text-amber-500",
+    bg: "bg-amber-500/10",
+  },
+  COMP_OFF_ACKNOWLEDGED: {
+    icon: CheckCircle2Icon,
+    color: "text-blue-500",
+    bg: "bg-blue-500/10",
+  },
+  COMP_OFF_REJECTED: {
+    icon: XCircleIcon,
+    color: "text-destructive",
+    bg: "bg-destructive/10",
+  },
+  REIMBURSEMENT_SUBMITTED: {
+    icon: CalendarDaysIcon, // Using CalendarDays or Banknote, let's use default
+    color: "text-amber-500",
+    bg: "bg-amber-500/10",
+  },
+  REIMBURSEMENT_APPROVED: {
+    icon: CheckCircle2Icon,
+    color: "text-blue-500",
+    bg: "bg-blue-500/10",
+  },
+  REIMBURSEMENT_REJECTED: {
+    icon: XCircleIcon,
+    color: "text-destructive",
+    bg: "bg-destructive/10",
+  },
+  REIMBURSEMENT_PAID: {
+    icon: CheckCircle2Icon,
+    color: "text-emerald-500",
+    bg: "bg-emerald-500/10",
   },
 };
 

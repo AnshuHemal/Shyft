@@ -402,7 +402,9 @@ export const ModelName = {
   EmployeeSkill: 'EmployeeSkill',
   LeaveApplication: 'LeaveApplication',
   Notification: 'Notification',
-  LeaveCompensation: 'LeaveCompensation'
+  LeaveCompensation: 'LeaveCompensation',
+  ReimbursementProof: 'ReimbursementProof',
+  Reimbursement: 'Reimbursement'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -418,7 +420,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "organization" | "department" | "position" | "holiday" | "employee" | "timesheet" | "timesheetEntry" | "timesheetTask" | "user" | "session" | "account" | "verification" | "project" | "projectMember" | "skill" | "employeeSkill" | "leaveApplication" | "notification" | "leaveCompensation"
+    modelProps: "organization" | "department" | "position" | "holiday" | "employee" | "timesheet" | "timesheetEntry" | "timesheetTask" | "user" | "session" | "account" | "verification" | "project" | "projectMember" | "skill" | "employeeSkill" | "leaveApplication" | "notification" | "leaveCompensation" | "reimbursementProof" | "reimbursement"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1828,6 +1830,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    ReimbursementProof: {
+      payload: Prisma.$ReimbursementProofPayload<ExtArgs>
+      fields: Prisma.ReimbursementProofFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ReimbursementProofFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReimbursementProofPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ReimbursementProofFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReimbursementProofPayload>
+        }
+        findFirst: {
+          args: Prisma.ReimbursementProofFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReimbursementProofPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ReimbursementProofFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReimbursementProofPayload>
+        }
+        findMany: {
+          args: Prisma.ReimbursementProofFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReimbursementProofPayload>[]
+        }
+        create: {
+          args: Prisma.ReimbursementProofCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReimbursementProofPayload>
+        }
+        createMany: {
+          args: Prisma.ReimbursementProofCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ReimbursementProofCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReimbursementProofPayload>[]
+        }
+        delete: {
+          args: Prisma.ReimbursementProofDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReimbursementProofPayload>
+        }
+        update: {
+          args: Prisma.ReimbursementProofUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReimbursementProofPayload>
+        }
+        deleteMany: {
+          args: Prisma.ReimbursementProofDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ReimbursementProofUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ReimbursementProofUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReimbursementProofPayload>[]
+        }
+        upsert: {
+          args: Prisma.ReimbursementProofUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReimbursementProofPayload>
+        }
+        aggregate: {
+          args: Prisma.ReimbursementProofAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateReimbursementProof>
+        }
+        groupBy: {
+          args: Prisma.ReimbursementProofGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ReimbursementProofGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ReimbursementProofCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ReimbursementProofCountAggregateOutputType> | number
+        }
+      }
+    }
+    Reimbursement: {
+      payload: Prisma.$ReimbursementPayload<ExtArgs>
+      fields: Prisma.ReimbursementFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ReimbursementFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReimbursementPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ReimbursementFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReimbursementPayload>
+        }
+        findFirst: {
+          args: Prisma.ReimbursementFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReimbursementPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ReimbursementFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReimbursementPayload>
+        }
+        findMany: {
+          args: Prisma.ReimbursementFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReimbursementPayload>[]
+        }
+        create: {
+          args: Prisma.ReimbursementCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReimbursementPayload>
+        }
+        createMany: {
+          args: Prisma.ReimbursementCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ReimbursementCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReimbursementPayload>[]
+        }
+        delete: {
+          args: Prisma.ReimbursementDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReimbursementPayload>
+        }
+        update: {
+          args: Prisma.ReimbursementUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReimbursementPayload>
+        }
+        deleteMany: {
+          args: Prisma.ReimbursementDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ReimbursementUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ReimbursementUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReimbursementPayload>[]
+        }
+        upsert: {
+          args: Prisma.ReimbursementUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReimbursementPayload>
+        }
+        aggregate: {
+          args: Prisma.ReimbursementAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateReimbursement>
+        }
+        groupBy: {
+          args: Prisma.ReimbursementGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ReimbursementGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ReimbursementCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ReimbursementCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -2170,6 +2320,7 @@ export const NotificationScalarFieldEnum = {
   recipientId: 'recipientId',
   leaveId: 'leaveId',
   compOffId: 'compOffId',
+  reimbursementId: 'reimbursementId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -2200,6 +2351,43 @@ export const LeaveCompensationScalarFieldEnum = {
 } as const
 
 export type LeaveCompensationScalarFieldEnum = (typeof LeaveCompensationScalarFieldEnum)[keyof typeof LeaveCompensationScalarFieldEnum]
+
+
+export const ReimbursementProofScalarFieldEnum = {
+  id: 'id',
+  fileName: 'fileName',
+  fileType: 'fileType',
+  fileSize: 'fileSize',
+  storageUrl: 'storageUrl',
+  storagePublicId: 'storagePublicId',
+  createdAt: 'createdAt',
+  reimbursementId: 'reimbursementId'
+} as const
+
+export type ReimbursementProofScalarFieldEnum = (typeof ReimbursementProofScalarFieldEnum)[keyof typeof ReimbursementProofScalarFieldEnum]
+
+
+export const ReimbursementScalarFieldEnum = {
+  id: 'id',
+  amount: 'amount',
+  currency: 'currency',
+  category: 'category',
+  purpose: 'purpose',
+  expenseDate: 'expenseDate',
+  status: 'status',
+  hrNote: 'hrNote',
+  reviewedAt: 'reviewedAt',
+  reviewedById: 'reviewedById',
+  paidAt: 'paidAt',
+  paidById: 'paidById',
+  submittedAt: 'submittedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  employeeId: 'employeeId',
+  organizationId: 'organizationId'
+} as const
+
+export type ReimbursementScalarFieldEnum = (typeof ReimbursementScalarFieldEnum)[keyof typeof ReimbursementScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -2521,6 +2709,34 @@ export type EnumCompOffStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$Pr
 export type ListEnumCompOffStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CompOffStatus[]'>
     
 
+
+/**
+ * Reference to a field of type 'ReimbursementCategory'
+ */
+export type EnumReimbursementCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ReimbursementCategory'>
+    
+
+
+/**
+ * Reference to a field of type 'ReimbursementCategory[]'
+ */
+export type ListEnumReimbursementCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ReimbursementCategory[]'>
+    
+
+
+/**
+ * Reference to a field of type 'ReimbursementStatus'
+ */
+export type EnumReimbursementStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ReimbursementStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'ReimbursementStatus[]'
+ */
+export type ListEnumReimbursementStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ReimbursementStatus[]'>
+    
+
 /**
  * Batch Payload for updateMany & deleteMany & createMany
  */
@@ -2650,6 +2866,8 @@ export type GlobalOmitConfig = {
   leaveApplication?: Prisma.LeaveApplicationOmit
   notification?: Prisma.NotificationOmit
   leaveCompensation?: Prisma.LeaveCompensationOmit
+  reimbursementProof?: Prisma.ReimbursementProofOmit
+  reimbursement?: Prisma.ReimbursementOmit
 }
 
 /* Types for Logging */

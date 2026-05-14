@@ -437,6 +437,7 @@ export type EmployeeWhereInput = {
   leavesAsReporter?: Prisma.LeaveApplicationListRelationFilter
   compOffs?: Prisma.LeaveCompensationListRelationFilter
   compOffsAsReporter?: Prisma.LeaveCompensationListRelationFilter
+  reimbursements?: Prisma.ReimbursementListRelationFilter
 }
 
 export type EmployeeOrderByWithRelationInput = {
@@ -484,6 +485,7 @@ export type EmployeeOrderByWithRelationInput = {
   leavesAsReporter?: Prisma.LeaveApplicationOrderByRelationAggregateInput
   compOffs?: Prisma.LeaveCompensationOrderByRelationAggregateInput
   compOffsAsReporter?: Prisma.LeaveCompensationOrderByRelationAggregateInput
+  reimbursements?: Prisma.ReimbursementOrderByRelationAggregateInput
 }
 
 export type EmployeeWhereUniqueInput = Prisma.AtLeast<{
@@ -535,6 +537,7 @@ export type EmployeeWhereUniqueInput = Prisma.AtLeast<{
   leavesAsReporter?: Prisma.LeaveApplicationListRelationFilter
   compOffs?: Prisma.LeaveCompensationListRelationFilter
   compOffsAsReporter?: Prisma.LeaveCompensationListRelationFilter
+  reimbursements?: Prisma.ReimbursementListRelationFilter
 }, "id" | "userId" | "email_organizationId">
 
 export type EmployeeOrderByWithAggregationInput = {
@@ -655,6 +658,7 @@ export type EmployeeCreateInput = {
   leavesAsReporter?: Prisma.LeaveApplicationCreateNestedManyWithoutReportingToInput
   compOffs?: Prisma.LeaveCompensationCreateNestedManyWithoutEmployeeInput
   compOffsAsReporter?: Prisma.LeaveCompensationCreateNestedManyWithoutReportingToInput
+  reimbursements?: Prisma.ReimbursementCreateNestedManyWithoutEmployeeInput
 }
 
 export type EmployeeUncheckedCreateInput = {
@@ -699,6 +703,7 @@ export type EmployeeUncheckedCreateInput = {
   leavesAsReporter?: Prisma.LeaveApplicationUncheckedCreateNestedManyWithoutReportingToInput
   compOffs?: Prisma.LeaveCompensationUncheckedCreateNestedManyWithoutEmployeeInput
   compOffsAsReporter?: Prisma.LeaveCompensationUncheckedCreateNestedManyWithoutReportingToInput
+  reimbursements?: Prisma.ReimbursementUncheckedCreateNestedManyWithoutEmployeeInput
 }
 
 export type EmployeeUpdateInput = {
@@ -743,6 +748,7 @@ export type EmployeeUpdateInput = {
   leavesAsReporter?: Prisma.LeaveApplicationUpdateManyWithoutReportingToNestedInput
   compOffs?: Prisma.LeaveCompensationUpdateManyWithoutEmployeeNestedInput
   compOffsAsReporter?: Prisma.LeaveCompensationUpdateManyWithoutReportingToNestedInput
+  reimbursements?: Prisma.ReimbursementUpdateManyWithoutEmployeeNestedInput
 }
 
 export type EmployeeUncheckedUpdateInput = {
@@ -787,6 +793,7 @@ export type EmployeeUncheckedUpdateInput = {
   leavesAsReporter?: Prisma.LeaveApplicationUncheckedUpdateManyWithoutReportingToNestedInput
   compOffs?: Prisma.LeaveCompensationUncheckedUpdateManyWithoutEmployeeNestedInput
   compOffsAsReporter?: Prisma.LeaveCompensationUncheckedUpdateManyWithoutReportingToNestedInput
+  reimbursements?: Prisma.ReimbursementUncheckedUpdateManyWithoutEmployeeNestedInput
 }
 
 export type EmployeeCreateManyInput = {
@@ -1309,6 +1316,20 @@ export type EmployeeUpdateOneWithoutCompOffsAsReporterNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.EmployeeUpdateToOneWithWhereWithoutCompOffsAsReporterInput, Prisma.EmployeeUpdateWithoutCompOffsAsReporterInput>, Prisma.EmployeeUncheckedUpdateWithoutCompOffsAsReporterInput>
 }
 
+export type EmployeeCreateNestedOneWithoutReimbursementsInput = {
+  create?: Prisma.XOR<Prisma.EmployeeCreateWithoutReimbursementsInput, Prisma.EmployeeUncheckedCreateWithoutReimbursementsInput>
+  connectOrCreate?: Prisma.EmployeeCreateOrConnectWithoutReimbursementsInput
+  connect?: Prisma.EmployeeWhereUniqueInput
+}
+
+export type EmployeeUpdateOneRequiredWithoutReimbursementsNestedInput = {
+  create?: Prisma.XOR<Prisma.EmployeeCreateWithoutReimbursementsInput, Prisma.EmployeeUncheckedCreateWithoutReimbursementsInput>
+  connectOrCreate?: Prisma.EmployeeCreateOrConnectWithoutReimbursementsInput
+  upsert?: Prisma.EmployeeUpsertWithoutReimbursementsInput
+  connect?: Prisma.EmployeeWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.EmployeeUpdateToOneWithWhereWithoutReimbursementsInput, Prisma.EmployeeUpdateWithoutReimbursementsInput>, Prisma.EmployeeUncheckedUpdateWithoutReimbursementsInput>
+}
+
 export type EmployeeCreateWithoutOrganizationInput = {
   id?: string
   firstName: string
@@ -1350,6 +1371,7 @@ export type EmployeeCreateWithoutOrganizationInput = {
   leavesAsReporter?: Prisma.LeaveApplicationCreateNestedManyWithoutReportingToInput
   compOffs?: Prisma.LeaveCompensationCreateNestedManyWithoutEmployeeInput
   compOffsAsReporter?: Prisma.LeaveCompensationCreateNestedManyWithoutReportingToInput
+  reimbursements?: Prisma.ReimbursementCreateNestedManyWithoutEmployeeInput
 }
 
 export type EmployeeUncheckedCreateWithoutOrganizationInput = {
@@ -1393,6 +1415,7 @@ export type EmployeeUncheckedCreateWithoutOrganizationInput = {
   leavesAsReporter?: Prisma.LeaveApplicationUncheckedCreateNestedManyWithoutReportingToInput
   compOffs?: Prisma.LeaveCompensationUncheckedCreateNestedManyWithoutEmployeeInput
   compOffsAsReporter?: Prisma.LeaveCompensationUncheckedCreateNestedManyWithoutReportingToInput
+  reimbursements?: Prisma.ReimbursementUncheckedCreateNestedManyWithoutEmployeeInput
 }
 
 export type EmployeeCreateOrConnectWithoutOrganizationInput = {
@@ -1499,6 +1522,7 @@ export type EmployeeCreateWithoutSubordinatesInput = {
   leavesAsReporter?: Prisma.LeaveApplicationCreateNestedManyWithoutReportingToInput
   compOffs?: Prisma.LeaveCompensationCreateNestedManyWithoutEmployeeInput
   compOffsAsReporter?: Prisma.LeaveCompensationCreateNestedManyWithoutReportingToInput
+  reimbursements?: Prisma.ReimbursementCreateNestedManyWithoutEmployeeInput
 }
 
 export type EmployeeUncheckedCreateWithoutSubordinatesInput = {
@@ -1542,6 +1566,7 @@ export type EmployeeUncheckedCreateWithoutSubordinatesInput = {
   leavesAsReporter?: Prisma.LeaveApplicationUncheckedCreateNestedManyWithoutReportingToInput
   compOffs?: Prisma.LeaveCompensationUncheckedCreateNestedManyWithoutEmployeeInput
   compOffsAsReporter?: Prisma.LeaveCompensationUncheckedCreateNestedManyWithoutReportingToInput
+  reimbursements?: Prisma.ReimbursementUncheckedCreateNestedManyWithoutEmployeeInput
 }
 
 export type EmployeeCreateOrConnectWithoutSubordinatesInput = {
@@ -1590,6 +1615,7 @@ export type EmployeeCreateWithoutReportingToInput = {
   leavesAsReporter?: Prisma.LeaveApplicationCreateNestedManyWithoutReportingToInput
   compOffs?: Prisma.LeaveCompensationCreateNestedManyWithoutEmployeeInput
   compOffsAsReporter?: Prisma.LeaveCompensationCreateNestedManyWithoutReportingToInput
+  reimbursements?: Prisma.ReimbursementCreateNestedManyWithoutEmployeeInput
 }
 
 export type EmployeeUncheckedCreateWithoutReportingToInput = {
@@ -1633,6 +1659,7 @@ export type EmployeeUncheckedCreateWithoutReportingToInput = {
   leavesAsReporter?: Prisma.LeaveApplicationUncheckedCreateNestedManyWithoutReportingToInput
   compOffs?: Prisma.LeaveCompensationUncheckedCreateNestedManyWithoutEmployeeInput
   compOffsAsReporter?: Prisma.LeaveCompensationUncheckedCreateNestedManyWithoutReportingToInput
+  reimbursements?: Prisma.ReimbursementUncheckedCreateNestedManyWithoutEmployeeInput
 }
 
 export type EmployeeCreateOrConnectWithoutReportingToInput = {
@@ -1697,6 +1724,7 @@ export type EmployeeUpdateWithoutSubordinatesInput = {
   leavesAsReporter?: Prisma.LeaveApplicationUpdateManyWithoutReportingToNestedInput
   compOffs?: Prisma.LeaveCompensationUpdateManyWithoutEmployeeNestedInput
   compOffsAsReporter?: Prisma.LeaveCompensationUpdateManyWithoutReportingToNestedInput
+  reimbursements?: Prisma.ReimbursementUpdateManyWithoutEmployeeNestedInput
 }
 
 export type EmployeeUncheckedUpdateWithoutSubordinatesInput = {
@@ -1740,6 +1768,7 @@ export type EmployeeUncheckedUpdateWithoutSubordinatesInput = {
   leavesAsReporter?: Prisma.LeaveApplicationUncheckedUpdateManyWithoutReportingToNestedInput
   compOffs?: Prisma.LeaveCompensationUncheckedUpdateManyWithoutEmployeeNestedInput
   compOffsAsReporter?: Prisma.LeaveCompensationUncheckedUpdateManyWithoutReportingToNestedInput
+  reimbursements?: Prisma.ReimbursementUncheckedUpdateManyWithoutEmployeeNestedInput
 }
 
 export type EmployeeUpsertWithWhereUniqueWithoutReportingToInput = {
@@ -1799,6 +1828,7 @@ export type EmployeeCreateWithoutReviewedTimesheetsInput = {
   leavesAsReporter?: Prisma.LeaveApplicationCreateNestedManyWithoutReportingToInput
   compOffs?: Prisma.LeaveCompensationCreateNestedManyWithoutEmployeeInput
   compOffsAsReporter?: Prisma.LeaveCompensationCreateNestedManyWithoutReportingToInput
+  reimbursements?: Prisma.ReimbursementCreateNestedManyWithoutEmployeeInput
 }
 
 export type EmployeeUncheckedCreateWithoutReviewedTimesheetsInput = {
@@ -1842,6 +1872,7 @@ export type EmployeeUncheckedCreateWithoutReviewedTimesheetsInput = {
   leavesAsReporter?: Prisma.LeaveApplicationUncheckedCreateNestedManyWithoutReportingToInput
   compOffs?: Prisma.LeaveCompensationUncheckedCreateNestedManyWithoutEmployeeInput
   compOffsAsReporter?: Prisma.LeaveCompensationUncheckedCreateNestedManyWithoutReportingToInput
+  reimbursements?: Prisma.ReimbursementUncheckedCreateNestedManyWithoutEmployeeInput
 }
 
 export type EmployeeCreateOrConnectWithoutReviewedTimesheetsInput = {
@@ -1890,6 +1921,7 @@ export type EmployeeCreateWithoutTimesheetsInput = {
   leavesAsReporter?: Prisma.LeaveApplicationCreateNestedManyWithoutReportingToInput
   compOffs?: Prisma.LeaveCompensationCreateNestedManyWithoutEmployeeInput
   compOffsAsReporter?: Prisma.LeaveCompensationCreateNestedManyWithoutReportingToInput
+  reimbursements?: Prisma.ReimbursementCreateNestedManyWithoutEmployeeInput
 }
 
 export type EmployeeUncheckedCreateWithoutTimesheetsInput = {
@@ -1933,6 +1965,7 @@ export type EmployeeUncheckedCreateWithoutTimesheetsInput = {
   leavesAsReporter?: Prisma.LeaveApplicationUncheckedCreateNestedManyWithoutReportingToInput
   compOffs?: Prisma.LeaveCompensationUncheckedCreateNestedManyWithoutEmployeeInput
   compOffsAsReporter?: Prisma.LeaveCompensationUncheckedCreateNestedManyWithoutReportingToInput
+  reimbursements?: Prisma.ReimbursementUncheckedCreateNestedManyWithoutEmployeeInput
 }
 
 export type EmployeeCreateOrConnectWithoutTimesheetsInput = {
@@ -1992,6 +2025,7 @@ export type EmployeeUpdateWithoutReviewedTimesheetsInput = {
   leavesAsReporter?: Prisma.LeaveApplicationUpdateManyWithoutReportingToNestedInput
   compOffs?: Prisma.LeaveCompensationUpdateManyWithoutEmployeeNestedInput
   compOffsAsReporter?: Prisma.LeaveCompensationUpdateManyWithoutReportingToNestedInput
+  reimbursements?: Prisma.ReimbursementUpdateManyWithoutEmployeeNestedInput
 }
 
 export type EmployeeUncheckedUpdateWithoutReviewedTimesheetsInput = {
@@ -2035,6 +2069,7 @@ export type EmployeeUncheckedUpdateWithoutReviewedTimesheetsInput = {
   leavesAsReporter?: Prisma.LeaveApplicationUncheckedUpdateManyWithoutReportingToNestedInput
   compOffs?: Prisma.LeaveCompensationUncheckedUpdateManyWithoutEmployeeNestedInput
   compOffsAsReporter?: Prisma.LeaveCompensationUncheckedUpdateManyWithoutReportingToNestedInput
+  reimbursements?: Prisma.ReimbursementUncheckedUpdateManyWithoutEmployeeNestedInput
 }
 
 export type EmployeeUpsertWithoutTimesheetsInput = {
@@ -2089,6 +2124,7 @@ export type EmployeeUpdateWithoutTimesheetsInput = {
   leavesAsReporter?: Prisma.LeaveApplicationUpdateManyWithoutReportingToNestedInput
   compOffs?: Prisma.LeaveCompensationUpdateManyWithoutEmployeeNestedInput
   compOffsAsReporter?: Prisma.LeaveCompensationUpdateManyWithoutReportingToNestedInput
+  reimbursements?: Prisma.ReimbursementUpdateManyWithoutEmployeeNestedInput
 }
 
 export type EmployeeUncheckedUpdateWithoutTimesheetsInput = {
@@ -2132,6 +2168,7 @@ export type EmployeeUncheckedUpdateWithoutTimesheetsInput = {
   leavesAsReporter?: Prisma.LeaveApplicationUncheckedUpdateManyWithoutReportingToNestedInput
   compOffs?: Prisma.LeaveCompensationUncheckedUpdateManyWithoutEmployeeNestedInput
   compOffsAsReporter?: Prisma.LeaveCompensationUncheckedUpdateManyWithoutReportingToNestedInput
+  reimbursements?: Prisma.ReimbursementUncheckedUpdateManyWithoutEmployeeNestedInput
 }
 
 export type EmployeeCreateWithoutUserInput = {
@@ -2175,6 +2212,7 @@ export type EmployeeCreateWithoutUserInput = {
   leavesAsReporter?: Prisma.LeaveApplicationCreateNestedManyWithoutReportingToInput
   compOffs?: Prisma.LeaveCompensationCreateNestedManyWithoutEmployeeInput
   compOffsAsReporter?: Prisma.LeaveCompensationCreateNestedManyWithoutReportingToInput
+  reimbursements?: Prisma.ReimbursementCreateNestedManyWithoutEmployeeInput
 }
 
 export type EmployeeUncheckedCreateWithoutUserInput = {
@@ -2218,6 +2256,7 @@ export type EmployeeUncheckedCreateWithoutUserInput = {
   leavesAsReporter?: Prisma.LeaveApplicationUncheckedCreateNestedManyWithoutReportingToInput
   compOffs?: Prisma.LeaveCompensationUncheckedCreateNestedManyWithoutEmployeeInput
   compOffsAsReporter?: Prisma.LeaveCompensationUncheckedCreateNestedManyWithoutReportingToInput
+  reimbursements?: Prisma.ReimbursementUncheckedCreateNestedManyWithoutEmployeeInput
 }
 
 export type EmployeeCreateOrConnectWithoutUserInput = {
@@ -2277,6 +2316,7 @@ export type EmployeeUpdateWithoutUserInput = {
   leavesAsReporter?: Prisma.LeaveApplicationUpdateManyWithoutReportingToNestedInput
   compOffs?: Prisma.LeaveCompensationUpdateManyWithoutEmployeeNestedInput
   compOffsAsReporter?: Prisma.LeaveCompensationUpdateManyWithoutReportingToNestedInput
+  reimbursements?: Prisma.ReimbursementUpdateManyWithoutEmployeeNestedInput
 }
 
 export type EmployeeUncheckedUpdateWithoutUserInput = {
@@ -2320,6 +2360,7 @@ export type EmployeeUncheckedUpdateWithoutUserInput = {
   leavesAsReporter?: Prisma.LeaveApplicationUncheckedUpdateManyWithoutReportingToNestedInput
   compOffs?: Prisma.LeaveCompensationUncheckedUpdateManyWithoutEmployeeNestedInput
   compOffsAsReporter?: Prisma.LeaveCompensationUncheckedUpdateManyWithoutReportingToNestedInput
+  reimbursements?: Prisma.ReimbursementUncheckedUpdateManyWithoutEmployeeNestedInput
 }
 
 export type EmployeeCreateWithoutLedProjectsInput = {
@@ -2363,6 +2404,7 @@ export type EmployeeCreateWithoutLedProjectsInput = {
   leavesAsReporter?: Prisma.LeaveApplicationCreateNestedManyWithoutReportingToInput
   compOffs?: Prisma.LeaveCompensationCreateNestedManyWithoutEmployeeInput
   compOffsAsReporter?: Prisma.LeaveCompensationCreateNestedManyWithoutReportingToInput
+  reimbursements?: Prisma.ReimbursementCreateNestedManyWithoutEmployeeInput
 }
 
 export type EmployeeUncheckedCreateWithoutLedProjectsInput = {
@@ -2406,6 +2448,7 @@ export type EmployeeUncheckedCreateWithoutLedProjectsInput = {
   leavesAsReporter?: Prisma.LeaveApplicationUncheckedCreateNestedManyWithoutReportingToInput
   compOffs?: Prisma.LeaveCompensationUncheckedCreateNestedManyWithoutEmployeeInput
   compOffsAsReporter?: Prisma.LeaveCompensationUncheckedCreateNestedManyWithoutReportingToInput
+  reimbursements?: Prisma.ReimbursementUncheckedCreateNestedManyWithoutEmployeeInput
 }
 
 export type EmployeeCreateOrConnectWithoutLedProjectsInput = {
@@ -2465,6 +2508,7 @@ export type EmployeeUpdateWithoutLedProjectsInput = {
   leavesAsReporter?: Prisma.LeaveApplicationUpdateManyWithoutReportingToNestedInput
   compOffs?: Prisma.LeaveCompensationUpdateManyWithoutEmployeeNestedInput
   compOffsAsReporter?: Prisma.LeaveCompensationUpdateManyWithoutReportingToNestedInput
+  reimbursements?: Prisma.ReimbursementUpdateManyWithoutEmployeeNestedInput
 }
 
 export type EmployeeUncheckedUpdateWithoutLedProjectsInput = {
@@ -2508,6 +2552,7 @@ export type EmployeeUncheckedUpdateWithoutLedProjectsInput = {
   leavesAsReporter?: Prisma.LeaveApplicationUncheckedUpdateManyWithoutReportingToNestedInput
   compOffs?: Prisma.LeaveCompensationUncheckedUpdateManyWithoutEmployeeNestedInput
   compOffsAsReporter?: Prisma.LeaveCompensationUncheckedUpdateManyWithoutReportingToNestedInput
+  reimbursements?: Prisma.ReimbursementUncheckedUpdateManyWithoutEmployeeNestedInput
 }
 
 export type EmployeeCreateWithoutProjectsInput = {
@@ -2551,6 +2596,7 @@ export type EmployeeCreateWithoutProjectsInput = {
   leavesAsReporter?: Prisma.LeaveApplicationCreateNestedManyWithoutReportingToInput
   compOffs?: Prisma.LeaveCompensationCreateNestedManyWithoutEmployeeInput
   compOffsAsReporter?: Prisma.LeaveCompensationCreateNestedManyWithoutReportingToInput
+  reimbursements?: Prisma.ReimbursementCreateNestedManyWithoutEmployeeInput
 }
 
 export type EmployeeUncheckedCreateWithoutProjectsInput = {
@@ -2594,6 +2640,7 @@ export type EmployeeUncheckedCreateWithoutProjectsInput = {
   leavesAsReporter?: Prisma.LeaveApplicationUncheckedCreateNestedManyWithoutReportingToInput
   compOffs?: Prisma.LeaveCompensationUncheckedCreateNestedManyWithoutEmployeeInput
   compOffsAsReporter?: Prisma.LeaveCompensationUncheckedCreateNestedManyWithoutReportingToInput
+  reimbursements?: Prisma.ReimbursementUncheckedCreateNestedManyWithoutEmployeeInput
 }
 
 export type EmployeeCreateOrConnectWithoutProjectsInput = {
@@ -2653,6 +2700,7 @@ export type EmployeeUpdateWithoutProjectsInput = {
   leavesAsReporter?: Prisma.LeaveApplicationUpdateManyWithoutReportingToNestedInput
   compOffs?: Prisma.LeaveCompensationUpdateManyWithoutEmployeeNestedInput
   compOffsAsReporter?: Prisma.LeaveCompensationUpdateManyWithoutReportingToNestedInput
+  reimbursements?: Prisma.ReimbursementUpdateManyWithoutEmployeeNestedInput
 }
 
 export type EmployeeUncheckedUpdateWithoutProjectsInput = {
@@ -2696,6 +2744,7 @@ export type EmployeeUncheckedUpdateWithoutProjectsInput = {
   leavesAsReporter?: Prisma.LeaveApplicationUncheckedUpdateManyWithoutReportingToNestedInput
   compOffs?: Prisma.LeaveCompensationUncheckedUpdateManyWithoutEmployeeNestedInput
   compOffsAsReporter?: Prisma.LeaveCompensationUncheckedUpdateManyWithoutReportingToNestedInput
+  reimbursements?: Prisma.ReimbursementUncheckedUpdateManyWithoutEmployeeNestedInput
 }
 
 export type EmployeeCreateWithoutSkillsInput = {
@@ -2739,6 +2788,7 @@ export type EmployeeCreateWithoutSkillsInput = {
   leavesAsReporter?: Prisma.LeaveApplicationCreateNestedManyWithoutReportingToInput
   compOffs?: Prisma.LeaveCompensationCreateNestedManyWithoutEmployeeInput
   compOffsAsReporter?: Prisma.LeaveCompensationCreateNestedManyWithoutReportingToInput
+  reimbursements?: Prisma.ReimbursementCreateNestedManyWithoutEmployeeInput
 }
 
 export type EmployeeUncheckedCreateWithoutSkillsInput = {
@@ -2782,6 +2832,7 @@ export type EmployeeUncheckedCreateWithoutSkillsInput = {
   leavesAsReporter?: Prisma.LeaveApplicationUncheckedCreateNestedManyWithoutReportingToInput
   compOffs?: Prisma.LeaveCompensationUncheckedCreateNestedManyWithoutEmployeeInput
   compOffsAsReporter?: Prisma.LeaveCompensationUncheckedCreateNestedManyWithoutReportingToInput
+  reimbursements?: Prisma.ReimbursementUncheckedCreateNestedManyWithoutEmployeeInput
 }
 
 export type EmployeeCreateOrConnectWithoutSkillsInput = {
@@ -2841,6 +2892,7 @@ export type EmployeeUpdateWithoutSkillsInput = {
   leavesAsReporter?: Prisma.LeaveApplicationUpdateManyWithoutReportingToNestedInput
   compOffs?: Prisma.LeaveCompensationUpdateManyWithoutEmployeeNestedInput
   compOffsAsReporter?: Prisma.LeaveCompensationUpdateManyWithoutReportingToNestedInput
+  reimbursements?: Prisma.ReimbursementUpdateManyWithoutEmployeeNestedInput
 }
 
 export type EmployeeUncheckedUpdateWithoutSkillsInput = {
@@ -2884,6 +2936,7 @@ export type EmployeeUncheckedUpdateWithoutSkillsInput = {
   leavesAsReporter?: Prisma.LeaveApplicationUncheckedUpdateManyWithoutReportingToNestedInput
   compOffs?: Prisma.LeaveCompensationUncheckedUpdateManyWithoutEmployeeNestedInput
   compOffsAsReporter?: Prisma.LeaveCompensationUncheckedUpdateManyWithoutReportingToNestedInput
+  reimbursements?: Prisma.ReimbursementUncheckedUpdateManyWithoutEmployeeNestedInput
 }
 
 export type EmployeeCreateWithoutLeavesAsReporterInput = {
@@ -2927,6 +2980,7 @@ export type EmployeeCreateWithoutLeavesAsReporterInput = {
   leaves?: Prisma.LeaveApplicationCreateNestedManyWithoutEmployeeInput
   compOffs?: Prisma.LeaveCompensationCreateNestedManyWithoutEmployeeInput
   compOffsAsReporter?: Prisma.LeaveCompensationCreateNestedManyWithoutReportingToInput
+  reimbursements?: Prisma.ReimbursementCreateNestedManyWithoutEmployeeInput
 }
 
 export type EmployeeUncheckedCreateWithoutLeavesAsReporterInput = {
@@ -2970,6 +3024,7 @@ export type EmployeeUncheckedCreateWithoutLeavesAsReporterInput = {
   leaves?: Prisma.LeaveApplicationUncheckedCreateNestedManyWithoutEmployeeInput
   compOffs?: Prisma.LeaveCompensationUncheckedCreateNestedManyWithoutEmployeeInput
   compOffsAsReporter?: Prisma.LeaveCompensationUncheckedCreateNestedManyWithoutReportingToInput
+  reimbursements?: Prisma.ReimbursementUncheckedCreateNestedManyWithoutEmployeeInput
 }
 
 export type EmployeeCreateOrConnectWithoutLeavesAsReporterInput = {
@@ -3018,6 +3073,7 @@ export type EmployeeCreateWithoutLeavesInput = {
   leavesAsReporter?: Prisma.LeaveApplicationCreateNestedManyWithoutReportingToInput
   compOffs?: Prisma.LeaveCompensationCreateNestedManyWithoutEmployeeInput
   compOffsAsReporter?: Prisma.LeaveCompensationCreateNestedManyWithoutReportingToInput
+  reimbursements?: Prisma.ReimbursementCreateNestedManyWithoutEmployeeInput
 }
 
 export type EmployeeUncheckedCreateWithoutLeavesInput = {
@@ -3061,6 +3117,7 @@ export type EmployeeUncheckedCreateWithoutLeavesInput = {
   leavesAsReporter?: Prisma.LeaveApplicationUncheckedCreateNestedManyWithoutReportingToInput
   compOffs?: Prisma.LeaveCompensationUncheckedCreateNestedManyWithoutEmployeeInput
   compOffsAsReporter?: Prisma.LeaveCompensationUncheckedCreateNestedManyWithoutReportingToInput
+  reimbursements?: Prisma.ReimbursementUncheckedCreateNestedManyWithoutEmployeeInput
 }
 
 export type EmployeeCreateOrConnectWithoutLeavesInput = {
@@ -3120,6 +3177,7 @@ export type EmployeeUpdateWithoutLeavesAsReporterInput = {
   leaves?: Prisma.LeaveApplicationUpdateManyWithoutEmployeeNestedInput
   compOffs?: Prisma.LeaveCompensationUpdateManyWithoutEmployeeNestedInput
   compOffsAsReporter?: Prisma.LeaveCompensationUpdateManyWithoutReportingToNestedInput
+  reimbursements?: Prisma.ReimbursementUpdateManyWithoutEmployeeNestedInput
 }
 
 export type EmployeeUncheckedUpdateWithoutLeavesAsReporterInput = {
@@ -3163,6 +3221,7 @@ export type EmployeeUncheckedUpdateWithoutLeavesAsReporterInput = {
   leaves?: Prisma.LeaveApplicationUncheckedUpdateManyWithoutEmployeeNestedInput
   compOffs?: Prisma.LeaveCompensationUncheckedUpdateManyWithoutEmployeeNestedInput
   compOffsAsReporter?: Prisma.LeaveCompensationUncheckedUpdateManyWithoutReportingToNestedInput
+  reimbursements?: Prisma.ReimbursementUncheckedUpdateManyWithoutEmployeeNestedInput
 }
 
 export type EmployeeUpsertWithoutLeavesInput = {
@@ -3217,6 +3276,7 @@ export type EmployeeUpdateWithoutLeavesInput = {
   leavesAsReporter?: Prisma.LeaveApplicationUpdateManyWithoutReportingToNestedInput
   compOffs?: Prisma.LeaveCompensationUpdateManyWithoutEmployeeNestedInput
   compOffsAsReporter?: Prisma.LeaveCompensationUpdateManyWithoutReportingToNestedInput
+  reimbursements?: Prisma.ReimbursementUpdateManyWithoutEmployeeNestedInput
 }
 
 export type EmployeeUncheckedUpdateWithoutLeavesInput = {
@@ -3260,6 +3320,7 @@ export type EmployeeUncheckedUpdateWithoutLeavesInput = {
   leavesAsReporter?: Prisma.LeaveApplicationUncheckedUpdateManyWithoutReportingToNestedInput
   compOffs?: Prisma.LeaveCompensationUncheckedUpdateManyWithoutEmployeeNestedInput
   compOffsAsReporter?: Prisma.LeaveCompensationUncheckedUpdateManyWithoutReportingToNestedInput
+  reimbursements?: Prisma.ReimbursementUncheckedUpdateManyWithoutEmployeeNestedInput
 }
 
 export type EmployeeCreateWithoutCompOffsInput = {
@@ -3303,6 +3364,7 @@ export type EmployeeCreateWithoutCompOffsInput = {
   leaves?: Prisma.LeaveApplicationCreateNestedManyWithoutEmployeeInput
   leavesAsReporter?: Prisma.LeaveApplicationCreateNestedManyWithoutReportingToInput
   compOffsAsReporter?: Prisma.LeaveCompensationCreateNestedManyWithoutReportingToInput
+  reimbursements?: Prisma.ReimbursementCreateNestedManyWithoutEmployeeInput
 }
 
 export type EmployeeUncheckedCreateWithoutCompOffsInput = {
@@ -3346,6 +3408,7 @@ export type EmployeeUncheckedCreateWithoutCompOffsInput = {
   leaves?: Prisma.LeaveApplicationUncheckedCreateNestedManyWithoutEmployeeInput
   leavesAsReporter?: Prisma.LeaveApplicationUncheckedCreateNestedManyWithoutReportingToInput
   compOffsAsReporter?: Prisma.LeaveCompensationUncheckedCreateNestedManyWithoutReportingToInput
+  reimbursements?: Prisma.ReimbursementUncheckedCreateNestedManyWithoutEmployeeInput
 }
 
 export type EmployeeCreateOrConnectWithoutCompOffsInput = {
@@ -3394,6 +3457,7 @@ export type EmployeeCreateWithoutCompOffsAsReporterInput = {
   leaves?: Prisma.LeaveApplicationCreateNestedManyWithoutEmployeeInput
   leavesAsReporter?: Prisma.LeaveApplicationCreateNestedManyWithoutReportingToInput
   compOffs?: Prisma.LeaveCompensationCreateNestedManyWithoutEmployeeInput
+  reimbursements?: Prisma.ReimbursementCreateNestedManyWithoutEmployeeInput
 }
 
 export type EmployeeUncheckedCreateWithoutCompOffsAsReporterInput = {
@@ -3437,6 +3501,7 @@ export type EmployeeUncheckedCreateWithoutCompOffsAsReporterInput = {
   leaves?: Prisma.LeaveApplicationUncheckedCreateNestedManyWithoutEmployeeInput
   leavesAsReporter?: Prisma.LeaveApplicationUncheckedCreateNestedManyWithoutReportingToInput
   compOffs?: Prisma.LeaveCompensationUncheckedCreateNestedManyWithoutEmployeeInput
+  reimbursements?: Prisma.ReimbursementUncheckedCreateNestedManyWithoutEmployeeInput
 }
 
 export type EmployeeCreateOrConnectWithoutCompOffsAsReporterInput = {
@@ -3496,6 +3561,7 @@ export type EmployeeUpdateWithoutCompOffsInput = {
   leaves?: Prisma.LeaveApplicationUpdateManyWithoutEmployeeNestedInput
   leavesAsReporter?: Prisma.LeaveApplicationUpdateManyWithoutReportingToNestedInput
   compOffsAsReporter?: Prisma.LeaveCompensationUpdateManyWithoutReportingToNestedInput
+  reimbursements?: Prisma.ReimbursementUpdateManyWithoutEmployeeNestedInput
 }
 
 export type EmployeeUncheckedUpdateWithoutCompOffsInput = {
@@ -3539,6 +3605,7 @@ export type EmployeeUncheckedUpdateWithoutCompOffsInput = {
   leaves?: Prisma.LeaveApplicationUncheckedUpdateManyWithoutEmployeeNestedInput
   leavesAsReporter?: Prisma.LeaveApplicationUncheckedUpdateManyWithoutReportingToNestedInput
   compOffsAsReporter?: Prisma.LeaveCompensationUncheckedUpdateManyWithoutReportingToNestedInput
+  reimbursements?: Prisma.ReimbursementUncheckedUpdateManyWithoutEmployeeNestedInput
 }
 
 export type EmployeeUpsertWithoutCompOffsAsReporterInput = {
@@ -3593,6 +3660,7 @@ export type EmployeeUpdateWithoutCompOffsAsReporterInput = {
   leaves?: Prisma.LeaveApplicationUpdateManyWithoutEmployeeNestedInput
   leavesAsReporter?: Prisma.LeaveApplicationUpdateManyWithoutReportingToNestedInput
   compOffs?: Prisma.LeaveCompensationUpdateManyWithoutEmployeeNestedInput
+  reimbursements?: Prisma.ReimbursementUpdateManyWithoutEmployeeNestedInput
 }
 
 export type EmployeeUncheckedUpdateWithoutCompOffsAsReporterInput = {
@@ -3636,6 +3704,199 @@ export type EmployeeUncheckedUpdateWithoutCompOffsAsReporterInput = {
   leaves?: Prisma.LeaveApplicationUncheckedUpdateManyWithoutEmployeeNestedInput
   leavesAsReporter?: Prisma.LeaveApplicationUncheckedUpdateManyWithoutReportingToNestedInput
   compOffs?: Prisma.LeaveCompensationUncheckedUpdateManyWithoutEmployeeNestedInput
+  reimbursements?: Prisma.ReimbursementUncheckedUpdateManyWithoutEmployeeNestedInput
+}
+
+export type EmployeeCreateWithoutReimbursementsInput = {
+  id?: string
+  firstName: string
+  lastName: string
+  email: string
+  phone?: string | null
+  avatar?: string | null
+  dateOfBirth?: Date | string | null
+  gender?: string | null
+  address?: string | null
+  employeeId?: string | null
+  designation: string
+  department?: string | null
+  position?: string | null
+  employmentType?: $Enums.EmploymentType
+  status?: $Enums.EmployeeStatus
+  joiningDate?: Date | string | null
+  leavingDate?: Date | string | null
+  salary?: number | null
+  currency?: string | null
+  emergencyName?: string | null
+  emergencyPhone?: string | null
+  emergencyRel?: string | null
+  password?: string | null
+  passwordCheck?: string | null
+  passwordEncrypted?: string | null
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  organization: Prisma.OrganizationCreateNestedOneWithoutEmployeesInput
+  user?: Prisma.UserCreateNestedOneWithoutEmployeeProfileInput
+  reportingTo?: Prisma.EmployeeCreateNestedOneWithoutSubordinatesInput
+  subordinates?: Prisma.EmployeeCreateNestedManyWithoutReportingToInput
+  timesheets?: Prisma.TimesheetCreateNestedManyWithoutEmployeeInput
+  reviewedTimesheets?: Prisma.TimesheetCreateNestedManyWithoutReportingLeadInput
+  ledProjects?: Prisma.ProjectCreateNestedManyWithoutLeadInput
+  projects?: Prisma.ProjectMemberCreateNestedManyWithoutEmployeeInput
+  skills?: Prisma.EmployeeSkillCreateNestedManyWithoutEmployeeInput
+  leaves?: Prisma.LeaveApplicationCreateNestedManyWithoutEmployeeInput
+  leavesAsReporter?: Prisma.LeaveApplicationCreateNestedManyWithoutReportingToInput
+  compOffs?: Prisma.LeaveCompensationCreateNestedManyWithoutEmployeeInput
+  compOffsAsReporter?: Prisma.LeaveCompensationCreateNestedManyWithoutReportingToInput
+}
+
+export type EmployeeUncheckedCreateWithoutReimbursementsInput = {
+  id?: string
+  firstName: string
+  lastName: string
+  email: string
+  phone?: string | null
+  avatar?: string | null
+  dateOfBirth?: Date | string | null
+  gender?: string | null
+  address?: string | null
+  employeeId?: string | null
+  designation: string
+  department?: string | null
+  position?: string | null
+  employmentType?: $Enums.EmploymentType
+  status?: $Enums.EmployeeStatus
+  joiningDate?: Date | string | null
+  leavingDate?: Date | string | null
+  salary?: number | null
+  currency?: string | null
+  emergencyName?: string | null
+  emergencyPhone?: string | null
+  emergencyRel?: string | null
+  password?: string | null
+  passwordCheck?: string | null
+  passwordEncrypted?: string | null
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  organizationId: string
+  userId?: string | null
+  reportingToId?: string | null
+  subordinates?: Prisma.EmployeeUncheckedCreateNestedManyWithoutReportingToInput
+  timesheets?: Prisma.TimesheetUncheckedCreateNestedManyWithoutEmployeeInput
+  reviewedTimesheets?: Prisma.TimesheetUncheckedCreateNestedManyWithoutReportingLeadInput
+  ledProjects?: Prisma.ProjectUncheckedCreateNestedManyWithoutLeadInput
+  projects?: Prisma.ProjectMemberUncheckedCreateNestedManyWithoutEmployeeInput
+  skills?: Prisma.EmployeeSkillUncheckedCreateNestedManyWithoutEmployeeInput
+  leaves?: Prisma.LeaveApplicationUncheckedCreateNestedManyWithoutEmployeeInput
+  leavesAsReporter?: Prisma.LeaveApplicationUncheckedCreateNestedManyWithoutReportingToInput
+  compOffs?: Prisma.LeaveCompensationUncheckedCreateNestedManyWithoutEmployeeInput
+  compOffsAsReporter?: Prisma.LeaveCompensationUncheckedCreateNestedManyWithoutReportingToInput
+}
+
+export type EmployeeCreateOrConnectWithoutReimbursementsInput = {
+  where: Prisma.EmployeeWhereUniqueInput
+  create: Prisma.XOR<Prisma.EmployeeCreateWithoutReimbursementsInput, Prisma.EmployeeUncheckedCreateWithoutReimbursementsInput>
+}
+
+export type EmployeeUpsertWithoutReimbursementsInput = {
+  update: Prisma.XOR<Prisma.EmployeeUpdateWithoutReimbursementsInput, Prisma.EmployeeUncheckedUpdateWithoutReimbursementsInput>
+  create: Prisma.XOR<Prisma.EmployeeCreateWithoutReimbursementsInput, Prisma.EmployeeUncheckedCreateWithoutReimbursementsInput>
+  where?: Prisma.EmployeeWhereInput
+}
+
+export type EmployeeUpdateToOneWithWhereWithoutReimbursementsInput = {
+  where?: Prisma.EmployeeWhereInput
+  data: Prisma.XOR<Prisma.EmployeeUpdateWithoutReimbursementsInput, Prisma.EmployeeUncheckedUpdateWithoutReimbursementsInput>
+}
+
+export type EmployeeUpdateWithoutReimbursementsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employeeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  designation?: Prisma.StringFieldUpdateOperationsInput | string
+  department?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employmentType?: Prisma.EnumEmploymentTypeFieldUpdateOperationsInput | $Enums.EmploymentType
+  status?: Prisma.EnumEmployeeStatusFieldUpdateOperationsInput | $Enums.EmployeeStatus
+  joiningDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  leavingDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  salary?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  currency?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyRel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordCheck?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutEmployeesNestedInput
+  user?: Prisma.UserUpdateOneWithoutEmployeeProfileNestedInput
+  reportingTo?: Prisma.EmployeeUpdateOneWithoutSubordinatesNestedInput
+  subordinates?: Prisma.EmployeeUpdateManyWithoutReportingToNestedInput
+  timesheets?: Prisma.TimesheetUpdateManyWithoutEmployeeNestedInput
+  reviewedTimesheets?: Prisma.TimesheetUpdateManyWithoutReportingLeadNestedInput
+  ledProjects?: Prisma.ProjectUpdateManyWithoutLeadNestedInput
+  projects?: Prisma.ProjectMemberUpdateManyWithoutEmployeeNestedInput
+  skills?: Prisma.EmployeeSkillUpdateManyWithoutEmployeeNestedInput
+  leaves?: Prisma.LeaveApplicationUpdateManyWithoutEmployeeNestedInput
+  leavesAsReporter?: Prisma.LeaveApplicationUpdateManyWithoutReportingToNestedInput
+  compOffs?: Prisma.LeaveCompensationUpdateManyWithoutEmployeeNestedInput
+  compOffsAsReporter?: Prisma.LeaveCompensationUpdateManyWithoutReportingToNestedInput
+}
+
+export type EmployeeUncheckedUpdateWithoutReimbursementsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employeeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  designation?: Prisma.StringFieldUpdateOperationsInput | string
+  department?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employmentType?: Prisma.EnumEmploymentTypeFieldUpdateOperationsInput | $Enums.EmploymentType
+  status?: Prisma.EnumEmployeeStatusFieldUpdateOperationsInput | $Enums.EmployeeStatus
+  joiningDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  leavingDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  salary?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  currency?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyRel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordCheck?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordEncrypted?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reportingToId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subordinates?: Prisma.EmployeeUncheckedUpdateManyWithoutReportingToNestedInput
+  timesheets?: Prisma.TimesheetUncheckedUpdateManyWithoutEmployeeNestedInput
+  reviewedTimesheets?: Prisma.TimesheetUncheckedUpdateManyWithoutReportingLeadNestedInput
+  ledProjects?: Prisma.ProjectUncheckedUpdateManyWithoutLeadNestedInput
+  projects?: Prisma.ProjectMemberUncheckedUpdateManyWithoutEmployeeNestedInput
+  skills?: Prisma.EmployeeSkillUncheckedUpdateManyWithoutEmployeeNestedInput
+  leaves?: Prisma.LeaveApplicationUncheckedUpdateManyWithoutEmployeeNestedInput
+  leavesAsReporter?: Prisma.LeaveApplicationUncheckedUpdateManyWithoutReportingToNestedInput
+  compOffs?: Prisma.LeaveCompensationUncheckedUpdateManyWithoutEmployeeNestedInput
+  compOffsAsReporter?: Prisma.LeaveCompensationUncheckedUpdateManyWithoutReportingToNestedInput
 }
 
 export type EmployeeCreateManyOrganizationInput = {
@@ -3712,6 +3973,7 @@ export type EmployeeUpdateWithoutOrganizationInput = {
   leavesAsReporter?: Prisma.LeaveApplicationUpdateManyWithoutReportingToNestedInput
   compOffs?: Prisma.LeaveCompensationUpdateManyWithoutEmployeeNestedInput
   compOffsAsReporter?: Prisma.LeaveCompensationUpdateManyWithoutReportingToNestedInput
+  reimbursements?: Prisma.ReimbursementUpdateManyWithoutEmployeeNestedInput
 }
 
 export type EmployeeUncheckedUpdateWithoutOrganizationInput = {
@@ -3755,6 +4017,7 @@ export type EmployeeUncheckedUpdateWithoutOrganizationInput = {
   leavesAsReporter?: Prisma.LeaveApplicationUncheckedUpdateManyWithoutReportingToNestedInput
   compOffs?: Prisma.LeaveCompensationUncheckedUpdateManyWithoutEmployeeNestedInput
   compOffsAsReporter?: Prisma.LeaveCompensationUncheckedUpdateManyWithoutReportingToNestedInput
+  reimbursements?: Prisma.ReimbursementUncheckedUpdateManyWithoutEmployeeNestedInput
 }
 
 export type EmployeeUncheckedUpdateManyWithoutOrganizationInput = {
@@ -3864,6 +4127,7 @@ export type EmployeeUpdateWithoutReportingToInput = {
   leavesAsReporter?: Prisma.LeaveApplicationUpdateManyWithoutReportingToNestedInput
   compOffs?: Prisma.LeaveCompensationUpdateManyWithoutEmployeeNestedInput
   compOffsAsReporter?: Prisma.LeaveCompensationUpdateManyWithoutReportingToNestedInput
+  reimbursements?: Prisma.ReimbursementUpdateManyWithoutEmployeeNestedInput
 }
 
 export type EmployeeUncheckedUpdateWithoutReportingToInput = {
@@ -3907,6 +4171,7 @@ export type EmployeeUncheckedUpdateWithoutReportingToInput = {
   leavesAsReporter?: Prisma.LeaveApplicationUncheckedUpdateManyWithoutReportingToNestedInput
   compOffs?: Prisma.LeaveCompensationUncheckedUpdateManyWithoutEmployeeNestedInput
   compOffsAsReporter?: Prisma.LeaveCompensationUncheckedUpdateManyWithoutReportingToNestedInput
+  reimbursements?: Prisma.ReimbursementUncheckedUpdateManyWithoutEmployeeNestedInput
 }
 
 export type EmployeeUncheckedUpdateManyWithoutReportingToInput = {
@@ -3958,6 +4223,7 @@ export type EmployeeCountOutputType = {
   leavesAsReporter: number
   compOffs: number
   compOffsAsReporter: number
+  reimbursements: number
 }
 
 export type EmployeeCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3971,6 +4237,7 @@ export type EmployeeCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensio
   leavesAsReporter?: boolean | EmployeeCountOutputTypeCountLeavesAsReporterArgs
   compOffs?: boolean | EmployeeCountOutputTypeCountCompOffsArgs
   compOffsAsReporter?: boolean | EmployeeCountOutputTypeCountCompOffsAsReporterArgs
+  reimbursements?: boolean | EmployeeCountOutputTypeCountReimbursementsArgs
 }
 
 /**
@@ -4053,6 +4320,13 @@ export type EmployeeCountOutputTypeCountCompOffsAsReporterArgs<ExtArgs extends r
   where?: Prisma.LeaveCompensationWhereInput
 }
 
+/**
+ * EmployeeCountOutputType without action
+ */
+export type EmployeeCountOutputTypeCountReimbursementsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ReimbursementWhereInput
+}
+
 
 export type EmployeeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -4099,6 +4373,7 @@ export type EmployeeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   leavesAsReporter?: boolean | Prisma.Employee$leavesAsReporterArgs<ExtArgs>
   compOffs?: boolean | Prisma.Employee$compOffsArgs<ExtArgs>
   compOffsAsReporter?: boolean | Prisma.Employee$compOffsAsReporterArgs<ExtArgs>
+  reimbursements?: boolean | Prisma.Employee$reimbursementsArgs<ExtArgs>
   _count?: boolean | Prisma.EmployeeCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["employee"]>
 
@@ -4225,6 +4500,7 @@ export type EmployeeInclude<ExtArgs extends runtime.Types.Extensions.InternalArg
   leavesAsReporter?: boolean | Prisma.Employee$leavesAsReporterArgs<ExtArgs>
   compOffs?: boolean | Prisma.Employee$compOffsArgs<ExtArgs>
   compOffsAsReporter?: boolean | Prisma.Employee$compOffsAsReporterArgs<ExtArgs>
+  reimbursements?: boolean | Prisma.Employee$reimbursementsArgs<ExtArgs>
   _count?: boolean | Prisma.EmployeeCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type EmployeeIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -4254,6 +4530,7 @@ export type $EmployeePayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     leavesAsReporter: Prisma.$LeaveApplicationPayload<ExtArgs>[]
     compOffs: Prisma.$LeaveCompensationPayload<ExtArgs>[]
     compOffsAsReporter: Prisma.$LeaveCompensationPayload<ExtArgs>[]
+    reimbursements: Prisma.$ReimbursementPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -4694,6 +4971,7 @@ export interface Prisma__EmployeeClient<T, Null = never, ExtArgs extends runtime
   leavesAsReporter<T extends Prisma.Employee$leavesAsReporterArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Employee$leavesAsReporterArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LeaveApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   compOffs<T extends Prisma.Employee$compOffsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Employee$compOffsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LeaveCompensationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   compOffsAsReporter<T extends Prisma.Employee$compOffsAsReporterArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Employee$compOffsAsReporterArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LeaveCompensationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  reimbursements<T extends Prisma.Employee$reimbursementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Employee$reimbursementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReimbursementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5430,6 +5708,30 @@ export type Employee$compOffsAsReporterArgs<ExtArgs extends runtime.Types.Extens
   take?: number
   skip?: number
   distinct?: Prisma.LeaveCompensationScalarFieldEnum | Prisma.LeaveCompensationScalarFieldEnum[]
+}
+
+/**
+ * Employee.reimbursements
+ */
+export type Employee$reimbursementsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Reimbursement
+   */
+  select?: Prisma.ReimbursementSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Reimbursement
+   */
+  omit?: Prisma.ReimbursementOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ReimbursementInclude<ExtArgs> | null
+  where?: Prisma.ReimbursementWhereInput
+  orderBy?: Prisma.ReimbursementOrderByWithRelationInput | Prisma.ReimbursementOrderByWithRelationInput[]
+  cursor?: Prisma.ReimbursementWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ReimbursementScalarFieldEnum | Prisma.ReimbursementScalarFieldEnum[]
 }
 
 /**

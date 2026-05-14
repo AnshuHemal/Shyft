@@ -123,7 +123,11 @@ export const NotificationType = {
   LEAVE_REJECTED: 'LEAVE_REJECTED',
   COMP_OFF_SUBMITTED: 'COMP_OFF_SUBMITTED',
   COMP_OFF_ACKNOWLEDGED: 'COMP_OFF_ACKNOWLEDGED',
-  COMP_OFF_REJECTED: 'COMP_OFF_REJECTED'
+  COMP_OFF_REJECTED: 'COMP_OFF_REJECTED',
+  REIMBURSEMENT_SUBMITTED: 'REIMBURSEMENT_SUBMITTED',
+  REIMBURSEMENT_APPROVED: 'REIMBURSEMENT_APPROVED',
+  REIMBURSEMENT_REJECTED: 'REIMBURSEMENT_REJECTED',
+  REIMBURSEMENT_PAID: 'REIMBURSEMENT_PAID'
 } as const
 
 export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType]
@@ -145,3 +149,24 @@ export const CompOffStatus = {
 } as const
 
 export type CompOffStatus = (typeof CompOffStatus)[keyof typeof CompOffStatus]
+
+
+export const ReimbursementStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  PAID: 'PAID'
+} as const
+
+export type ReimbursementStatus = (typeof ReimbursementStatus)[keyof typeof ReimbursementStatus]
+
+
+export const ReimbursementCategory = {
+  TRAVEL: 'TRAVEL',
+  FOOD: 'FOOD',
+  CLIENT_MEETING: 'CLIENT_MEETING',
+  EQUIPMENT: 'EQUIPMENT',
+  OTHER: 'OTHER'
+} as const
+
+export type ReimbursementCategory = (typeof ReimbursementCategory)[keyof typeof ReimbursementCategory]

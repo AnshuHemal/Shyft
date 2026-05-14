@@ -52,6 +52,7 @@ import {
   CalendarDaysIcon,
   BrainCircuitIcon,
   CalendarOffIcon,
+  BanknoteIcon,
 } from "lucide-react";
 import { NavBreadcrumbs } from "@/components/shared/nav-breadcrumbs";
 import { NotificationBell } from "@/components/shared/notification-bell";
@@ -92,6 +93,11 @@ const NAV_MAIN = [
     label: "Leave",
     href: "/dashboard/leave",
     icon: CalendarOffIcon,
+  },
+  {
+    label: "Reimbursements",
+    href: "/dashboard/reimbursements",
+    icon: BanknoteIcon,
   },
   {
     label: "Reports",

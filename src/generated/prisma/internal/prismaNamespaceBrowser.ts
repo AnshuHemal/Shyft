@@ -69,7 +69,9 @@ export const ModelName = {
   EmployeeSkill: 'EmployeeSkill',
   LeaveApplication: 'LeaveApplication',
   Notification: 'Notification',
-  LeaveCompensation: 'LeaveCompensation'
+  LeaveCompensation: 'LeaveCompensation',
+  ReimbursementProof: 'ReimbursementProof',
+  Reimbursement: 'Reimbursement'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -391,6 +393,7 @@ export const NotificationScalarFieldEnum = {
   recipientId: 'recipientId',
   leaveId: 'leaveId',
   compOffId: 'compOffId',
+  reimbursementId: 'reimbursementId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -421,6 +424,43 @@ export const LeaveCompensationScalarFieldEnum = {
 } as const
 
 export type LeaveCompensationScalarFieldEnum = (typeof LeaveCompensationScalarFieldEnum)[keyof typeof LeaveCompensationScalarFieldEnum]
+
+
+export const ReimbursementProofScalarFieldEnum = {
+  id: 'id',
+  fileName: 'fileName',
+  fileType: 'fileType',
+  fileSize: 'fileSize',
+  storageUrl: 'storageUrl',
+  storagePublicId: 'storagePublicId',
+  createdAt: 'createdAt',
+  reimbursementId: 'reimbursementId'
+} as const
+
+export type ReimbursementProofScalarFieldEnum = (typeof ReimbursementProofScalarFieldEnum)[keyof typeof ReimbursementProofScalarFieldEnum]
+
+
+export const ReimbursementScalarFieldEnum = {
+  id: 'id',
+  amount: 'amount',
+  currency: 'currency',
+  category: 'category',
+  purpose: 'purpose',
+  expenseDate: 'expenseDate',
+  status: 'status',
+  hrNote: 'hrNote',
+  reviewedAt: 'reviewedAt',
+  reviewedById: 'reviewedById',
+  paidAt: 'paidAt',
+  paidById: 'paidById',
+  submittedAt: 'submittedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  employeeId: 'employeeId',
+  organizationId: 'organizationId'
+} as const
+
+export type ReimbursementScalarFieldEnum = (typeof ReimbursementScalarFieldEnum)[keyof typeof ReimbursementScalarFieldEnum]
 
 
 export const SortOrder = {
