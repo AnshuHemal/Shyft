@@ -17,9 +17,11 @@ import {
   LayersIcon,
   FileTextIcon,
   UserIcon,
-  ChevronRightIcon,
   RefreshCwIcon,
+  CalendarCheckIcon,
 } from "lucide-react";
+import { CompOffForm } from "./comp-off-form";
+import { CompOffHistory } from "./comp-off-history";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -440,9 +442,14 @@ function LeaveHistory({ leaves, loading, onRefresh }: {
 
 // ── Main component ─────────────────────────────────────────────────────────────
 
+type ActiveTab = "leave" | "comp-off";
+
 export function EmployeeLeave() {
+  const [activeTab, setActiveTab] = React.useState<ActiveTab>("leave");
   const [leaves, setLeaves] = React.useState<LeaveApplication[]>([]);
   const [loading, setLoading] = React.useState(true);
+  const [compOffs, setCompOffs] = React.useState<any[]>([]);
+  const [compOffLoading, setCompOffLoading] = React.useState(true);
   const [reportingPersons, setReportingPersons] = React.useState<ReportingPerson[]>([]);
   const [defaultReportingId, setDefaultReportingId] = React.useState<string | null>(null);
   const [mounted, setMounted] = React.useState(false);
@@ -465,6 +472,19 @@ export function EmployeeLeave() {
     }
   }
 
+  async function fetchCompOffs() {
+    setCompOffLoading(true);
+    try {
+      const res = await fetch("/api/comp-off");
+      const json = await res.json();
+      if (res.ok) setCompOffs(json.compOffs ?? []);
+    } catch {
+      toast.error("Failed to load comp-off history.");
+    } finally {
+      setCompOffLoading(false);
+    }
+  }
+
   async function fetchReportingPersons() {
     try {
       const res = await fetch("/api/employees/reporting-persons");
@@ -473,25 +493,25 @@ export function EmployeeLeave() {
         setReportingPersons(json.persons ?? []);
         if (json.defaultId) setDefaultReportingId(json.defaultId);
       }
-    } catch {
-      // silent
-    }
+    } catch { /* silent */ }
   }
 
   React.useEffect(() => {
     fetchLeaves();
+    fetchCompOffs();
     fetchReportingPersons();
   }, []);
 
-  const pendingCount = leaves.filter(l => l.status === "PENDING").length;
+  const pendingCount  = leaves.filter(l => l.status === "PENDING").length;
   const approvedCount = leaves.filter(l => l.status === "APPROVED").length;
+  const compOffPendingCount = compOffs.filter((c: any) => c.status === "PENDING").length;
 
   return (
     <div className={cn(
       "space-y-6 transition-all duration-500",
       mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
     )}>
-      {/* Header */}
+      {/* Page header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="flex items-center gap-3">
           <div className="flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
@@ -499,57 +519,129 @@ export function EmployeeLeave() {
           </div>
           <div>
             <h1 className="text-2xl font-bold tracking-tight">Leave Management</h1>
-            <p className="text-xs text-muted-foreground mt-0.5">Apply and track your leave requests.</p>
+            <p className="text-xs text-muted-foreground mt-0.5">Apply for leave or submit a comp-off request.</p>
           </div>
+        </div>
+
+        {/* Tab switcher */}
+        <div className="flex gap-1 p-1 bg-muted/50 rounded-2xl border border-border/40 w-fit shrink-0">
+          {([
+            { id: "leave" as ActiveTab,    label: "My Leaves",  icon: CalendarOffIcon,  count: pendingCount },
+            { id: "comp-off" as ActiveTab, label: "Comp-Off",   icon: CalendarCheckIcon, count: compOffPendingCount },
+          ]).map(({ id, label, icon: Icon, count }) => (
+            <button
+              key={id}
+              onClick={() => setActiveTab(id)}
+              className={cn(
+                "flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all duration-200",
+                activeTab === id
+                  ? "bg-card text-foreground shadow-sm border border-border/60"
+                  : "text-muted-foreground hover:text-foreground"
+              )}
+            >
+              <Icon className="size-3.5" />
+              {label}
+              {count > 0 && (
+                <span className="ml-0.5 size-4 rounded-full bg-primary text-primary-foreground text-[9px] font-black flex items-center justify-center">
+                  {count}
+                </span>
+              )}
+            </button>
+          ))}
         </div>
       </div>
 
-      {/* Stats */}
-      <div className="grid grid-cols-3 gap-4">
-        {[
-          { label: "Total Applications", value: leaves.length, color: "text-primary bg-primary/10" },
-          { label: "Pending Review",     value: pendingCount,   color: "text-amber-500 bg-amber-500/10" },
-          { label: "Approved",           value: approvedCount,  color: "text-emerald-500 bg-emerald-500/10" },
-        ].map((s, i) => (
-          <div
-            key={i}
-            className="rounded-2xl border border-border/60 bg-card p-4 flex items-center gap-3"
-          >
-            <div className={cn("size-10 rounded-xl flex items-center justify-center shrink-0", s.color)}>
-              <CalendarDaysIcon className="size-5" />
+      {/* Stats — leave tab */}
+      {activeTab === "leave" && (
+        <div className="grid grid-cols-3 gap-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
+          {[
+            { label: "Total Applications", value: leaves.length, color: "text-primary bg-primary/10" },
+            { label: "Pending Review",     value: pendingCount,   color: "text-amber-500 bg-amber-500/10" },
+            { label: "Approved",           value: approvedCount,  color: "text-emerald-500 bg-emerald-500/10" },
+          ].map((s, i) => (
+            <div key={i} className="rounded-2xl border border-border/60 bg-card p-4 flex items-center gap-3">
+              <div className={cn("size-10 rounded-xl flex items-center justify-center shrink-0", s.color)}>
+                <CalendarDaysIcon className="size-5" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-lg font-bold tabular-nums">{s.value}</p>
+                <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-wide truncate">{s.label}</p>
+              </div>
             </div>
-            <div className="min-w-0">
-              <p className="text-lg font-bold tabular-nums">{s.value}</p>
-              <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-wide truncate">{s.label}</p>
+          ))}
+        </div>
+      )}
+
+      {/* Stats — comp-off tab */}
+      {activeTab === "comp-off" && (
+        <div className="grid grid-cols-3 gap-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
+          {[
+            { label: "Total Requests",  value: compOffs.length, color: "text-primary bg-primary/10" },
+            { label: "Pending",         value: compOffPendingCount, color: "text-amber-500 bg-amber-500/10" },
+            { label: "Acknowledged",    value: compOffs.filter((c: any) => c.status === "ACKNOWLEDGED").length, color: "text-emerald-500 bg-emerald-500/10" },
+          ].map((s, i) => (
+            <div key={i} className="rounded-2xl border border-border/60 bg-card p-4 flex items-center gap-3">
+              <div className={cn("size-10 rounded-xl flex items-center justify-center shrink-0", s.color)}>
+                <CalendarCheckIcon className="size-5" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-lg font-bold tabular-nums">{s.value}</p>
+                <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-wide truncate">{s.label}</p>
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Content Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        {/* Left Column: Form */}
-        <div className="lg:col-span-7 xl:col-span-8 rounded-3xl border border-border/40 bg-card p-6 shadow-xs space-y-5">
-          <div>
-            <h2 className="text-base font-bold">New Leave Application</h2>
-            <p className="text-xs text-muted-foreground mt-0.5">Fill in the details below and submit for HR review.</p>
-          </div>
-          <LeaveForm
-            reportingPersons={reportingPersons}
-            defaultReportingId={defaultReportingId}
-            onSuccess={() => { fetchLeaves(); }}
-          />
+          ))}
         </div>
+      )}
 
-        {/* Right Column: History */}
-        <div className="lg:col-span-5 xl:col-span-4 rounded-3xl border border-border/40 bg-card p-6 shadow-xs space-y-5 lg:sticky lg:top-24 max-h-[calc(100vh-8rem)] overflow-y-auto no-scrollbar">
-          <div>
-            <h2 className="text-base font-bold">My Leave History</h2>
-            <p className="text-xs text-muted-foreground mt-0.5">Track the status of all your submitted applications.</p>
+      {/* ── Leave Tab ─────────────────────────────────────────────────────── */}
+      {activeTab === "leave" && (
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start animate-in fade-in slide-in-from-bottom-2 duration-300">
+          <div className="lg:col-span-7 xl:col-span-8 rounded-3xl border border-border/40 bg-card p-6 shadow-xs space-y-5">
+            <div>
+              <h2 className="text-base font-bold">New Leave Application</h2>
+              <p className="text-xs text-muted-foreground mt-0.5">Fill in the details below and submit for HR review.</p>
+            </div>
+            <LeaveForm
+              reportingPersons={reportingPersons}
+              defaultReportingId={defaultReportingId}
+              onSuccess={() => { fetchLeaves(); }}
+            />
           </div>
-          <LeaveHistory leaves={leaves} loading={loading} onRefresh={fetchLeaves} />
+          <div className="lg:col-span-5 xl:col-span-4 rounded-3xl border border-border/40 bg-card p-6 shadow-xs space-y-5 lg:sticky lg:top-24 max-h-[calc(100vh-8rem)] overflow-y-auto no-scrollbar">
+            <div>
+              <h2 className="text-base font-bold">My Leave History</h2>
+              <p className="text-xs text-muted-foreground mt-0.5">Track the status of all your submitted applications.</p>
+            </div>
+            <LeaveHistory leaves={leaves} loading={loading} onRefresh={fetchLeaves} />
+          </div>
         </div>
-      </div>
+      )}
+
+      {/* ── Comp-Off Tab ──────────────────────────────────────────────────── */}
+      {activeTab === "comp-off" && (
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start animate-in fade-in slide-in-from-bottom-2 duration-300">
+          <div className="lg:col-span-7 xl:col-span-8 rounded-3xl border border-border/40 bg-card p-6 shadow-xs space-y-5">
+            <div>
+              <h2 className="text-base font-bold">Leave Compensation Request</h2>
+              <p className="text-xs text-muted-foreground mt-0.5">
+                Fill this form on a Saturday when you come to office to compensate for a previous leave.
+              </p>
+            </div>
+            <CompOffForm
+              reportingPersons={reportingPersons}
+              defaultReportingId={defaultReportingId}
+              onSuccess={() => { fetchCompOffs(); }}
+            />
+          </div>
+          <div className="lg:col-span-5 xl:col-span-4 rounded-3xl border border-border/40 bg-card p-6 shadow-xs space-y-5 lg:sticky lg:top-24 max-h-[calc(100vh-8rem)] overflow-y-auto no-scrollbar">
+            <div>
+              <h2 className="text-base font-bold">My Comp-Off History</h2>
+              <p className="text-xs text-muted-foreground mt-0.5">Track all your submitted comp-off requests.</p>
+            </div>
+            <CompOffHistory compOffs={compOffs} loading={compOffLoading} onRefresh={fetchCompOffs} />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

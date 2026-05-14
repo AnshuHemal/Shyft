@@ -401,7 +401,8 @@ export const ModelName = {
   Skill: 'Skill',
   EmployeeSkill: 'EmployeeSkill',
   LeaveApplication: 'LeaveApplication',
-  Notification: 'Notification'
+  Notification: 'Notification',
+  LeaveCompensation: 'LeaveCompensation'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -417,7 +418,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "organization" | "department" | "position" | "holiday" | "employee" | "timesheet" | "timesheetEntry" | "timesheetTask" | "user" | "session" | "account" | "verification" | "project" | "projectMember" | "skill" | "employeeSkill" | "leaveApplication" | "notification"
+    modelProps: "organization" | "department" | "position" | "holiday" | "employee" | "timesheet" | "timesheetEntry" | "timesheetTask" | "user" | "session" | "account" | "verification" | "project" | "projectMember" | "skill" | "employeeSkill" | "leaveApplication" | "notification" | "leaveCompensation"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1753,6 +1754,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    LeaveCompensation: {
+      payload: Prisma.$LeaveCompensationPayload<ExtArgs>
+      fields: Prisma.LeaveCompensationFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.LeaveCompensationFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LeaveCompensationPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.LeaveCompensationFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LeaveCompensationPayload>
+        }
+        findFirst: {
+          args: Prisma.LeaveCompensationFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LeaveCompensationPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.LeaveCompensationFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LeaveCompensationPayload>
+        }
+        findMany: {
+          args: Prisma.LeaveCompensationFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LeaveCompensationPayload>[]
+        }
+        create: {
+          args: Prisma.LeaveCompensationCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LeaveCompensationPayload>
+        }
+        createMany: {
+          args: Prisma.LeaveCompensationCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.LeaveCompensationCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LeaveCompensationPayload>[]
+        }
+        delete: {
+          args: Prisma.LeaveCompensationDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LeaveCompensationPayload>
+        }
+        update: {
+          args: Prisma.LeaveCompensationUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LeaveCompensationPayload>
+        }
+        deleteMany: {
+          args: Prisma.LeaveCompensationDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.LeaveCompensationUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.LeaveCompensationUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LeaveCompensationPayload>[]
+        }
+        upsert: {
+          args: Prisma.LeaveCompensationUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LeaveCompensationPayload>
+        }
+        aggregate: {
+          args: Prisma.LeaveCompensationAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateLeaveCompensation>
+        }
+        groupBy: {
+          args: Prisma.LeaveCompensationGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LeaveCompensationGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.LeaveCompensationCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LeaveCompensationCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -2094,11 +2169,37 @@ export const NotificationScalarFieldEnum = {
   isRead: 'isRead',
   recipientId: 'recipientId',
   leaveId: 'leaveId',
+  compOffId: 'compOffId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
+
+
+export const LeaveCompensationScalarFieldEnum = {
+  id: 'id',
+  compensationOn: 'compensationOn',
+  compOnDuration: 'compOnDuration',
+  compOnOther: 'compOnOther',
+  compensationFor: 'compensationFor',
+  compForDuration: 'compForDuration',
+  compForOther: 'compForOther',
+  isSameMonth: 'isSameMonth',
+  awarenessNote: 'awarenessNote',
+  status: 'status',
+  hrNote: 'hrNote',
+  reviewedAt: 'reviewedAt',
+  reviewedById: 'reviewedById',
+  submittedAt: 'submittedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  employeeId: 'employeeId',
+  reportingToId: 'reportingToId',
+  organizationId: 'organizationId'
+} as const
+
+export type LeaveCompensationScalarFieldEnum = (typeof LeaveCompensationScalarFieldEnum)[keyof typeof LeaveCompensationScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -2392,6 +2493,34 @@ export type EnumNotificationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<
 export type ListEnumNotificationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NotificationType[]'>
     
 
+
+/**
+ * Reference to a field of type 'CompDuration'
+ */
+export type EnumCompDurationFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CompDuration'>
+    
+
+
+/**
+ * Reference to a field of type 'CompDuration[]'
+ */
+export type ListEnumCompDurationFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CompDuration[]'>
+    
+
+
+/**
+ * Reference to a field of type 'CompOffStatus'
+ */
+export type EnumCompOffStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CompOffStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'CompOffStatus[]'
+ */
+export type ListEnumCompOffStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CompOffStatus[]'>
+    
+
 /**
  * Batch Payload for updateMany & deleteMany & createMany
  */
@@ -2520,6 +2649,7 @@ export type GlobalOmitConfig = {
   employeeSkill?: Prisma.EmployeeSkillOmit
   leaveApplication?: Prisma.LeaveApplicationOmit
   notification?: Prisma.NotificationOmit
+  leaveCompensation?: Prisma.LeaveCompensationOmit
 }
 
 /* Types for Logging */

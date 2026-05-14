@@ -484,6 +484,40 @@ export type EnumNotificationTypeWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumNotificationTypeFilter<$PrismaModel>
 }
 
+export type EnumCompDurationFilter<$PrismaModel = never> = {
+  equals?: $Enums.CompDuration | Prisma.EnumCompDurationFieldRefInput<$PrismaModel>
+  in?: $Enums.CompDuration[] | Prisma.ListEnumCompDurationFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CompDuration[] | Prisma.ListEnumCompDurationFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCompDurationFilter<$PrismaModel> | $Enums.CompDuration
+}
+
+export type EnumCompOffStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.CompOffStatus | Prisma.EnumCompOffStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.CompOffStatus[] | Prisma.ListEnumCompOffStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CompOffStatus[] | Prisma.ListEnumCompOffStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCompOffStatusFilter<$PrismaModel> | $Enums.CompOffStatus
+}
+
+export type EnumCompDurationWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.CompDuration | Prisma.EnumCompDurationFieldRefInput<$PrismaModel>
+  in?: $Enums.CompDuration[] | Prisma.ListEnumCompDurationFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CompDuration[] | Prisma.ListEnumCompDurationFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCompDurationWithAggregatesFilter<$PrismaModel> | $Enums.CompDuration
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumCompDurationFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumCompDurationFilter<$PrismaModel>
+}
+
+export type EnumCompOffStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.CompOffStatus | Prisma.EnumCompOffStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.CompOffStatus[] | Prisma.ListEnumCompOffStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CompOffStatus[] | Prisma.ListEnumCompOffStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCompOffStatusWithAggregatesFilter<$PrismaModel> | $Enums.CompOffStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumCompOffStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumCompOffStatusFilter<$PrismaModel>
+}
+
 export type NestedStringFilter<$PrismaModel = never> = {
   equals?: string | Prisma.StringFieldRefInput<$PrismaModel>
   in?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
@@ -927,6 +961,40 @@ export type NestedEnumNotificationTypeWithAggregatesFilter<$PrismaModel = never>
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumNotificationTypeFilter<$PrismaModel>
   _max?: Prisma.NestedEnumNotificationTypeFilter<$PrismaModel>
+}
+
+export type NestedEnumCompDurationFilter<$PrismaModel = never> = {
+  equals?: $Enums.CompDuration | Prisma.EnumCompDurationFieldRefInput<$PrismaModel>
+  in?: $Enums.CompDuration[] | Prisma.ListEnumCompDurationFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CompDuration[] | Prisma.ListEnumCompDurationFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCompDurationFilter<$PrismaModel> | $Enums.CompDuration
+}
+
+export type NestedEnumCompOffStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.CompOffStatus | Prisma.EnumCompOffStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.CompOffStatus[] | Prisma.ListEnumCompOffStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CompOffStatus[] | Prisma.ListEnumCompOffStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCompOffStatusFilter<$PrismaModel> | $Enums.CompOffStatus
+}
+
+export type NestedEnumCompDurationWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.CompDuration | Prisma.EnumCompDurationFieldRefInput<$PrismaModel>
+  in?: $Enums.CompDuration[] | Prisma.ListEnumCompDurationFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CompDuration[] | Prisma.ListEnumCompDurationFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCompDurationWithAggregatesFilter<$PrismaModel> | $Enums.CompDuration
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumCompDurationFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumCompDurationFilter<$PrismaModel>
+}
+
+export type NestedEnumCompOffStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.CompOffStatus | Prisma.EnumCompOffStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.CompOffStatus[] | Prisma.ListEnumCompOffStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CompOffStatus[] | Prisma.ListEnumCompOffStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCompOffStatusWithAggregatesFilter<$PrismaModel> | $Enums.CompOffStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumCompOffStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumCompOffStatusFilter<$PrismaModel>
 }
 
 

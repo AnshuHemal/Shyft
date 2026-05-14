@@ -120,7 +120,28 @@ export type LeaveStatus = (typeof LeaveStatus)[keyof typeof LeaveStatus]
 export const NotificationType = {
   LEAVE_SUBMITTED: 'LEAVE_SUBMITTED',
   LEAVE_APPROVED: 'LEAVE_APPROVED',
-  LEAVE_REJECTED: 'LEAVE_REJECTED'
+  LEAVE_REJECTED: 'LEAVE_REJECTED',
+  COMP_OFF_SUBMITTED: 'COMP_OFF_SUBMITTED',
+  COMP_OFF_ACKNOWLEDGED: 'COMP_OFF_ACKNOWLEDGED',
+  COMP_OFF_REJECTED: 'COMP_OFF_REJECTED'
 } as const
 
 export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType]
+
+
+export const CompDuration = {
+  HALF_DAY: 'HALF_DAY',
+  FULL_DAY: 'FULL_DAY',
+  OTHER: 'OTHER'
+} as const
+
+export type CompDuration = (typeof CompDuration)[keyof typeof CompDuration]
+
+
+export const CompOffStatus = {
+  PENDING: 'PENDING',
+  ACKNOWLEDGED: 'ACKNOWLEDGED',
+  REJECTED: 'REJECTED'
+} as const
+
+export type CompOffStatus = (typeof CompOffStatus)[keyof typeof CompOffStatus]

@@ -131,3 +131,8 @@ export type LeaveApplication = Prisma.LeaveApplicationModel
  * 
  */
 export type Notification = Prisma.NotificationModel
+/**
+ * Model LeaveCompensation
+ * 
+ */
+export type LeaveCompensation = Prisma.LeaveCompensationModel

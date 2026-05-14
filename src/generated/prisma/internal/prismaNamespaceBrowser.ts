@@ -68,7 +68,8 @@ export const ModelName = {
   Skill: 'Skill',
   EmployeeSkill: 'EmployeeSkill',
   LeaveApplication: 'LeaveApplication',
-  Notification: 'Notification'
+  Notification: 'Notification',
+  LeaveCompensation: 'LeaveCompensation'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -389,11 +390,37 @@ export const NotificationScalarFieldEnum = {
   isRead: 'isRead',
   recipientId: 'recipientId',
   leaveId: 'leaveId',
+  compOffId: 'compOffId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
+
+
+export const LeaveCompensationScalarFieldEnum = {
+  id: 'id',
+  compensationOn: 'compensationOn',
+  compOnDuration: 'compOnDuration',
+  compOnOther: 'compOnOther',
+  compensationFor: 'compensationFor',
+  compForDuration: 'compForDuration',
+  compForOther: 'compForOther',
+  isSameMonth: 'isSameMonth',
+  awarenessNote: 'awarenessNote',
+  status: 'status',
+  hrNote: 'hrNote',
+  reviewedAt: 'reviewedAt',
+  reviewedById: 'reviewedById',
+  submittedAt: 'submittedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  employeeId: 'employeeId',
+  reportingToId: 'reportingToId',
+  organizationId: 'organizationId'
+} as const
+
+export type LeaveCompensationScalarFieldEnum = (typeof LeaveCompensationScalarFieldEnum)[keyof typeof LeaveCompensationScalarFieldEnum]
 
 
 export const SortOrder = {

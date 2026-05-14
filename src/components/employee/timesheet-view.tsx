@@ -97,6 +97,9 @@ const DAY_TYPE_CONFIG: Record<DayType, { label: string; rowClass: string; badgeC
   HALF_DAY: { label: "Half day", rowClass: "bg-purple-500/5", badgeClass: "bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20" },
 };
 
+// Saturday badge variant — distinct from Sunday
+const SATURDAY_BADGE_CLASS = "bg-primary/10 text-primary border-primary/20";
+
 // ── Row display component ──────────────────────────────────────────────────────
 
 interface RowDisplayProps {
@@ -120,6 +123,19 @@ function RowDisplay({ entry, onEdit, readOnly, holidayName }: RowDisplayProps) {
     !readOnly &&
     !isFutureDate(date) &&
     isWithinEditWindow(date);
+
+  // Saturdays (day=6) that are tagged WEEKEND unlock for comp-off logging
+  const isSaturday = date.getUTCDay() === 6;
+  const isCompOffSaturday = entry.dayType === "WEEKEND" && isSaturday;
+
+  const canEditEntry =
+    canEdit &&
+    (
+      entry.dayType === "WORKING" ||
+      entry.dayType === "HALF_DAY" ||
+      entry.dayType === "LEAVE" ||
+      isCompOffSaturday  // Saturdays unlock for comp-off timesheet logging
+    );
 
   const cfg = DAY_TYPE_CONFIG[entry.dayType];
 
@@ -151,6 +167,13 @@ function RowDisplay({ entry, onEdit, readOnly, holidayName }: RowDisplayProps) {
                 <p className="text-sm font-medium">{holidayName}</p>
               </TooltipContent>
             </Tooltip>
+          ) : isCompOffSaturday ? (
+            // Saturday gets a distinct primary-colored badge
+            <div className="space-y-1">
+              <span className={cn("inline-flex items-center rounded-full border px-2.5 py-0.5 text-[12px] font-bold", SATURDAY_BADGE_CLASS)}>
+                Sat (Comp-Off)
+              </span>
+            </div>
           ) : (
             <span className={cn("inline-flex items-center rounded-full border px-2.5 py-0.5 text-[12px] font-bold", cfg.badgeClass)}>
               {cfg.label}
@@ -250,14 +273,19 @@ function RowDisplay({ entry, onEdit, readOnly, holidayName }: RowDisplayProps) {
       </td>
       {/* Actions */}
       <td className="px-4 py-4 w-28 text-right">
-        {canEdit && (entry.dayType === "WORKING" || entry.dayType === "HALF_DAY" || entry.dayType === "LEAVE") && (
+        {canEditEntry && (
           <Button
             size="xs"
             variant="outline"
-            className="h-8 px-4 text-xs font-bold bg-background group-hover/row:border-primary group-hover/row:text-primary transition-all shadow-sm rounded-lg"
+            className={cn(
+              "h-8 px-4 text-xs font-bold bg-background transition-all shadow-sm rounded-lg",
+              isCompOffSaturday
+                ? "group-hover/row:border-primary group-hover/row:text-primary border-primary/40 text-primary"
+                : "group-hover/row:border-primary group-hover/row:text-primary"
+            )}
             onClick={() => onEdit(entry)}
           >
-            Log Tasks
+            {isCompOffSaturday ? "Log Comp-Off" : "Log Tasks"}
           </Button>
         )}
       </td>

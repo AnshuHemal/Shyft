@@ -98,6 +98,7 @@ model Organization {
   projects    Project[]
   skills      Skill[]
   leaves      LeaveApplication[]
+  compOffs    LeaveCompensation[]
 
   @@map("organization")
 }
@@ -227,8 +228,10 @@ model Employee {
   ledProjects    Project[]      @relation("ProjectLead")
   projects       ProjectMember[]
   skills         EmployeeSkill[]
-  leaves         LeaveApplication[] @relation("EmployeeLeaves")
+  leaves           LeaveApplication[] @relation("EmployeeLeaves")
   leavesAsReporter LeaveApplication[] @relation("LeaveReportingTo")
+  compOffs         LeaveCompensation[] @relation("EmployeeCompOff")
+  compOffsAsReporter LeaveCompensation[] @relation("CompOffReportingTo")
 
   @@unique([email, organizationId])
   @@map("employee")
@@ -552,6 +555,21 @@ enum NotificationType {
   LEAVE_SUBMITTED
   LEAVE_APPROVED
   LEAVE_REJECTED
+  COMP_OFF_SUBMITTED
+  COMP_OFF_ACKNOWLEDGED
+  COMP_OFF_REJECTED
+}
+
+enum CompDuration {
+  HALF_DAY
+  FULL_DAY
+  OTHER
+}
+
+enum CompOffStatus {
+  PENDING        // Submitted, awaiting HR acknowledgement
+  ACKNOWLEDGED   // HR confirmed; leave treated as cleared
+  REJECTED       // HR rejected (dates don't match policy, etc.)
 }
 
 model Notification {
@@ -568,9 +586,62 @@ model Notification {
   leaveId     String?
   leave       LeaveApplication? @relation(fields: [leaveId], references: [id], onDelete: Cascade)
 
+  // Optional deep-link to a comp-off request
+  compOffId   String?
+  compOff     LeaveCompensation? @relation(fields: [compOffId], references: [id], onDelete: Cascade)
+
   createdAt   DateTime         @default(now())
   updatedAt   DateTime         @updatedAt
 
   @@index([recipientId, isRead])
   @@map("notification")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Leave Compensation (Comp-Off)
+// ─────────────────────────────────────────────────────────────────────────────
+
+model LeaveCompensation {
+  id               String        @id @default(cuid())
+
+  // ── Compensation ON (the Saturday worked) ──────────────────────────────────
+  compensationOn   DateTime      // The Saturday the employee came to office
+  compOnDuration   CompDuration  // HALF_DAY | FULL_DAY | OTHER
+  compOnOther      String?       // Only set when compOnDuration = OTHER
+
+  // ── Compensation FOR (the leave taken) ────────────────────────────────────
+  compensationFor  DateTime      // The date the employee had taken leave
+  compForDuration  CompDuration  // HALF_DAY | FULL_DAY | OTHER
+  compForOther     String?       // Only set when compForDuration = OTHER
+
+  // ── Policy validation (computed at submission time, stored for audit) ──────
+  isSameMonth      Boolean       // compensationOn.month === compensationFor.month
+
+  // ── Additional info ────────────────────────────────────────────────────────
+  awarenessNote    String        // Required — "No" or actual note
+
+  // ── Workflow ───────────────────────────────────────────────────────────────
+  status           CompOffStatus @default(PENDING)
+  hrNote           String?       // HR comment on ack/rejection
+  reviewedAt       DateTime?
+  reviewedById     String?       // userId of HR who acted
+
+  submittedAt      DateTime      @default(now())
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  // ── Relations ──────────────────────────────────────────────────────────────
+  employeeId       String
+  employee         Employee      @relation("EmployeeCompOff", fields: [employeeId], references: [id], onDelete: Cascade)
+
+  reportingToId    String?       // Denormalized at submission time
+  reportingTo      Employee?     @relation("CompOffReportingTo", fields: [reportingToId], references: [id], onDelete: SetNull)
+
+  organizationId   String
+  organization     Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  notifications    Notification[]
+
+  @@unique([employeeId, compensationFor]) // One comp-off per leave date per employee
+  @@map("leave_compensation")
 }

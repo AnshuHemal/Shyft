@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { HRLeaveManagement } from "@/components/dashboard/leave/hr-leave-management";
+import { HRLeavePageWrapper } from "@/components/dashboard/leave/hr-leave-page-wrapper";
 
 export const metadata: Metadata = {
-  title: "Leave Requests",
-  description: "Review and manage employee leave applications.",
+  title: "Leave & Comp-Off",
+  description: "Review and manage employee leave and comp-off requests.",
 };
 
 export default function LeaveManagementPage() {
-  return <HRLeaveManagement />;
+  return <HRLeavePageWrapper />;
 }
