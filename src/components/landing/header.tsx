@@ -6,7 +6,8 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/shared/theme-toggle";
-import { MenuIcon, XIcon, ZapIcon } from "lucide-react";
+import { MenuIcon, XIcon, ZapIcon, ChevronRightIcon } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const NAV_LINKS = [
   { label: "Features", href: "#features" },
@@ -31,49 +32,55 @@ export function LandingHeader() {
   }, [pathname]);
 
   return (
-    <header
+    <motion.header
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      transition={{ duration: 0.6, type: "spring", stiffness: 100 }}
       className={cn(
-        "fixed top-0 inset-x-0 z-50 transition-all duration-300",
+        "fixed top-0 inset-x-0 z-50 transition-all duration-500",
         scrolled
-          ? "bg-background/80 backdrop-blur-md border-b border-border/60 shadow-sm"
-          : "bg-transparent"
+          ? "py-3 bg-background/70 backdrop-blur-xl border-b border-border/40 shadow-sm"
+          : "py-5 bg-transparent"
       )}
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between">
+        <div className="flex items-center justify-between">
           {/* Logo */}
           <Link
             href="/"
-            className="flex items-center gap-2 group"
+            className="flex items-center gap-3 group"
             aria-label="SHYFT home"
           >
-            <div className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-sm transition-transform group-hover:scale-105">
-              <ZapIcon className="size-4" />
+            <div className="flex size-9 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-lg shadow-primary/20 transition-transform duration-300 group-hover:scale-110">
+              <ZapIcon className="size-5" />
             </div>
-            <span className="text-lg font-semibold tracking-tight">SHYFT</span>
+            <span className="text-xl font-bold tracking-tight">SHYFT</span>
           </Link>
 
           {/* Desktop nav */}
-          <nav className="hidden md:flex items-center gap-1" aria-label="Main navigation">
-            {NAV_LINKS.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                className="px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground rounded-md transition-colors hover:bg-muted/50"
-              >
-                {link.label}
-              </a>
-            ))}
+          <nav className="hidden md:flex items-center gap-2" aria-label="Main navigation">
+            <div className="flex items-center bg-muted/40 rounded-full px-2 py-1.5 border border-border/40 backdrop-blur-md">
+              {NAV_LINKS.map((link) => (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  className="px-4 py-1.5 text-sm font-medium text-muted-foreground hover:text-foreground rounded-full transition-all hover:bg-background/80 hover:shadow-sm"
+                >
+                  {link.label}
+                </a>
+              ))}
+            </div>
           </nav>
 
           {/* Desktop actions */}
-          <div className="hidden md:flex items-center gap-2">
+          <div className="hidden md:flex items-center gap-3">
             <ThemeToggle />
-            <Button variant="ghost" size="sm" nativeButton={false} render={<Link href="/login" />}>
+            <div className="h-6 w-px bg-border/60 mx-1" />
+            <Button variant="ghost" size="sm" nativeButton={false} className="font-semibold hover:bg-muted/50" render={<Link href="/login" />}>
               Sign in
             </Button>
-            <Button size="sm" nativeButton={false} render={<Link href="/signup" />}>
-              Get started
+            <Button size="sm" nativeButton={false} className="font-bold gap-1 shadow-md shadow-primary/20 hover:scale-105 transition-all" render={<Link href="/signup" />}>
+              Get started <ChevronRightIcon className="size-3.5" />
             </Button>
           </div>
 
@@ -86,6 +93,7 @@ export function LandingHeader() {
               onClick={() => setMobileOpen((v) => !v)}
               aria-label="Toggle menu"
               aria-expanded={mobileOpen}
+              className="bg-muted/40"
             >
               {mobileOpen ? <XIcon /> : <MenuIcon />}
             </Button>
@@ -94,32 +102,36 @@ export function LandingHeader() {
       </div>
 
       {/* Mobile menu */}
-      <div
-        className={cn(
-          "md:hidden overflow-hidden transition-all duration-300 ease-in-out",
-          mobileOpen ? "max-h-80 opacity-100" : "max-h-0 opacity-0"
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            className="md:hidden overflow-hidden"
+          >
+            <div className="bg-background/95 backdrop-blur-xl border-b border-border/40 px-4 pb-6 pt-4 mt-3 space-y-2 shadow-2xl">
+              {NAV_LINKS.map((link) => (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  className="block px-4 py-3 text-base font-medium text-muted-foreground hover:text-foreground rounded-xl transition-colors hover:bg-muted/50"
+                >
+                  {link.label}
+                </a>
+              ))}
+              <div className="pt-4 flex flex-col gap-3">
+                <Button variant="outline" size="lg" nativeButton={false} className="w-full font-bold" render={<Link href="/login" />}>
+                  Sign in
+                </Button>
+                <Button size="lg" nativeButton={false} className="w-full font-bold shadow-lg shadow-primary/20" render={<Link href="/signup" />}>
+                  Get started free
+                </Button>
+              </div>
+            </div>
+          </motion.div>
         )}
-      >
-        <div className="bg-background/95 backdrop-blur-md border-b border-border/60 px-4 pb-4 pt-2 space-y-1">
-          {NAV_LINKS.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              className="block px-3 py-2 text-sm text-muted-foreground hover:text-foreground rounded-md transition-colors hover:bg-muted/50"
-            >
-              {link.label}
-            </a>
-          ))}
-          <div className="pt-2 flex flex-col gap-2">
-            <Button variant="outline" size="sm" nativeButton={false} className="w-full" render={<Link href="/login" />}>
-              Sign in
-            </Button>
-            <Button size="sm" nativeButton={false} className="w-full" render={<Link href="/signup" />}>
-              Get started free
-            </Button>
-          </div>
-        </div>
-      </div>
-    </header>
+      </AnimatePresence>
+    </motion.header>
   );
 }
