@@ -54,6 +54,7 @@ import {
   CalendarOffIcon,
   BanknoteIcon,
   LaptopIcon,
+  UserCheckIcon,
 } from "lucide-react";
 import { NavBreadcrumbs } from "@/components/shared/nav-breadcrumbs";
 import { NotificationBell } from "@/components/shared/notification-bell";
@@ -104,6 +105,11 @@ const NAV_MAIN = [
     label: "Assets",
     href: "/dashboard/assets",
     icon: LaptopIcon,
+  },
+  {
+    label: "Onboarding",
+    href: "/dashboard/onboarding",
+    icon: UserCheckIcon,
   },
   {
     label: "Reports",

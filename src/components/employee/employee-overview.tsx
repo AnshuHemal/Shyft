@@ -14,6 +14,7 @@ import {
   ArrowRightIcon,
   BriefcaseIcon,
   BuildingIcon,
+  AlertCircleIcon,
 } from "lucide-react";
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -70,6 +71,7 @@ interface EmployeeOverviewProps {
   } | null;
   currentMonth: number;
   currentYear: number;
+  onboardingCompleted?: boolean;
 }
 
 export function EmployeeOverview({
@@ -77,6 +79,7 @@ export function EmployeeOverview({
   timesheet,
   currentMonth,
   currentYear,
+  onboardingCompleted = true,
 }: EmployeeOverviewProps) {
   const [mounted, setMounted] = React.useState(false);
   React.useEffect(() => {
@@ -137,6 +140,30 @@ export function EmployeeOverview({
           })}
         </p>
       </div>
+
+      {/* Onboarding Reminder */}
+      {!onboardingCompleted && (
+        <div className="bg-amber-500/10 border border-amber-500/20 rounded-2xl p-4 flex items-center justify-between gap-4 animate-in fade-in slide-in-from-top-4 duration-500">
+          <div className="flex items-center gap-3">
+            <div className="size-10 rounded-full bg-amber-500/20 flex items-center justify-center shrink-0">
+              <AlertCircleIcon className="size-5 text-amber-600 dark:text-amber-400" />
+            </div>
+            <div>
+              <p className="text-sm font-bold text-amber-900 dark:text-amber-100">Action Required: Complete Onboarding</p>
+              <p className="text-xs text-amber-800/70 dark:text-amber-400/70 mt-0.5">Please submit your KYC documents within 5 days of joining to unlock all features.</p>
+            </div>
+          </div>
+          <Button 
+            size="sm" 
+            variant="outline" 
+            className="border-amber-500/30 bg-amber-500/10 hover:bg-amber-500/20 text-amber-700 dark:text-amber-300 gap-1.5 shrink-0"
+            nativeButton={false}
+            render={<Link href="/employee/onboarding" />}
+          >
+            Start Now <ArrowRightIcon className="size-3.5" />
+          </Button>
+        </div>
+      )}
 
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">

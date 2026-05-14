@@ -15,7 +15,8 @@ type NotificationType =
   | "LEAVE_SUBMITTED" | "LEAVE_APPROVED" | "LEAVE_REJECTED"
   | "COMP_OFF_SUBMITTED" | "COMP_OFF_ACKNOWLEDGED" | "COMP_OFF_REJECTED"
   | "REIMBURSEMENT_SUBMITTED" | "REIMBURSEMENT_APPROVED" | "REIMBURSEMENT_REJECTED" | "REIMBURSEMENT_PAID"
-  | "ASSET_REQUEST_SUBMITTED" | "ASSET_REQUEST_APPROVED" | "ASSET_REQUEST_REJECTED";
+  | "ASSET_REQUEST_SUBMITTED" | "ASSET_REQUEST_APPROVED" | "ASSET_REQUEST_REJECTED"
+  | "ONBOARDING_SUBMITTED" | "ONBOARDING_APPROVED" | "ONBOARDING_REJECTED";
 
 interface Notification {
   id: string;
@@ -89,6 +90,21 @@ const TYPE_CONFIG: Record<NotificationType, { icon: React.ElementType; color: st
     bg: "bg-emerald-500/10",
   },
   ASSET_REQUEST_REJECTED: {
+    icon: XCircleIcon,
+    color: "text-destructive",
+    bg: "bg-destructive/10",
+  },
+  ONBOARDING_SUBMITTED: {
+    icon: CalendarDaysIcon, // or better icon
+    color: "text-blue-500",
+    bg: "bg-blue-500/10",
+  },
+  ONBOARDING_APPROVED: {
+    icon: CheckCircle2Icon,
+    color: "text-emerald-500",
+    bg: "bg-emerald-500/10",
+  },
+  ONBOARDING_REJECTED: {
     icon: XCircleIcon,
     color: "text-destructive",
     bg: "bg-destructive/10",

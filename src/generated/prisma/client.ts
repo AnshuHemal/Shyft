@@ -156,3 +156,8 @@ export type Asset = Prisma.AssetModel
  * 
  */
 export type AssetRequest = Prisma.AssetRequestModel
+/**
+ * Model EmployeeOnboarding
+ * 
+ */
+export type EmployeeOnboarding = Prisma.EmployeeOnboardingModel

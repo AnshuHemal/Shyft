@@ -275,6 +275,7 @@ export type OrganizationWhereInput = {
   reimbursements?: Prisma.ReimbursementListRelationFilter
   assets?: Prisma.AssetListRelationFilter
   assetRequests?: Prisma.AssetRequestListRelationFilter
+  onboardings?: Prisma.EmployeeOnboardingListRelationFilter
 }
 
 export type OrganizationOrderByWithRelationInput = {
@@ -306,6 +307,7 @@ export type OrganizationOrderByWithRelationInput = {
   reimbursements?: Prisma.ReimbursementOrderByRelationAggregateInput
   assets?: Prisma.AssetOrderByRelationAggregateInput
   assetRequests?: Prisma.AssetRequestOrderByRelationAggregateInput
+  onboardings?: Prisma.EmployeeOnboardingOrderByRelationAggregateInput
 }
 
 export type OrganizationWhereUniqueInput = Prisma.AtLeast<{
@@ -340,6 +342,7 @@ export type OrganizationWhereUniqueInput = Prisma.AtLeast<{
   reimbursements?: Prisma.ReimbursementListRelationFilter
   assets?: Prisma.AssetListRelationFilter
   assetRequests?: Prisma.AssetRequestListRelationFilter
+  onboardings?: Prisma.EmployeeOnboardingListRelationFilter
 }, "id" | "slug" | "ownerId">
 
 export type OrganizationOrderByWithAggregationInput = {
@@ -412,6 +415,7 @@ export type OrganizationCreateInput = {
   reimbursements?: Prisma.ReimbursementCreateNestedManyWithoutOrganizationInput
   assets?: Prisma.AssetCreateNestedManyWithoutOrganizationInput
   assetRequests?: Prisma.AssetRequestCreateNestedManyWithoutOrganizationInput
+  onboardings?: Prisma.EmployeeOnboardingCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateInput = {
@@ -442,6 +446,7 @@ export type OrganizationUncheckedCreateInput = {
   reimbursements?: Prisma.ReimbursementUncheckedCreateNestedManyWithoutOrganizationInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutOrganizationInput
   assetRequests?: Prisma.AssetRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  onboardings?: Prisma.EmployeeOnboardingUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUpdateInput = {
@@ -472,6 +477,7 @@ export type OrganizationUpdateInput = {
   reimbursements?: Prisma.ReimbursementUpdateManyWithoutOrganizationNestedInput
   assets?: Prisma.AssetUpdateManyWithoutOrganizationNestedInput
   assetRequests?: Prisma.AssetRequestUpdateManyWithoutOrganizationNestedInput
+  onboardings?: Prisma.EmployeeOnboardingUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateInput = {
@@ -502,6 +508,7 @@ export type OrganizationUncheckedUpdateInput = {
   reimbursements?: Prisma.ReimbursementUncheckedUpdateManyWithoutOrganizationNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutOrganizationNestedInput
   assetRequests?: Prisma.AssetRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  onboardings?: Prisma.EmployeeOnboardingUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateManyInput = {
@@ -837,6 +844,20 @@ export type OrganizationUpdateOneRequiredWithoutAssetRequestsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutAssetRequestsInput, Prisma.OrganizationUpdateWithoutAssetRequestsInput>, Prisma.OrganizationUncheckedUpdateWithoutAssetRequestsInput>
 }
 
+export type OrganizationCreateNestedOneWithoutOnboardingsInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutOnboardingsInput, Prisma.OrganizationUncheckedCreateWithoutOnboardingsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutOnboardingsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+}
+
+export type OrganizationUpdateOneRequiredWithoutOnboardingsNestedInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutOnboardingsInput, Prisma.OrganizationUncheckedCreateWithoutOnboardingsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutOnboardingsInput
+  upsert?: Prisma.OrganizationUpsertWithoutOnboardingsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutOnboardingsInput, Prisma.OrganizationUpdateWithoutOnboardingsInput>, Prisma.OrganizationUncheckedUpdateWithoutOnboardingsInput>
+}
+
 export type OrganizationCreateWithoutDepartmentsInput = {
   id?: string
   name: string
@@ -864,6 +885,7 @@ export type OrganizationCreateWithoutDepartmentsInput = {
   reimbursements?: Prisma.ReimbursementCreateNestedManyWithoutOrganizationInput
   assets?: Prisma.AssetCreateNestedManyWithoutOrganizationInput
   assetRequests?: Prisma.AssetRequestCreateNestedManyWithoutOrganizationInput
+  onboardings?: Prisma.EmployeeOnboardingCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutDepartmentsInput = {
@@ -893,6 +915,7 @@ export type OrganizationUncheckedCreateWithoutDepartmentsInput = {
   reimbursements?: Prisma.ReimbursementUncheckedCreateNestedManyWithoutOrganizationInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutOrganizationInput
   assetRequests?: Prisma.AssetRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  onboardings?: Prisma.EmployeeOnboardingUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutDepartmentsInput = {
@@ -938,6 +961,7 @@ export type OrganizationUpdateWithoutDepartmentsInput = {
   reimbursements?: Prisma.ReimbursementUpdateManyWithoutOrganizationNestedInput
   assets?: Prisma.AssetUpdateManyWithoutOrganizationNestedInput
   assetRequests?: Prisma.AssetRequestUpdateManyWithoutOrganizationNestedInput
+  onboardings?: Prisma.EmployeeOnboardingUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutDepartmentsInput = {
@@ -967,6 +991,7 @@ export type OrganizationUncheckedUpdateWithoutDepartmentsInput = {
   reimbursements?: Prisma.ReimbursementUncheckedUpdateManyWithoutOrganizationNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutOrganizationNestedInput
   assetRequests?: Prisma.AssetRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  onboardings?: Prisma.EmployeeOnboardingUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutPositionsInput = {
@@ -996,6 +1021,7 @@ export type OrganizationCreateWithoutPositionsInput = {
   reimbursements?: Prisma.ReimbursementCreateNestedManyWithoutOrganizationInput
   assets?: Prisma.AssetCreateNestedManyWithoutOrganizationInput
   assetRequests?: Prisma.AssetRequestCreateNestedManyWithoutOrganizationInput
+  onboardings?: Prisma.EmployeeOnboardingCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutPositionsInput = {
@@ -1025,6 +1051,7 @@ export type OrganizationUncheckedCreateWithoutPositionsInput = {
   reimbursements?: Prisma.ReimbursementUncheckedCreateNestedManyWithoutOrganizationInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutOrganizationInput
   assetRequests?: Prisma.AssetRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  onboardings?: Prisma.EmployeeOnboardingUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutPositionsInput = {
@@ -1070,6 +1097,7 @@ export type OrganizationUpdateWithoutPositionsInput = {
   reimbursements?: Prisma.ReimbursementUpdateManyWithoutOrganizationNestedInput
   assets?: Prisma.AssetUpdateManyWithoutOrganizationNestedInput
   assetRequests?: Prisma.AssetRequestUpdateManyWithoutOrganizationNestedInput
+  onboardings?: Prisma.EmployeeOnboardingUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutPositionsInput = {
@@ -1099,6 +1127,7 @@ export type OrganizationUncheckedUpdateWithoutPositionsInput = {
   reimbursements?: Prisma.ReimbursementUncheckedUpdateManyWithoutOrganizationNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutOrganizationNestedInput
   assetRequests?: Prisma.AssetRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  onboardings?: Prisma.EmployeeOnboardingUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutHolidaysInput = {
@@ -1128,6 +1157,7 @@ export type OrganizationCreateWithoutHolidaysInput = {
   reimbursements?: Prisma.ReimbursementCreateNestedManyWithoutOrganizationInput
   assets?: Prisma.AssetCreateNestedManyWithoutOrganizationInput
   assetRequests?: Prisma.AssetRequestCreateNestedManyWithoutOrganizationInput
+  onboardings?: Prisma.EmployeeOnboardingCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutHolidaysInput = {
@@ -1157,6 +1187,7 @@ export type OrganizationUncheckedCreateWithoutHolidaysInput = {
   reimbursements?: Prisma.ReimbursementUncheckedCreateNestedManyWithoutOrganizationInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutOrganizationInput
   assetRequests?: Prisma.AssetRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  onboardings?: Prisma.EmployeeOnboardingUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutHolidaysInput = {
@@ -1202,6 +1233,7 @@ export type OrganizationUpdateWithoutHolidaysInput = {
   reimbursements?: Prisma.ReimbursementUpdateManyWithoutOrganizationNestedInput
   assets?: Prisma.AssetUpdateManyWithoutOrganizationNestedInput
   assetRequests?: Prisma.AssetRequestUpdateManyWithoutOrganizationNestedInput
+  onboardings?: Prisma.EmployeeOnboardingUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutHolidaysInput = {
@@ -1231,6 +1263,7 @@ export type OrganizationUncheckedUpdateWithoutHolidaysInput = {
   reimbursements?: Prisma.ReimbursementUncheckedUpdateManyWithoutOrganizationNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutOrganizationNestedInput
   assetRequests?: Prisma.AssetRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  onboardings?: Prisma.EmployeeOnboardingUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutEmployeesInput = {
@@ -1260,6 +1293,7 @@ export type OrganizationCreateWithoutEmployeesInput = {
   reimbursements?: Prisma.ReimbursementCreateNestedManyWithoutOrganizationInput
   assets?: Prisma.AssetCreateNestedManyWithoutOrganizationInput
   assetRequests?: Prisma.AssetRequestCreateNestedManyWithoutOrganizationInput
+  onboardings?: Prisma.EmployeeOnboardingCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutEmployeesInput = {
@@ -1289,6 +1323,7 @@ export type OrganizationUncheckedCreateWithoutEmployeesInput = {
   reimbursements?: Prisma.ReimbursementUncheckedCreateNestedManyWithoutOrganizationInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutOrganizationInput
   assetRequests?: Prisma.AssetRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  onboardings?: Prisma.EmployeeOnboardingUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutEmployeesInput = {
@@ -1334,6 +1369,7 @@ export type OrganizationUpdateWithoutEmployeesInput = {
   reimbursements?: Prisma.ReimbursementUpdateManyWithoutOrganizationNestedInput
   assets?: Prisma.AssetUpdateManyWithoutOrganizationNestedInput
   assetRequests?: Prisma.AssetRequestUpdateManyWithoutOrganizationNestedInput
+  onboardings?: Prisma.EmployeeOnboardingUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutEmployeesInput = {
@@ -1363,6 +1399,7 @@ export type OrganizationUncheckedUpdateWithoutEmployeesInput = {
   reimbursements?: Prisma.ReimbursementUncheckedUpdateManyWithoutOrganizationNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutOrganizationNestedInput
   assetRequests?: Prisma.AssetRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  onboardings?: Prisma.EmployeeOnboardingUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutTimesheetsInput = {
@@ -1392,6 +1429,7 @@ export type OrganizationCreateWithoutTimesheetsInput = {
   reimbursements?: Prisma.ReimbursementCreateNestedManyWithoutOrganizationInput
   assets?: Prisma.AssetCreateNestedManyWithoutOrganizationInput
   assetRequests?: Prisma.AssetRequestCreateNestedManyWithoutOrganizationInput
+  onboardings?: Prisma.EmployeeOnboardingCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutTimesheetsInput = {
@@ -1421,6 +1459,7 @@ export type OrganizationUncheckedCreateWithoutTimesheetsInput = {
   reimbursements?: Prisma.ReimbursementUncheckedCreateNestedManyWithoutOrganizationInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutOrganizationInput
   assetRequests?: Prisma.AssetRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  onboardings?: Prisma.EmployeeOnboardingUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutTimesheetsInput = {
@@ -1466,6 +1505,7 @@ export type OrganizationUpdateWithoutTimesheetsInput = {
   reimbursements?: Prisma.ReimbursementUpdateManyWithoutOrganizationNestedInput
   assets?: Prisma.AssetUpdateManyWithoutOrganizationNestedInput
   assetRequests?: Prisma.AssetRequestUpdateManyWithoutOrganizationNestedInput
+  onboardings?: Prisma.EmployeeOnboardingUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutTimesheetsInput = {
@@ -1495,6 +1535,7 @@ export type OrganizationUncheckedUpdateWithoutTimesheetsInput = {
   reimbursements?: Prisma.ReimbursementUncheckedUpdateManyWithoutOrganizationNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutOrganizationNestedInput
   assetRequests?: Prisma.AssetRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  onboardings?: Prisma.EmployeeOnboardingUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutOwnerInput = {
@@ -1524,6 +1565,7 @@ export type OrganizationCreateWithoutOwnerInput = {
   reimbursements?: Prisma.ReimbursementCreateNestedManyWithoutOrganizationInput
   assets?: Prisma.AssetCreateNestedManyWithoutOrganizationInput
   assetRequests?: Prisma.AssetRequestCreateNestedManyWithoutOrganizationInput
+  onboardings?: Prisma.EmployeeOnboardingCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutOwnerInput = {
@@ -1553,6 +1595,7 @@ export type OrganizationUncheckedCreateWithoutOwnerInput = {
   reimbursements?: Prisma.ReimbursementUncheckedCreateNestedManyWithoutOrganizationInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutOrganizationInput
   assetRequests?: Prisma.AssetRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  onboardings?: Prisma.EmployeeOnboardingUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutOwnerInput = {
@@ -1598,6 +1641,7 @@ export type OrganizationUpdateWithoutOwnerInput = {
   reimbursements?: Prisma.ReimbursementUpdateManyWithoutOrganizationNestedInput
   assets?: Prisma.AssetUpdateManyWithoutOrganizationNestedInput
   assetRequests?: Prisma.AssetRequestUpdateManyWithoutOrganizationNestedInput
+  onboardings?: Prisma.EmployeeOnboardingUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutOwnerInput = {
@@ -1627,6 +1671,7 @@ export type OrganizationUncheckedUpdateWithoutOwnerInput = {
   reimbursements?: Prisma.ReimbursementUncheckedUpdateManyWithoutOrganizationNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutOrganizationNestedInput
   assetRequests?: Prisma.AssetRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  onboardings?: Prisma.EmployeeOnboardingUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutProjectsInput = {
@@ -1656,6 +1701,7 @@ export type OrganizationCreateWithoutProjectsInput = {
   reimbursements?: Prisma.ReimbursementCreateNestedManyWithoutOrganizationInput
   assets?: Prisma.AssetCreateNestedManyWithoutOrganizationInput
   assetRequests?: Prisma.AssetRequestCreateNestedManyWithoutOrganizationInput
+  onboardings?: Prisma.EmployeeOnboardingCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutProjectsInput = {
@@ -1685,6 +1731,7 @@ export type OrganizationUncheckedCreateWithoutProjectsInput = {
   reimbursements?: Prisma.ReimbursementUncheckedCreateNestedManyWithoutOrganizationInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutOrganizationInput
   assetRequests?: Prisma.AssetRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  onboardings?: Prisma.EmployeeOnboardingUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutProjectsInput = {
@@ -1730,6 +1777,7 @@ export type OrganizationUpdateWithoutProjectsInput = {
   reimbursements?: Prisma.ReimbursementUpdateManyWithoutOrganizationNestedInput
   assets?: Prisma.AssetUpdateManyWithoutOrganizationNestedInput
   assetRequests?: Prisma.AssetRequestUpdateManyWithoutOrganizationNestedInput
+  onboardings?: Prisma.EmployeeOnboardingUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutProjectsInput = {
@@ -1759,6 +1807,7 @@ export type OrganizationUncheckedUpdateWithoutProjectsInput = {
   reimbursements?: Prisma.ReimbursementUncheckedUpdateManyWithoutOrganizationNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutOrganizationNestedInput
   assetRequests?: Prisma.AssetRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  onboardings?: Prisma.EmployeeOnboardingUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutSkillsInput = {
@@ -1788,6 +1837,7 @@ export type OrganizationCreateWithoutSkillsInput = {
   reimbursements?: Prisma.ReimbursementCreateNestedManyWithoutOrganizationInput
   assets?: Prisma.AssetCreateNestedManyWithoutOrganizationInput
   assetRequests?: Prisma.AssetRequestCreateNestedManyWithoutOrganizationInput
+  onboardings?: Prisma.EmployeeOnboardingCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutSkillsInput = {
@@ -1817,6 +1867,7 @@ export type OrganizationUncheckedCreateWithoutSkillsInput = {
   reimbursements?: Prisma.ReimbursementUncheckedCreateNestedManyWithoutOrganizationInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutOrganizationInput
   assetRequests?: Prisma.AssetRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  onboardings?: Prisma.EmployeeOnboardingUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutSkillsInput = {
@@ -1862,6 +1913,7 @@ export type OrganizationUpdateWithoutSkillsInput = {
   reimbursements?: Prisma.ReimbursementUpdateManyWithoutOrganizationNestedInput
   assets?: Prisma.AssetUpdateManyWithoutOrganizationNestedInput
   assetRequests?: Prisma.AssetRequestUpdateManyWithoutOrganizationNestedInput
+  onboardings?: Prisma.EmployeeOnboardingUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutSkillsInput = {
@@ -1891,6 +1943,7 @@ export type OrganizationUncheckedUpdateWithoutSkillsInput = {
   reimbursements?: Prisma.ReimbursementUncheckedUpdateManyWithoutOrganizationNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutOrganizationNestedInput
   assetRequests?: Prisma.AssetRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  onboardings?: Prisma.EmployeeOnboardingUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutLeavesInput = {
@@ -1920,6 +1973,7 @@ export type OrganizationCreateWithoutLeavesInput = {
   reimbursements?: Prisma.ReimbursementCreateNestedManyWithoutOrganizationInput
   assets?: Prisma.AssetCreateNestedManyWithoutOrganizationInput
   assetRequests?: Prisma.AssetRequestCreateNestedManyWithoutOrganizationInput
+  onboardings?: Prisma.EmployeeOnboardingCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutLeavesInput = {
@@ -1949,6 +2003,7 @@ export type OrganizationUncheckedCreateWithoutLeavesInput = {
   reimbursements?: Prisma.ReimbursementUncheckedCreateNestedManyWithoutOrganizationInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutOrganizationInput
   assetRequests?: Prisma.AssetRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  onboardings?: Prisma.EmployeeOnboardingUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutLeavesInput = {
@@ -1994,6 +2049,7 @@ export type OrganizationUpdateWithoutLeavesInput = {
   reimbursements?: Prisma.ReimbursementUpdateManyWithoutOrganizationNestedInput
   assets?: Prisma.AssetUpdateManyWithoutOrganizationNestedInput
   assetRequests?: Prisma.AssetRequestUpdateManyWithoutOrganizationNestedInput
+  onboardings?: Prisma.EmployeeOnboardingUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutLeavesInput = {
@@ -2023,6 +2079,7 @@ export type OrganizationUncheckedUpdateWithoutLeavesInput = {
   reimbursements?: Prisma.ReimbursementUncheckedUpdateManyWithoutOrganizationNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutOrganizationNestedInput
   assetRequests?: Prisma.AssetRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  onboardings?: Prisma.EmployeeOnboardingUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutCompOffsInput = {
@@ -2052,6 +2109,7 @@ export type OrganizationCreateWithoutCompOffsInput = {
   reimbursements?: Prisma.ReimbursementCreateNestedManyWithoutOrganizationInput
   assets?: Prisma.AssetCreateNestedManyWithoutOrganizationInput
   assetRequests?: Prisma.AssetRequestCreateNestedManyWithoutOrganizationInput
+  onboardings?: Prisma.EmployeeOnboardingCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutCompOffsInput = {
@@ -2081,6 +2139,7 @@ export type OrganizationUncheckedCreateWithoutCompOffsInput = {
   reimbursements?: Prisma.ReimbursementUncheckedCreateNestedManyWithoutOrganizationInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutOrganizationInput
   assetRequests?: Prisma.AssetRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  onboardings?: Prisma.EmployeeOnboardingUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutCompOffsInput = {
@@ -2126,6 +2185,7 @@ export type OrganizationUpdateWithoutCompOffsInput = {
   reimbursements?: Prisma.ReimbursementUpdateManyWithoutOrganizationNestedInput
   assets?: Prisma.AssetUpdateManyWithoutOrganizationNestedInput
   assetRequests?: Prisma.AssetRequestUpdateManyWithoutOrganizationNestedInput
+  onboardings?: Prisma.EmployeeOnboardingUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutCompOffsInput = {
@@ -2155,6 +2215,7 @@ export type OrganizationUncheckedUpdateWithoutCompOffsInput = {
   reimbursements?: Prisma.ReimbursementUncheckedUpdateManyWithoutOrganizationNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutOrganizationNestedInput
   assetRequests?: Prisma.AssetRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  onboardings?: Prisma.EmployeeOnboardingUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutReimbursementsInput = {
@@ -2184,6 +2245,7 @@ export type OrganizationCreateWithoutReimbursementsInput = {
   compOffs?: Prisma.LeaveCompensationCreateNestedManyWithoutOrganizationInput
   assets?: Prisma.AssetCreateNestedManyWithoutOrganizationInput
   assetRequests?: Prisma.AssetRequestCreateNestedManyWithoutOrganizationInput
+  onboardings?: Prisma.EmployeeOnboardingCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutReimbursementsInput = {
@@ -2213,6 +2275,7 @@ export type OrganizationUncheckedCreateWithoutReimbursementsInput = {
   compOffs?: Prisma.LeaveCompensationUncheckedCreateNestedManyWithoutOrganizationInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutOrganizationInput
   assetRequests?: Prisma.AssetRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  onboardings?: Prisma.EmployeeOnboardingUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutReimbursementsInput = {
@@ -2258,6 +2321,7 @@ export type OrganizationUpdateWithoutReimbursementsInput = {
   compOffs?: Prisma.LeaveCompensationUpdateManyWithoutOrganizationNestedInput
   assets?: Prisma.AssetUpdateManyWithoutOrganizationNestedInput
   assetRequests?: Prisma.AssetRequestUpdateManyWithoutOrganizationNestedInput
+  onboardings?: Prisma.EmployeeOnboardingUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutReimbursementsInput = {
@@ -2287,6 +2351,7 @@ export type OrganizationUncheckedUpdateWithoutReimbursementsInput = {
   compOffs?: Prisma.LeaveCompensationUncheckedUpdateManyWithoutOrganizationNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutOrganizationNestedInput
   assetRequests?: Prisma.AssetRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  onboardings?: Prisma.EmployeeOnboardingUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutAssetsInput = {
@@ -2316,6 +2381,7 @@ export type OrganizationCreateWithoutAssetsInput = {
   compOffs?: Prisma.LeaveCompensationCreateNestedManyWithoutOrganizationInput
   reimbursements?: Prisma.ReimbursementCreateNestedManyWithoutOrganizationInput
   assetRequests?: Prisma.AssetRequestCreateNestedManyWithoutOrganizationInput
+  onboardings?: Prisma.EmployeeOnboardingCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutAssetsInput = {
@@ -2345,6 +2411,7 @@ export type OrganizationUncheckedCreateWithoutAssetsInput = {
   compOffs?: Prisma.LeaveCompensationUncheckedCreateNestedManyWithoutOrganizationInput
   reimbursements?: Prisma.ReimbursementUncheckedCreateNestedManyWithoutOrganizationInput
   assetRequests?: Prisma.AssetRequestUncheckedCreateNestedManyWithoutOrganizationInput
+  onboardings?: Prisma.EmployeeOnboardingUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutAssetsInput = {
@@ -2390,6 +2457,7 @@ export type OrganizationUpdateWithoutAssetsInput = {
   compOffs?: Prisma.LeaveCompensationUpdateManyWithoutOrganizationNestedInput
   reimbursements?: Prisma.ReimbursementUpdateManyWithoutOrganizationNestedInput
   assetRequests?: Prisma.AssetRequestUpdateManyWithoutOrganizationNestedInput
+  onboardings?: Prisma.EmployeeOnboardingUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutAssetsInput = {
@@ -2419,6 +2487,7 @@ export type OrganizationUncheckedUpdateWithoutAssetsInput = {
   compOffs?: Prisma.LeaveCompensationUncheckedUpdateManyWithoutOrganizationNestedInput
   reimbursements?: Prisma.ReimbursementUncheckedUpdateManyWithoutOrganizationNestedInput
   assetRequests?: Prisma.AssetRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+  onboardings?: Prisma.EmployeeOnboardingUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutAssetRequestsInput = {
@@ -2448,6 +2517,7 @@ export type OrganizationCreateWithoutAssetRequestsInput = {
   compOffs?: Prisma.LeaveCompensationCreateNestedManyWithoutOrganizationInput
   reimbursements?: Prisma.ReimbursementCreateNestedManyWithoutOrganizationInput
   assets?: Prisma.AssetCreateNestedManyWithoutOrganizationInput
+  onboardings?: Prisma.EmployeeOnboardingCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutAssetRequestsInput = {
@@ -2477,6 +2547,7 @@ export type OrganizationUncheckedCreateWithoutAssetRequestsInput = {
   compOffs?: Prisma.LeaveCompensationUncheckedCreateNestedManyWithoutOrganizationInput
   reimbursements?: Prisma.ReimbursementUncheckedCreateNestedManyWithoutOrganizationInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutOrganizationInput
+  onboardings?: Prisma.EmployeeOnboardingUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutAssetRequestsInput = {
@@ -2522,6 +2593,7 @@ export type OrganizationUpdateWithoutAssetRequestsInput = {
   compOffs?: Prisma.LeaveCompensationUpdateManyWithoutOrganizationNestedInput
   reimbursements?: Prisma.ReimbursementUpdateManyWithoutOrganizationNestedInput
   assets?: Prisma.AssetUpdateManyWithoutOrganizationNestedInput
+  onboardings?: Prisma.EmployeeOnboardingUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutAssetRequestsInput = {
@@ -2551,6 +2623,143 @@ export type OrganizationUncheckedUpdateWithoutAssetRequestsInput = {
   compOffs?: Prisma.LeaveCompensationUncheckedUpdateManyWithoutOrganizationNestedInput
   reimbursements?: Prisma.ReimbursementUncheckedUpdateManyWithoutOrganizationNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutOrganizationNestedInput
+  onboardings?: Prisma.EmployeeOnboardingUncheckedUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationCreateWithoutOnboardingsInput = {
+  id?: string
+  name: string
+  slug: string
+  logo?: string | null
+  website?: string | null
+  industry?: string | null
+  size?: $Enums.CompanySize | null
+  description?: string | null
+  address?: string | null
+  city?: string | null
+  country?: string | null
+  phone?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  owner: Prisma.UserCreateNestedOneWithoutOrganizationInput
+  employees?: Prisma.EmployeeCreateNestedManyWithoutOrganizationInput
+  departments?: Prisma.DepartmentCreateNestedManyWithoutOrganizationInput
+  positions?: Prisma.PositionCreateNestedManyWithoutOrganizationInput
+  holidays?: Prisma.HolidayCreateNestedManyWithoutOrganizationInput
+  timesheets?: Prisma.TimesheetCreateNestedManyWithoutOrganizationInput
+  projects?: Prisma.ProjectCreateNestedManyWithoutOrganizationInput
+  skills?: Prisma.SkillCreateNestedManyWithoutOrganizationInput
+  leaves?: Prisma.LeaveApplicationCreateNestedManyWithoutOrganizationInput
+  compOffs?: Prisma.LeaveCompensationCreateNestedManyWithoutOrganizationInput
+  reimbursements?: Prisma.ReimbursementCreateNestedManyWithoutOrganizationInput
+  assets?: Prisma.AssetCreateNestedManyWithoutOrganizationInput
+  assetRequests?: Prisma.AssetRequestCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationUncheckedCreateWithoutOnboardingsInput = {
+  id?: string
+  name: string
+  slug: string
+  logo?: string | null
+  website?: string | null
+  industry?: string | null
+  size?: $Enums.CompanySize | null
+  description?: string | null
+  address?: string | null
+  city?: string | null
+  country?: string | null
+  phone?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  ownerId: string
+  employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutOrganizationInput
+  departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutOrganizationInput
+  positions?: Prisma.PositionUncheckedCreateNestedManyWithoutOrganizationInput
+  holidays?: Prisma.HolidayUncheckedCreateNestedManyWithoutOrganizationInput
+  timesheets?: Prisma.TimesheetUncheckedCreateNestedManyWithoutOrganizationInput
+  projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutOrganizationInput
+  skills?: Prisma.SkillUncheckedCreateNestedManyWithoutOrganizationInput
+  leaves?: Prisma.LeaveApplicationUncheckedCreateNestedManyWithoutOrganizationInput
+  compOffs?: Prisma.LeaveCompensationUncheckedCreateNestedManyWithoutOrganizationInput
+  reimbursements?: Prisma.ReimbursementUncheckedCreateNestedManyWithoutOrganizationInput
+  assets?: Prisma.AssetUncheckedCreateNestedManyWithoutOrganizationInput
+  assetRequests?: Prisma.AssetRequestUncheckedCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationCreateOrConnectWithoutOnboardingsInput = {
+  where: Prisma.OrganizationWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutOnboardingsInput, Prisma.OrganizationUncheckedCreateWithoutOnboardingsInput>
+}
+
+export type OrganizationUpsertWithoutOnboardingsInput = {
+  update: Prisma.XOR<Prisma.OrganizationUpdateWithoutOnboardingsInput, Prisma.OrganizationUncheckedUpdateWithoutOnboardingsInput>
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutOnboardingsInput, Prisma.OrganizationUncheckedCreateWithoutOnboardingsInput>
+  where?: Prisma.OrganizationWhereInput
+}
+
+export type OrganizationUpdateToOneWithWhereWithoutOnboardingsInput = {
+  where?: Prisma.OrganizationWhereInput
+  data: Prisma.XOR<Prisma.OrganizationUpdateWithoutOnboardingsInput, Prisma.OrganizationUncheckedUpdateWithoutOnboardingsInput>
+}
+
+export type OrganizationUpdateWithoutOnboardingsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  industry?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.NullableEnumCompanySizeFieldUpdateOperationsInput | $Enums.CompanySize | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneRequiredWithoutOrganizationNestedInput
+  employees?: Prisma.EmployeeUpdateManyWithoutOrganizationNestedInput
+  departments?: Prisma.DepartmentUpdateManyWithoutOrganizationNestedInput
+  positions?: Prisma.PositionUpdateManyWithoutOrganizationNestedInput
+  holidays?: Prisma.HolidayUpdateManyWithoutOrganizationNestedInput
+  timesheets?: Prisma.TimesheetUpdateManyWithoutOrganizationNestedInput
+  projects?: Prisma.ProjectUpdateManyWithoutOrganizationNestedInput
+  skills?: Prisma.SkillUpdateManyWithoutOrganizationNestedInput
+  leaves?: Prisma.LeaveApplicationUpdateManyWithoutOrganizationNestedInput
+  compOffs?: Prisma.LeaveCompensationUpdateManyWithoutOrganizationNestedInput
+  reimbursements?: Prisma.ReimbursementUpdateManyWithoutOrganizationNestedInput
+  assets?: Prisma.AssetUpdateManyWithoutOrganizationNestedInput
+  assetRequests?: Prisma.AssetRequestUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationUncheckedUpdateWithoutOnboardingsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  industry?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.NullableEnumCompanySizeFieldUpdateOperationsInput | $Enums.CompanySize | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  employees?: Prisma.EmployeeUncheckedUpdateManyWithoutOrganizationNestedInput
+  departments?: Prisma.DepartmentUncheckedUpdateManyWithoutOrganizationNestedInput
+  positions?: Prisma.PositionUncheckedUpdateManyWithoutOrganizationNestedInput
+  holidays?: Prisma.HolidayUncheckedUpdateManyWithoutOrganizationNestedInput
+  timesheets?: Prisma.TimesheetUncheckedUpdateManyWithoutOrganizationNestedInput
+  projects?: Prisma.ProjectUncheckedUpdateManyWithoutOrganizationNestedInput
+  skills?: Prisma.SkillUncheckedUpdateManyWithoutOrganizationNestedInput
+  leaves?: Prisma.LeaveApplicationUncheckedUpdateManyWithoutOrganizationNestedInput
+  compOffs?: Prisma.LeaveCompensationUncheckedUpdateManyWithoutOrganizationNestedInput
+  reimbursements?: Prisma.ReimbursementUncheckedUpdateManyWithoutOrganizationNestedInput
+  assets?: Prisma.AssetUncheckedUpdateManyWithoutOrganizationNestedInput
+  assetRequests?: Prisma.AssetRequestUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 
@@ -2571,6 +2780,7 @@ export type OrganizationCountOutputType = {
   reimbursements: number
   assets: number
   assetRequests: number
+  onboardings: number
 }
 
 export type OrganizationCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2586,6 +2796,7 @@ export type OrganizationCountOutputTypeSelect<ExtArgs extends runtime.Types.Exte
   reimbursements?: boolean | OrganizationCountOutputTypeCountReimbursementsArgs
   assets?: boolean | OrganizationCountOutputTypeCountAssetsArgs
   assetRequests?: boolean | OrganizationCountOutputTypeCountAssetRequestsArgs
+  onboardings?: boolean | OrganizationCountOutputTypeCountOnboardingsArgs
 }
 
 /**
@@ -2682,6 +2893,13 @@ export type OrganizationCountOutputTypeCountAssetRequestsArgs<ExtArgs extends ru
   where?: Prisma.AssetRequestWhereInput
 }
 
+/**
+ * OrganizationCountOutputType without action
+ */
+export type OrganizationCountOutputTypeCountOnboardingsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.EmployeeOnboardingWhereInput
+}
+
 
 export type OrganizationSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -2712,6 +2930,7 @@ export type OrganizationSelect<ExtArgs extends runtime.Types.Extensions.Internal
   reimbursements?: boolean | Prisma.Organization$reimbursementsArgs<ExtArgs>
   assets?: boolean | Prisma.Organization$assetsArgs<ExtArgs>
   assetRequests?: boolean | Prisma.Organization$assetRequestsArgs<ExtArgs>
+  onboardings?: boolean | Prisma.Organization$onboardingsArgs<ExtArgs>
   _count?: boolean | Prisma.OrganizationCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["organization"]>
 
@@ -2786,6 +3005,7 @@ export type OrganizationInclude<ExtArgs extends runtime.Types.Extensions.Interna
   reimbursements?: boolean | Prisma.Organization$reimbursementsArgs<ExtArgs>
   assets?: boolean | Prisma.Organization$assetsArgs<ExtArgs>
   assetRequests?: boolean | Prisma.Organization$assetRequestsArgs<ExtArgs>
+  onboardings?: boolean | Prisma.Organization$onboardingsArgs<ExtArgs>
   _count?: boolean | Prisma.OrganizationCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type OrganizationIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2811,6 +3031,7 @@ export type $OrganizationPayload<ExtArgs extends runtime.Types.Extensions.Intern
     reimbursements: Prisma.$ReimbursementPayload<ExtArgs>[]
     assets: Prisma.$AssetPayload<ExtArgs>[]
     assetRequests: Prisma.$AssetRequestPayload<ExtArgs>[]
+    onboardings: Prisma.$EmployeeOnboardingPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -3235,6 +3456,7 @@ export interface Prisma__OrganizationClient<T, Null = never, ExtArgs extends run
   reimbursements<T extends Prisma.Organization$reimbursementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$reimbursementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReimbursementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   assets<T extends Prisma.Organization$assetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$assetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   assetRequests<T extends Prisma.Organization$assetRequestsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$assetRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AssetRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  onboardings<T extends Prisma.Organization$onboardingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$onboardingsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EmployeeOnboardingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3965,6 +4187,30 @@ export type Organization$assetRequestsArgs<ExtArgs extends runtime.Types.Extensi
   take?: number
   skip?: number
   distinct?: Prisma.AssetRequestScalarFieldEnum | Prisma.AssetRequestScalarFieldEnum[]
+}
+
+/**
+ * Organization.onboardings
+ */
+export type Organization$onboardingsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the EmployeeOnboarding
+   */
+  select?: Prisma.EmployeeOnboardingSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the EmployeeOnboarding
+   */
+  omit?: Prisma.EmployeeOnboardingOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.EmployeeOnboardingInclude<ExtArgs> | null
+  where?: Prisma.EmployeeOnboardingWhereInput
+  orderBy?: Prisma.EmployeeOnboardingOrderByWithRelationInput | Prisma.EmployeeOnboardingOrderByWithRelationInput[]
+  cursor?: Prisma.EmployeeOnboardingWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.EmployeeOnboardingScalarFieldEnum | Prisma.EmployeeOnboardingScalarFieldEnum[]
 }
 
 /**

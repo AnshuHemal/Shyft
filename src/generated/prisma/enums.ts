@@ -130,7 +130,10 @@ export const NotificationType = {
   REIMBURSEMENT_PAID: 'REIMBURSEMENT_PAID',
   ASSET_REQUEST_SUBMITTED: 'ASSET_REQUEST_SUBMITTED',
   ASSET_REQUEST_APPROVED: 'ASSET_REQUEST_APPROVED',
-  ASSET_REQUEST_REJECTED: 'ASSET_REQUEST_REJECTED'
+  ASSET_REQUEST_REJECTED: 'ASSET_REQUEST_REJECTED',
+  ONBOARDING_SUBMITTED: 'ONBOARDING_SUBMITTED',
+  ONBOARDING_APPROVED: 'ONBOARDING_APPROVED',
+  ONBOARDING_REJECTED: 'ONBOARDING_REJECTED'
 } as const
 
 export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType]
@@ -201,3 +204,13 @@ export const AssetRequestStatus = {
 } as const
 
 export type AssetRequestStatus = (typeof AssetRequestStatus)[keyof typeof AssetRequestStatus]
+
+
+export const OnboardingStatus = {
+  PENDING_SUBMISSION: 'PENDING_SUBMISSION',
+  UNDER_REVIEW: 'UNDER_REVIEW',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+} as const
+
+export type OnboardingStatus = (typeof OnboardingStatus)[keyof typeof OnboardingStatus]

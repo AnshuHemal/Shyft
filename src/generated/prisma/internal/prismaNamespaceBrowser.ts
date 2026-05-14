@@ -73,7 +73,8 @@ export const ModelName = {
   ReimbursementProof: 'ReimbursementProof',
   Reimbursement: 'Reimbursement',
   Asset: 'Asset',
-  AssetRequest: 'AssetRequest'
+  AssetRequest: 'AssetRequest',
+  EmployeeOnboarding: 'EmployeeOnboarding'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -397,6 +398,7 @@ export const NotificationScalarFieldEnum = {
   compOffId: 'compOffId',
   reimbursementId: 'reimbursementId',
   assetRequestId: 'assetRequestId',
+  onboardingId: 'onboardingId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -501,6 +503,36 @@ export const AssetRequestScalarFieldEnum = {
 } as const
 
 export type AssetRequestScalarFieldEnum = (typeof AssetRequestScalarFieldEnum)[keyof typeof AssetRequestScalarFieldEnum]
+
+
+export const EmployeeOnboardingScalarFieldEnum = {
+  id: 'id',
+  contactNumber: 'contactNumber',
+  emergencyContactNumber: 'emergencyContactNumber',
+  currentAddress: 'currentAddress',
+  permanentAddress: 'permanentAddress',
+  dateOfBirth: 'dateOfBirth',
+  isExperienced: 'isExperienced',
+  passbookUrl: 'passbookUrl',
+  panCardUrl: 'panCardUrl',
+  aadhaarCardUrl: 'aadhaarCardUrl',
+  marksheet10thUrl: 'marksheet10thUrl',
+  marksheet12thUrl: 'marksheet12thUrl',
+  marksheetGraduationUrl: 'marksheetGraduationUrl',
+  salarySlipUrl: 'salarySlipUrl',
+  experienceLetterUrl: 'experienceLetterUrl',
+  relievingLetterUrl: 'relievingLetterUrl',
+  passportPhotoUrl: 'passportPhotoUrl',
+  casualPhotoUrl: 'casualPhotoUrl',
+  status: 'status',
+  hrNote: 'hrNote',
+  employeeId: 'employeeId',
+  organizationId: 'organizationId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type EmployeeOnboardingScalarFieldEnum = (typeof EmployeeOnboardingScalarFieldEnum)[keyof typeof EmployeeOnboardingScalarFieldEnum]
 
 
 export const SortOrder = {

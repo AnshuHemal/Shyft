@@ -406,7 +406,8 @@ export const ModelName = {
   ReimbursementProof: 'ReimbursementProof',
   Reimbursement: 'Reimbursement',
   Asset: 'Asset',
-  AssetRequest: 'AssetRequest'
+  AssetRequest: 'AssetRequest',
+  EmployeeOnboarding: 'EmployeeOnboarding'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -422,7 +423,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "organization" | "department" | "position" | "holiday" | "employee" | "timesheet" | "timesheetEntry" | "timesheetTask" | "user" | "session" | "account" | "verification" | "project" | "projectMember" | "skill" | "employeeSkill" | "leaveApplication" | "notification" | "leaveCompensation" | "reimbursementProof" | "reimbursement" | "asset" | "assetRequest"
+    modelProps: "organization" | "department" | "position" | "holiday" | "employee" | "timesheet" | "timesheetEntry" | "timesheetTask" | "user" | "session" | "account" | "verification" | "project" | "projectMember" | "skill" | "employeeSkill" | "leaveApplication" | "notification" | "leaveCompensation" | "reimbursementProof" | "reimbursement" | "asset" | "assetRequest" | "employeeOnboarding"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2128,6 +2129,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    EmployeeOnboarding: {
+      payload: Prisma.$EmployeeOnboardingPayload<ExtArgs>
+      fields: Prisma.EmployeeOnboardingFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.EmployeeOnboardingFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployeeOnboardingPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.EmployeeOnboardingFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployeeOnboardingPayload>
+        }
+        findFirst: {
+          args: Prisma.EmployeeOnboardingFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployeeOnboardingPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.EmployeeOnboardingFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployeeOnboardingPayload>
+        }
+        findMany: {
+          args: Prisma.EmployeeOnboardingFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployeeOnboardingPayload>[]
+        }
+        create: {
+          args: Prisma.EmployeeOnboardingCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployeeOnboardingPayload>
+        }
+        createMany: {
+          args: Prisma.EmployeeOnboardingCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.EmployeeOnboardingCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployeeOnboardingPayload>[]
+        }
+        delete: {
+          args: Prisma.EmployeeOnboardingDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployeeOnboardingPayload>
+        }
+        update: {
+          args: Prisma.EmployeeOnboardingUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployeeOnboardingPayload>
+        }
+        deleteMany: {
+          args: Prisma.EmployeeOnboardingDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.EmployeeOnboardingUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.EmployeeOnboardingUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployeeOnboardingPayload>[]
+        }
+        upsert: {
+          args: Prisma.EmployeeOnboardingUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployeeOnboardingPayload>
+        }
+        aggregate: {
+          args: Prisma.EmployeeOnboardingAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateEmployeeOnboarding>
+        }
+        groupBy: {
+          args: Prisma.EmployeeOnboardingGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EmployeeOnboardingGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.EmployeeOnboardingCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EmployeeOnboardingCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -2472,6 +2547,7 @@ export const NotificationScalarFieldEnum = {
   compOffId: 'compOffId',
   reimbursementId: 'reimbursementId',
   assetRequestId: 'assetRequestId',
+  onboardingId: 'onboardingId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -2576,6 +2652,36 @@ export const AssetRequestScalarFieldEnum = {
 } as const
 
 export type AssetRequestScalarFieldEnum = (typeof AssetRequestScalarFieldEnum)[keyof typeof AssetRequestScalarFieldEnum]
+
+
+export const EmployeeOnboardingScalarFieldEnum = {
+  id: 'id',
+  contactNumber: 'contactNumber',
+  emergencyContactNumber: 'emergencyContactNumber',
+  currentAddress: 'currentAddress',
+  permanentAddress: 'permanentAddress',
+  dateOfBirth: 'dateOfBirth',
+  isExperienced: 'isExperienced',
+  passbookUrl: 'passbookUrl',
+  panCardUrl: 'panCardUrl',
+  aadhaarCardUrl: 'aadhaarCardUrl',
+  marksheet10thUrl: 'marksheet10thUrl',
+  marksheet12thUrl: 'marksheet12thUrl',
+  marksheetGraduationUrl: 'marksheetGraduationUrl',
+  salarySlipUrl: 'salarySlipUrl',
+  experienceLetterUrl: 'experienceLetterUrl',
+  relievingLetterUrl: 'relievingLetterUrl',
+  passportPhotoUrl: 'passportPhotoUrl',
+  casualPhotoUrl: 'casualPhotoUrl',
+  status: 'status',
+  hrNote: 'hrNote',
+  employeeId: 'employeeId',
+  organizationId: 'organizationId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type EmployeeOnboardingScalarFieldEnum = (typeof EmployeeOnboardingScalarFieldEnum)[keyof typeof EmployeeOnboardingScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -2967,6 +3073,20 @@ export type EnumAssetRequestStatusFieldRefInput<$PrismaModel> = FieldRefInputTyp
 export type ListEnumAssetRequestStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AssetRequestStatus[]'>
     
 
+
+/**
+ * Reference to a field of type 'OnboardingStatus'
+ */
+export type EnumOnboardingStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OnboardingStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'OnboardingStatus[]'
+ */
+export type ListEnumOnboardingStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OnboardingStatus[]'>
+    
+
 /**
  * Batch Payload for updateMany & deleteMany & createMany
  */
@@ -3100,6 +3220,7 @@ export type GlobalOmitConfig = {
   reimbursement?: Prisma.ReimbursementOmit
   asset?: Prisma.AssetOmit
   assetRequest?: Prisma.AssetRequestOmit
+  employeeOnboarding?: Prisma.EmployeeOnboardingOmit
 }
 
 /* Types for Logging */

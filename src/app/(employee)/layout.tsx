@@ -11,7 +11,11 @@ export default async function EmployeeLayout({
   const session = await getSession();
   if (!session) redirect("/login");
 
-  const user = session.user as typeof session.user & { role: string };
+  const user = session.user as typeof session.user & { 
+    role: string;
+    onboardingCompleted: boolean;
+    accountStatus: string;
+  };
 
   // Only EMPLOYEE role can access this layout
   if (user.role !== "EMPLOYEE") {

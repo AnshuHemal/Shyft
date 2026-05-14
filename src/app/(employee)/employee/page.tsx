@@ -7,7 +7,7 @@ export const metadata: Metadata = { title: "My Dashboard" };
 
 export default async function EmployeeDashboardPage() {
   const session = await getSession();
-  const user = session!.user;
+  const user = session!.user as any;
 
   const employee = await prisma.employee.findUnique({
     where: { userId: user.id },
@@ -53,6 +53,7 @@ export default async function EmployeeDashboardPage() {
       timesheet={timesheet}
       currentMonth={now.getMonth() + 1}
       currentYear={now.getFullYear()}
+      onboardingCompleted={user.onboardingCompleted}
     />
   );
 }
