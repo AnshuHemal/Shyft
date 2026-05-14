@@ -171,7 +171,7 @@ function RowDisplay({ entry, onEdit, readOnly, holidayName }: RowDisplayProps) {
             // Saturday gets a distinct primary-colored badge
             <div className="space-y-1">
               <span className={cn("inline-flex items-center rounded-full border px-2.5 py-0.5 text-[12px] font-bold", SATURDAY_BADGE_CLASS)}>
-                Sat (Comp-Off)
+                Comp-Off
               </span>
             </div>
           ) : (

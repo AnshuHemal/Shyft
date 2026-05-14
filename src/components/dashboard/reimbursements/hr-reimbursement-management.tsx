@@ -198,11 +198,7 @@ function ReviewDialog({
           )}
         </div>
 
-        <DialogFooter className="p-8 pt-0 bg-card shrink-0 flex gap-3 sm:justify-between">
-          <Button variant="ghost" onClick={onClose} disabled={loading} className="font-bold h-11 rounded-xl">
-            {action === "view" ? "Close" : "Cancel"}
-          </Button>
-          
+        <DialogFooter className="pt-0 bg-card shrink-0 flex gap-3 sm:justify-between">
           {action !== "view" && (
             <Button
               onClick={() => onConfirm(note)}
