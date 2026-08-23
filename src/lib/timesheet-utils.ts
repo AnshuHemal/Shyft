@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Timesheet utility functions shared between employee and HR views.
  */
 
@@ -38,8 +38,10 @@ export function calcNetMinutes(
   endTime: string,
   breakMinutes: number = 0
 ): number {
+  if (!startTime || !endTime) return 0;
   const [sh, sm] = startTime.split(":").map(Number);
   const [eh, em] = endTime.split(":").map(Number);
+  if (isNaN(sh) || isNaN(sm) || isNaN(eh) || isNaN(em)) return 0;
   const total = (eh * 60 + em) - (sh * 60 + sm);
   return Math.max(0, total - breakMinutes);
 }
@@ -52,6 +54,33 @@ export function formatHours(minutes: number): string {
   const h = Math.floor(minutes / 60);
   const m = minutes % 60;
   return m > 0 ? `${h}h ${m}m` : `${h}h`;
+}
+
+/**
+ * Format a 24h "HH:MM" time string into 12h AM/PM format.
+ * e.g., "09:00" -> "09:00 AM", "17:00" -> "05:00 PM"
+ */
+export function formatTime12h(timeStr: string, padZero: boolean = true): string {
+  if (!timeStr || !timeStr.includes(":")) return timeStr || "";
+  const [hStr, mStr] = timeStr.split(":");
+  const h = parseInt(hStr, 10);
+  const m = mStr ? mStr.padStart(2, "0") : "00";
+  if (isNaN(h)) return timeStr;
+  const hour12 = h === 0 ? 12 : h > 12 ? h - 12 : h;
+  const ampm = h < 12 ? "AM" : "PM";
+  const displayHour = padZero ? String(hour12).padStart(2, "0") : String(hour12);
+  return `${displayHour}:${m} ${ampm}`;
+}
+
+/**
+ * Format a 24h start/end time range into 12h AM/PM format.
+ * e.g., "09:00", "17:00" -> "09:00 AM - 05:00 PM"
+ */
+export function formatTimeRange12h(startTime: string, endTime: string, padZero: boolean = true): string {
+  if (!startTime && !endTime) return "—";
+  if (!startTime) return formatTime12h(endTime, padZero);
+  if (!endTime) return formatTime12h(startTime, padZero);
+  return `${formatTime12h(startTime, padZero)} - ${formatTime12h(endTime, padZero)}`;
 }
 
 /**
@@ -115,7 +144,7 @@ export function getTimeOptions(): { value: string; label: string }[] {
       const value = `${hh}:${mm}`;
       const hour12 = h === 0 ? 12 : h > 12 ? h - 12 : h;
       const ampm = h < 12 ? "AM" : "PM";
-      const label = `${hour12}:${mm} ${ampm}`;
+      const label = `${String(hour12).padStart(2, "0")}:${mm} ${ampm}`;
       options.push({ value, label });
     }
   }

@@ -15,6 +15,7 @@ import {
   isFutureDate,
   isMonthComplete,
   daysRemainingInMonth,
+  formatTimeRange12h,
 } from "@/lib/timesheet-utils";
 import {
   ChevronLeftIcon,
@@ -42,7 +43,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 
-// ── Types ─────────────────────────────────────────────────────────────────────
+// â”€â”€ Types â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 type DayType = "WORKING" | "HOLIDAY" | "LEAVE" | "HALF_DAY" | "WEEKEND";
 type TimesheetStatus = "DRAFT" | "SUBMITTED" | "APPROVED" | "REJECTED" | "HR_SUBMITTED" | "HR_APPROVED";
@@ -78,13 +79,13 @@ interface Timesheet {
   entries: TimesheetEntry[];
 }
 
-// ── Status config ─────────────────────────────────────────────────────────────
+// â”€â”€ Status config â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const STATUS_CONFIG: Record<TimesheetStatus, { label: string; color: string }> = {
   DRAFT:        { label: "Draft",                    color: "bg-muted text-muted-foreground border-border" },
   SUBMITTED:    { label: "Submitted for review",     color: "bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20" },
   APPROVED:     { label: "Approved by lead",         color: "bg-green-500/10 text-green-600 dark:text-green-400 border-green-500/20" },
-  REJECTED:     { label: "Rejected — please revise", color: "bg-destructive/10 text-destructive border-destructive/20" },
+  REJECTED:     { label: "Rejected â€” please revise", color: "bg-destructive/10 text-destructive border-destructive/20" },
   HR_SUBMITTED: { label: "Submitted to HR",          color: "bg-violet-500/10 text-violet-600 dark:text-violet-400 border-violet-500/20" },
   HR_APPROVED:  { label: "HR Approved",              color: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20" },
 };
@@ -97,10 +98,10 @@ const DAY_TYPE_CONFIG: Record<DayType, { label: string; rowClass: string; badgeC
   HALF_DAY: { label: "Half day", rowClass: "bg-purple-500/5", badgeClass: "bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20" },
 };
 
-// Saturday badge variant — distinct from Sunday
+// Saturday badge variant â€” distinct from Sunday
 const SATURDAY_BADGE_CLASS = "bg-primary/10 text-primary border-primary/20";
 
-// ── Row display component ──────────────────────────────────────────────────────
+// â”€â”€ Row display component â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 interface RowDisplayProps {
   entry: TimesheetEntry;
@@ -186,18 +187,20 @@ function RowDisplay({ entry, onEdit, readOnly, holidayName }: RowDisplayProps) {
         {entry.tasks.length > 0 ? (
           <div className="space-y-1.5">
             {entry.tasks.map((task, i) => (
-              <div key={i} className="flex items-center gap-2 text-[13px]">
-                <span className="font-bold tabular-nums text-muted-foreground/80">{task.startTime}-{task.endTime}</span>
+              <div key={i} className="flex items-center gap-2 text-[12px]">
+                <span className="font-semibold font-mono tracking-tight tabular-nums text-muted-foreground/90 bg-muted/50 px-2 py-0.5 rounded border border-border/50 text-[12px] whitespace-nowrap">
+                  {formatTimeRange12h(task.startTime, task.endTime)}
+                </span>
                 {(task.project || task.isLearning) && (
                   <div className="flex items-center gap-1">
                     {task.project && (
-                      <span className="text-primary font-bold px-1.5 rounded bg-primary/5 border border-primary/10">
+                      <span className="text-primary font-bold px-1.5 py-0.5 rounded bg-primary/10 border border-primary/20 text-[11px] max-w-[130px] truncate">
                         {task.project.name}
                       </span>
                     )}
                     {(task.project?.isLearning || task.isLearning) && (
-                      <span className="text-[12px] font-bold text-amber-600 bg-amber-500/10 px-1.5 rounded border border-amber-500/20 uppercase tracking-tighter">
-                        Lrn
+                      <span className="text-[11px] font-bold text-amber-600 dark:text-amber-400 bg-amber-500/10 px-1.5 py-0.5 rounded border border-amber-500/20 uppercase tracking-tight">
+                        LRN
                       </span>
                     )}
                   </div>
@@ -206,7 +209,7 @@ function RowDisplay({ entry, onEdit, readOnly, holidayName }: RowDisplayProps) {
             ))}
           </div>
         ) : (
-          <span className="text-muted-foreground/40 text-xs">—</span>
+          <span className="text-muted-foreground/30 text-sm font-mono">&mdash;</span>
         )}
       </td>
       {/* Net hours */}
@@ -222,7 +225,7 @@ function RowDisplay({ entry, onEdit, readOnly, holidayName }: RowDisplayProps) {
             )}
           </div>
         ) : (
-          <span className="text-muted-foreground/30">—</span>
+          <span className="text-muted-foreground/30 text-sm font-mono">&mdash;</span>
         )}
       </td>
       {/* Work done / Tasks */}
@@ -239,7 +242,7 @@ function RowDisplay({ entry, onEdit, readOnly, holidayName }: RowDisplayProps) {
             ))}
           </div>
         ) : (
-          <span className="text-muted-foreground/30 text-xs">—</span>
+          <span className="text-muted-foreground/30 text-sm font-mono">&mdash;</span>
         )}
       </td>
       {/* Links (Masked) */}
@@ -267,7 +270,7 @@ function RowDisplay({ entry, onEdit, readOnly, holidayName }: RowDisplayProps) {
               </Tooltip>
             ))
           ) : (
-            <span className="text-muted-foreground/30 text-xs">—</span>
+            <span className="text-muted-foreground/30 text-sm font-mono">&mdash;</span>
           )}
         </div>
       </td>
@@ -293,7 +296,7 @@ function RowDisplay({ entry, onEdit, readOnly, holidayName }: RowDisplayProps) {
   );
 }
 
-// ── Main component ────────────────────────────────────────────────────────────
+// â”€â”€ Main component â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export function TimesheetView() {
   const now = new Date();
@@ -567,7 +570,7 @@ export function TimesheetView() {
             </span>
           </div>
           <div className="sm:ml-auto flex items-center gap-3">
-            {/* Month not complete yet — show locked state with days remaining */}
+            {/* Month not complete yet â€” show locked state with days remaining */}
             {canEdit && daysWithTasks > 0 && !monthComplete && (
               <Tooltip>
                 <TooltipTrigger render={
@@ -592,14 +595,14 @@ export function TimesheetView() {
                 </TooltipContent>
               </Tooltip>
             )}
-            {/* Month complete — show active submit button */}
+            {/* Month complete â€” show active submit button */}
             {canSubmit && (
               <Button size="sm" className="gap-2 px-4 shadow-lg shadow-primary/20 animate-in fade-in zoom-in-95 duration-300" onClick={handleSubmit} disabled={submitting}>
                 {submitting ? <Spinner className="size-4" /> : <SendIcon className="size-4" />}
-                {submitting ? "Submitting…" : "Submit for review"}
+                {submitting ? "Submittingâ€¦" : "Submit for review"}
               </Button>
             )}
-            {/* Lead approved — show Submit to HR button */}
+            {/* Lead approved â€” show Submit to HR button */}
             {canSubmitToHR && (
               <Button
                 size="sm"
@@ -610,7 +613,7 @@ export function TimesheetView() {
                 Submit to HR
               </Button>
             )}
-            {/* HR submitted — waiting */}
+            {/* HR submitted â€” waiting */}
             {status === "HR_SUBMITTED" && (
               <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 text-violet-600 dark:text-violet-400 text-sm font-bold border border-violet-500/20 animate-in fade-in duration-300">
                 <Building2Icon className="size-4" />
@@ -628,7 +631,7 @@ export function TimesheetView() {
         </div>
       )}
 
-      {/* Month-in-progress notice — shown when viewing current month in DRAFT */}
+      {/* Month-in-progress notice â€” shown when viewing current month in DRAFT */}
       {timesheet && canEdit && !monthComplete && (
         <div className={cn(
           "flex items-start gap-4 rounded-2xl border border-amber-500/20 bg-amber-500/5 px-5 py-4 transition-all duration-500",
@@ -639,7 +642,7 @@ export function TimesheetView() {
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-bold text-amber-700 dark:text-amber-400">
-              Month in progress — {daysLeft} {daysLeft === 1 ? "day" : "days"} remaining
+              Month in progress â€” {daysLeft} {daysLeft === 1 ? "day" : "days"} remaining
             </p>
             <p className="text-xs text-amber-600/80 dark:text-amber-500/80 mt-0.5 leading-relaxed">
               Keep logging your daily tasks. The <span className="font-bold">Submit for review</span> button will unlock automatically once {MONTH_NAMES[month - 1]} is complete.
@@ -677,7 +680,7 @@ export function TimesheetView() {
         </div>
       )}
 
-      {/* HR Approved — final celebration banner */}
+      {/* HR Approved â€” final celebration banner */}
       {status === "HR_APPROVED" && (
         <div className={cn(
           "flex items-start gap-4 rounded-2xl border border-emerald-500/20 bg-emerald-500/5 px-5 py-4 transition-all duration-500",
@@ -822,7 +825,7 @@ export function TimesheetView() {
                 className="h-11 px-8 rounded-xl font-black uppercase tracking-widest shadow-lg bg-violet-600 hover:bg-violet-700 text-white shadow-violet-500/20 gap-2 transition-all active:scale-95"
               >
                 {hrSubmitting ? <Spinner className="size-4" /> : <Building2Icon className="size-4" />}
-                {hrSubmitting ? "Submitting…" : "Confirm & Submit"}
+                {hrSubmitting ? "Submittingâ€¦" : "Confirm & Submit"}
               </Button>
             </DialogFooter>
           </div>
@@ -832,3 +835,5 @@ export function TimesheetView() {
     </TooltipProvider>
   );
 }
+
+

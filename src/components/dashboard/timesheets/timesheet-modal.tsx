@@ -24,6 +24,7 @@ import {
   DAY_NAMES,
   calcNetMinutes,
   formatHours,
+  formatTimeRange12h,
 } from "@/lib/timesheet-utils";
 import {
   CheckCircle2Icon,
@@ -37,7 +38,7 @@ import {
   FileTextIcon,
 } from "lucide-react";
 
-// ── Types ─────────────────────────────────────────────────────────────────────
+// â”€â”€ Types â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 type DayType = "WORKING" | "HOLIDAY" | "LEAVE" | "HALF_DAY" | "WEEKEND";
 type TimesheetStatus = "DRAFT" | "SUBMITTED" | "APPROVED" | "REJECTED" | "HR_SUBMITTED" | "HR_APPROVED";
@@ -98,7 +99,7 @@ interface TimesheetModalProps {
   onReject?: (timesheetId: string) => void;
 }
 
-// ── Config ────────────────────────────────────────────────────────────────────
+// â”€â”€ Config â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const STATUS_CONFIG: Record<TimesheetStatus, { label: string; color: string; dot: string }> = {
   DRAFT: { label: "Draft", color: "bg-muted text-muted-foreground border-border", dot: "bg-muted-foreground" },
@@ -117,7 +118,7 @@ const DAY_TYPE_CONFIG: Record<DayType, { label: string; rowClass: string; badgeC
   HALF_DAY: { label: "Half day", rowClass: "bg-purple-500/5", badgeClass: "bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20" },
 };
 
-// ── Read-only row ─────────────────────────────────────────────────────────────
+// â”€â”€ Read-only row â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function ReadOnlyRow({ entry, holidayName }: { entry: TimesheetEntry; holidayName?: string }) {
   const date = new Date(entry.date);
@@ -161,17 +162,19 @@ function ReadOnlyRow({ entry, holidayName }: { entry: TimesheetEntry; holidayNam
           <div className="space-y-1.5">
             {entry.tasks.map((task, i) => (
               <div key={i} className="flex items-center gap-2 text-[12px]">
-                <span className="font-bold tabular-nums text-muted-foreground/80">{task.startTime}–{task.endTime}</span>
+                <span className="font-semibold font-mono tracking-tight tabular-nums text-muted-foreground/90 bg-muted/50 px-2 py-0.5 rounded border border-border/50 text-[11px] whitespace-nowrap">
+                  {formatTimeRange12h(task.startTime, task.endTime)}
+                </span>
                 {(task.project || task.isLearning) && (
                   <div className="flex items-center gap-1">
                     {task.project && (
-                      <span className="text-primary font-bold px-1.5 rounded bg-primary/5 border border-primary/10 text-[11px]">
+                      <span className="text-primary font-bold px-1.5 py-0.5 rounded bg-primary/10 border border-primary/20 text-[11px] max-w-[130px] truncate">
                         {task.project.name}
                       </span>
                     )}
                     {(task.project?.isLearning || task.isLearning) && (
-                      <span className="text-[10px] font-bold text-amber-600 bg-amber-500/10 px-1.5 rounded border border-amber-500/20 uppercase tracking-tighter">
-                        Lrn
+                      <span className="text-[10px] font-bold text-amber-600 dark:text-amber-400 bg-amber-500/10 px-1.5 py-0.5 rounded border border-amber-500/20 uppercase tracking-tight">
+                        LRN
                       </span>
                     )}
                   </div>
@@ -179,7 +182,7 @@ function ReadOnlyRow({ entry, holidayName }: { entry: TimesheetEntry; holidayNam
               </div>
             ))}
           </div>
-        ) : <span className="text-muted-foreground/30 text-xs">—</span>}
+        ) : <span className="text-muted-foreground/30 text-sm font-mono">&mdash;</span>}
       </td>
       {/* Net hours */}
       <td className="px-4 py-4 w-28">
@@ -192,7 +195,7 @@ function ReadOnlyRow({ entry, holidayName }: { entry: TimesheetEntry; holidayNam
               </p>
             )}
           </div>
-        ) : <span className="text-muted-foreground/30">—</span>}
+        ) : <span className="text-muted-foreground/30 text-sm font-mono">&mdash;</span>}
       </td>
       {/* Activity */}
       <td className="px-4 py-4 min-w-[260px]">
@@ -207,7 +210,7 @@ function ReadOnlyRow({ entry, holidayName }: { entry: TimesheetEntry; holidayNam
               </div>
             ))}
           </div>
-        ) : <span className="text-muted-foreground/30 text-xs">—</span>}
+        ) : <span className="text-muted-foreground/30 text-sm font-mono">&mdash;</span>}
       </td>
       {/* Links */}
       <td className="px-4 py-4 w-44">
@@ -223,14 +226,14 @@ function ReadOnlyRow({ entry, holidayName }: { entry: TimesheetEntry; holidayNam
               } />
               <TooltipContent side="top"><p className="text-[11px] font-mono">{link.url}</p></TooltipContent>
             </Tooltip>
-          )) : <span className="text-muted-foreground/30 text-xs">—</span>}
+          )) : <span className="text-muted-foreground/30 text-sm font-mono">&mdash;</span>}
         </div>
       </td>
     </tr>
   );
 }
 
-// ── Main modal ────────────────────────────────────────────────────────────────
+// â”€â”€ Main modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export function TimesheetModal({
   open, onClose, employee, month, year, holidays, orgName, onApprove, onReject,
@@ -272,7 +275,7 @@ export function TimesheetModal({
         status,
         orgName,
       });
-      toast.success(`PDF downloaded — ${fullName} Timesheet Format '${shortYear} - ${monthName}`);
+      toast.success(`PDF downloaded â€” ${fullName} Timesheet Format '${shortYear} - ${monthName}`);
     } catch (err) {
       console.error(err);
       toast.error("Failed to generate PDF.");
@@ -285,7 +288,7 @@ export function TimesheetModal({
     <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
       <DialogContent showCloseButton={false} className="max-w-[100vw] sm:max-w-[100vw] w-full h-screen sm:h-screen flex flex-col p-0 overflow-hidden border border-border/60 shadow-2xl gap-0">
 
-        {/* ── Modal header ── */}
+        {/* â”€â”€ Modal header â”€â”€ */}
         <div className="relative shrink-0 overflow-hidden">
           {/* Gradient background */}
           <div className="absolute inset-0 bg-linear-to-br from-primary/90 to-primary pointer-events-none" />
@@ -316,8 +319,8 @@ export function TimesheetModal({
                 </div>
                 <DialogDescription className="text-white/70 text-sm mt-1 flex items-center gap-3 flex-wrap">
                   <span>{employee.designation}</span>
-                  {employee.department && <><span className="opacity-40">·</span><span>{employee.department}</span></>}
-                  {employee.employeeId && <><span className="opacity-40">·</span><span className="font-mono">{employee.employeeId}</span></>}
+                  {employee.department && <><span className="opacity-40">Â·</span><span>{employee.department}</span></>}
+                  {employee.employeeId && <><span className="opacity-40">Â·</span><span className="font-mono">{employee.employeeId}</span></>}
                 </DialogDescription>
                 {/* Stats row */}
                 <div className="flex items-center gap-5 mt-2.5">
@@ -378,7 +381,7 @@ export function TimesheetModal({
                 className="gap-2 h-9 px-5 rounded-xl font-bold bg-white/15 hover:bg-white/25 text-white border border-white/20 backdrop-blur-sm transition-all"
               >
                 {downloading ? <Spinner className="size-3.5" /> : <DownloadIcon className="size-3.5" />}
-                {downloading ? "Generating…" : "Download PDF"}
+                {downloading ? "Generatingâ€¦" : "Download PDF"}
               </Button>
 
               {/* Close */}
@@ -405,7 +408,7 @@ export function TimesheetModal({
           )}
         </div>
 
-        {/* ── Timesheet table ── */}
+        {/* â”€â”€ Timesheet table â”€â”€ */}
         <div className="flex-1 overflow-auto no-scrollbar bg-background">
           <table className="w-full text-sm">
             <thead className="sticky top-0 z-10">
@@ -433,10 +436,10 @@ export function TimesheetModal({
           </table>
         </div>
 
-        {/* ── Footer ── */}
+        {/* â”€â”€ Footer â”€â”€ */}
         <div className="shrink-0 flex items-center justify-between px-6 py-3 border-t border-border/60 bg-muted/20">
           <p className="text-xs text-muted-foreground">
-            {fullName} · {monthName} {year} · {daysLogged} days · {formatHours(totalMins)}
+            {fullName} Â· {monthName} {year} Â· {daysLogged} days Â· {formatHours(totalMins)}
           </p>
           <p className="text-xs text-muted-foreground font-mono">
             {fullName} Timesheet Format &apos;{shortYear} - {monthName}
@@ -446,3 +449,4 @@ export function TimesheetModal({
     </Dialog>
   );
 }
+

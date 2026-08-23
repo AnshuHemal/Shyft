@@ -6,7 +6,7 @@
 
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
-import { DAY_NAMES, calcNetMinutes, formatHours, MONTH_NAMES } from "./timesheet-utils";
+import { DAY_NAMES, calcNetMinutes, formatHours, MONTH_NAMES, formatTimeRange12h } from "./timesheet-utils";
 
 type DayType = "WORKING" | "HOLIDAY" | "LEAVE" | "HALF_DAY" | "WEEKEND";
 
@@ -41,7 +41,7 @@ interface TimesheetPDFOptions {
   orgName?: string;
 }
 
-// ── Colour palette (matches the app's design) ─────────────────────────────────
+// â”€â”€ Colour palette (matches the app's design) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const COLORS = {
   primary:    [99,  102, 241] as [number, number, number],  // indigo-500
   dark:       [15,  23,  42]  as [number, number, number],  // slate-900
@@ -98,7 +98,7 @@ export function generateTimesheetPDF(opts: TimesheetPDFOptions): void {
   const monthName = MONTH_NAMES[month - 1];
   const shortYear = String(year).slice(2);
 
-  // ── Filename: "Hemal Katariya Timesheet Format '26 - April.pdf" ──────────
+  // â”€â”€ Filename: "Hemal Katariya Timesheet Format '26 - April.pdf" â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const filename = `${fullName} Timesheet Format '${shortYear} - ${monthName}.pdf`;
 
   const doc = new jsPDF({ orientation: "landscape", unit: "mm", format: "a4" });
@@ -106,7 +106,7 @@ export function generateTimesheetPDF(opts: TimesheetPDFOptions): void {
   const pageH = doc.internal.pageSize.getHeight();
   const margin = 14;
 
-  // ── Header bar ────────────────────────────────────────────────────────────
+  // â”€â”€ Header bar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   doc.setFillColor(...COLORS.primary);
   doc.rect(0, 0, pageW, 22, "F");
 
@@ -125,7 +125,7 @@ export function generateTimesheetPDF(opts: TimesheetPDFOptions): void {
   doc.setFontSize(10);
   doc.text(`${monthName} ${year}`, pageW - margin, 14, { align: "right" });
 
-  // ── Employee info block ───────────────────────────────────────────────────
+  // â”€â”€ Employee info block â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   doc.setFillColor(...COLORS.headerBg);
   doc.rect(0, 22, pageW, 18, "F");
   doc.setDrawColor(...COLORS.border);
@@ -143,7 +143,7 @@ export function generateTimesheetPDF(opts: TimesheetPDFOptions): void {
   if (designation) meta.push(designation);
   if (department)  meta.push(department);
   if (employeeId)  meta.push(`ID: ${employeeId}`);
-  doc.text(meta.join("  ·  "), margin, 38);
+  doc.text(meta.join("  Â·  "), margin, 38);
 
   // Status badge (right side)
   const statusLabel = getStatusLabel(status);
@@ -160,7 +160,7 @@ export function generateTimesheetPDF(opts: TimesheetPDFOptions): void {
   doc.setFont("helvetica", "bold");
   doc.text(statusLabel, pageW - margin - statusBadgeW / 2, 31.5, { align: "center" });
 
-  // ── Summary row ───────────────────────────────────────────────────────────
+  // â”€â”€ Summary row â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const workingEntries = entries.filter((e) => e.tasks.length > 0);
   const totalMins = workingEntries.reduce((acc, e) => {
     const taskMins = e.tasks.reduce((tAcc, t) => tAcc + calcNetMinutes(t.startTime, t.endTime, 0), 0);
@@ -195,7 +195,7 @@ export function generateTimesheetPDF(opts: TimesheetPDFOptions): void {
   doc.setDrawColor(...COLORS.border);
   doc.line(margin, 58, pageW - margin, 58);
 
-  // ── Table ─────────────────────────────────────────────────────────────────
+  // â”€â”€ Table â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const holidayMap = new Map(holidays.map((h) => [h.date.split("T")[0], h.name]));
 
   const tableRows = entries.map((entry) => {
@@ -207,38 +207,38 @@ export function generateTimesheetPDF(opts: TimesheetPDFOptions): void {
     // Holiday name tooltip
     const holidayName = entry.dayType === "HOLIDAY"
       ? (holidayMap.get(entry.date.split("T")[0]) ?? "")
-      : "";
+      : "—";
     const statusCell = holidayName ? `${dayTypeLabel}\n(${holidayName})` : dayTypeLabel;
 
-    // Timeline: "10:00–19:00 | ProjectName"
+    // Timeline: "10:00â€“19:00 | ProjectName"
     const timeline = entry.tasks.length > 0
       ? entry.tasks.map((t) => {
-          const proj = t.project ? ` [${t.project.name}]` : "";
-          const lrn  = (t.project?.isLearning || t.isLearning) ? " [Lrn]" : "";
-          return `${t.startTime}–${t.endTime}${proj}${lrn}`;
+          const proj = t.project ? ` [${t.project.name}]` : "—";
+          const lrn  = (t.project?.isLearning || t.isLearning) ? " [Lrn]" : "—";
+          return `${formatTimeRange12h(t.startTime, t.endTime)}${proj}${lrn}`;
         }).join("\n")
-      : "—";
+      : "â€”";
 
     // Net hours
     const taskMins = entry.tasks.reduce((acc, t) => acc + calcNetMinutes(t.startTime, t.endTime, 0), 0);
     const net = Math.max(0, taskMins - (entry.breakMinutes || 0));
     const hoursCell = net > 0
       ? `${formatHours(net)}${entry.breakMinutes ? `\n(${entry.breakMinutes}m break)` : ""}`
-      : "—";
+      : "â€”";
 
     // Activity
     const activity = entry.tasks.length > 0
       ? entry.tasks.map((t) => {
-          const desc = t.description ? `\n  ${t.description}` : "";
-          return `• ${t.subject}${desc}`;
+          const desc = t.description ? `\n  ${t.description}` : "—";
+          return `â€¢ ${t.subject}${desc}`;
         }).join("\n")
-      : "—";
+      : "â€”";
 
     // Links: Show only labels with professional styling
     const links = entry.tasks.flatMap((t) => t.links ?? []);
     const linksCell = links.length > 0
       ? links.map((l) => l.label || "Link").join("\n")
-      : "—";
+      : "â€”";
 
     return [dateStr, dayName, statusCell, timeline, hoursCell, activity, linksCell];
   });
@@ -282,14 +282,14 @@ export function generateTimesheetPDF(opts: TimesheetPDFOptions): void {
           data.cell.styles.fillColor = getRowBg(entry.dayType);
         }
         // If it's the documentation column and has content, make it look like a link
-        if (data.column.index === 6 && data.cell.text[0] !== "—") {
+        if (data.column.index === 6 && data.cell.text[0] !== "â€”") {
           data.cell.styles.textColor = COLORS.primary;
         }
       }
     },
     didDrawCell: (data) => {
       // Add actual clickable links to the PDF
-      if (data.section === "body" && data.column.index === 6 && data.cell.text[0] !== "—") {
+      if (data.section === "body" && data.column.index === 6 && data.cell.text[0] !== "â€”") {
         const entry = entries[data.row.index];
         const links = entry.tasks.flatMap((t) => t.links ?? []);
         
@@ -317,14 +317,14 @@ export function generateTimesheetPDF(opts: TimesheetPDFOptions): void {
     alternateRowStyles: { fillColor: undefined },
   });
 
-  // ── Footer ────────────────────────────────────────────────────────────────
+  // â”€â”€ Footer â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const totalPages = (doc.internal as unknown as { getNumberOfPages: () => number }).getNumberOfPages();
   for (let i = 1; i <= totalPages; i++) {
     doc.setPage(i);
     doc.setFontSize(7);
     doc.setTextColor(...COLORS.muted);
     doc.text(
-      `${fullName}  ·  ${monthName} ${year}  ·  Generated ${new Date().toLocaleDateString("en-IN")}`,
+      `${fullName}  Â·  ${monthName} ${year}  Â·  Generated ${new Date().toLocaleDateString("en-IN")}`,
       margin,
       pageH - 6
     );
@@ -336,3 +336,4 @@ export function generateTimesheetPDF(opts: TimesheetPDFOptions): void {
 
   doc.save(filename);
 }
+

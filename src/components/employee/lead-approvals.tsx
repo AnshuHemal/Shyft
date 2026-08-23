@@ -21,6 +21,7 @@ import {
   DAY_NAMES,
   calcNetMinutes,
   formatHours,
+  formatTimeRange12h,
 } from "@/lib/timesheet-utils";
 import {
   ChevronLeftIcon,
@@ -39,7 +40,7 @@ import {
   ChevronUpIcon,
 } from "lucide-react";
 
-// ── Types ─────────────────────────────────────────────────────────────────────
+// â”€â”€ Types â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 type DayType = "WORKING" | "HOLIDAY" | "LEAVE" | "HALF_DAY" | "WEEKEND";
 type TimesheetStatus = "DRAFT" | "SUBMITTED" | "APPROVED" | "REJECTED";
@@ -85,7 +86,7 @@ interface TeamMember {
   timesheets: TeamTimesheet[];
 }
 
-// ── Config ────────────────────────────────────────────────────────────────────
+// â”€â”€ Config â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const STATUS_CONFIG: Record<TimesheetStatus | "NONE", { label: string; color: string; dot: string }> = {
   NONE:      { label: "Not submitted",    color: "bg-muted text-muted-foreground border-border",                              dot: "bg-muted-foreground" },
@@ -103,7 +104,7 @@ const DAY_TYPE_CONFIG: Record<DayType, { label: string; rowClass: string; badgeC
   HALF_DAY: { label: "Half day", rowClass: "bg-purple-500/5",     badgeClass: "bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20" },
 };
 
-// ── Read-only timesheet row (mirrors RowDisplay in timesheet-view.tsx) ────────
+// â”€â”€ Read-only timesheet row (mirrors RowDisplay in timesheet-view.tsx) â”€â”€â”€â”€â”€â”€â”€â”€
 
 interface ReadOnlyRowProps {
   entry: TimesheetEntry;
@@ -152,17 +153,19 @@ function ReadOnlyRow({ entry, holidayName }: ReadOnlyRowProps) {
           <div className="space-y-1.5">
             {entry.tasks.map((task, i) => (
               <div key={i} className="flex items-center gap-2 text-[12px]">
-                <span className="font-bold tabular-nums text-muted-foreground/80">{task.startTime}–{task.endTime}</span>
+                <span className="font-semibold font-mono tracking-tight tabular-nums text-muted-foreground/90 bg-muted/50 px-2 py-0.5 rounded border border-border/50 text-[11px] whitespace-nowrap">
+                  {formatTimeRange12h(task.startTime, task.endTime)}
+                </span>
                 {(task.project || task.isLearning) && (
                   <div className="flex items-center gap-1">
                     {task.project && (
-                      <span className="text-primary font-bold px-1.5 rounded bg-primary/5 border border-primary/10 text-[11px]">
+                      <span className="text-primary font-bold px-1.5 py-0.5 rounded bg-primary/10 border border-primary/20 text-[11px] max-w-[130px] truncate">
                         {task.project.name}
                       </span>
                     )}
                     {(task.project?.isLearning || task.isLearning) && (
-                      <span className="text-[10px] font-bold text-amber-600 bg-amber-500/10 px-1.5 rounded border border-amber-500/20 uppercase tracking-tighter">
-                        Lrn
+                      <span className="text-[10px] font-bold text-amber-600 dark:text-amber-400 bg-amber-500/10 px-1.5 py-0.5 rounded border border-amber-500/20 uppercase tracking-tight">
+                        LRN
                       </span>
                     )}
                   </div>
@@ -171,7 +174,7 @@ function ReadOnlyRow({ entry, holidayName }: ReadOnlyRowProps) {
             ))}
           </div>
         ) : (
-          <span className="text-muted-foreground/30 text-xs">—</span>
+          <span className="text-muted-foreground/30 text-sm font-mono">&mdash;</span>
         )}
       </td>
       {/* Net hours */}
@@ -186,7 +189,7 @@ function ReadOnlyRow({ entry, holidayName }: ReadOnlyRowProps) {
             )}
           </div>
         ) : (
-          <span className="text-muted-foreground/30">—</span>
+          <span className="text-muted-foreground/30 text-sm font-mono">&mdash;</span>
         )}
       </td>
       {/* Activity */}
@@ -203,7 +206,7 @@ function ReadOnlyRow({ entry, holidayName }: ReadOnlyRowProps) {
             ))}
           </div>
         ) : (
-          <span className="text-muted-foreground/30 text-xs">—</span>
+          <span className="text-muted-foreground/30 text-sm font-mono">&mdash;</span>
         )}
       </td>
       {/* Links */}
@@ -221,7 +224,7 @@ function ReadOnlyRow({ entry, holidayName }: ReadOnlyRowProps) {
               <TooltipContent side="top"><p className="text-[11px] font-mono">{link.url}</p></TooltipContent>
             </Tooltip>
           )) : (
-            <span className="text-muted-foreground/30 text-xs">—</span>
+            <span className="text-muted-foreground/30 text-sm font-mono">&mdash;</span>
           )}
         </div>
       </td>
@@ -229,7 +232,7 @@ function ReadOnlyRow({ entry, holidayName }: ReadOnlyRowProps) {
   );
 }
 
-// ── Review dialog ─────────────────────────────────────────────────────────────
+// â”€â”€ Review dialog â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 interface ReviewDialogProps {
   open: boolean;
@@ -272,7 +275,7 @@ function ReviewDialog({ open, employeeName, action, loading, onClose, onConfirm 
             </FieldLabel>
             <textarea
               rows={4}
-              placeholder={action === "approve" ? "Add a note of encouragement…" : "Explain what needs to be corrected…"}
+              placeholder={action === "approve" ? "Add a note of encouragementâ€¦" : "Explain what needs to be correctedâ€¦"}
               value={note}
               onChange={(e) => setNote(e.target.value)}
               className={cn(
@@ -303,7 +306,7 @@ function ReviewDialog({ open, employeeName, action, loading, onClose, onConfirm 
   );
 }
 
-// ── Main component ────────────────────────────────────────────────────────────
+// â”€â”€ Main component â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 import { TimesheetModal } from "@/components/dashboard/timesheets/timesheet-modal";
 
@@ -406,7 +409,7 @@ export function LeadApprovals() {
   return (
     <div className={cn("space-y-6 transition-all duration-500", mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
 
-      {/* ── Header ── */}
+      {/* â”€â”€ Header â”€â”€ */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">Team Approvals</h1>
@@ -464,7 +467,7 @@ export function LeadApprovals() {
         </div>
       </div>
 
-      {/* ── Summary stats ── */}
+      {/* â”€â”€ Summary stats â”€â”€ */}
       <div className={cn("grid grid-cols-2 lg:grid-cols-4 gap-4 transition-all duration-500", mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
         {[
           { label: "Team members",  value: counts.total,    icon: UsersIcon,         color: "text-primary bg-primary/10" },
@@ -482,20 +485,20 @@ export function LeadApprovals() {
         ))}
       </div>
 
-      {/* ── Main table ── */}
+      {/* â”€â”€ Main table â”€â”€ */}
       <div className="rounded-3xl border border-border/50 bg-card overflow-hidden shadow-sm">
         {/* Table header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-border/60 bg-muted/20">
           <div>
             <p className="text-sm font-semibold">Team Timesheets</p>
-            <p className="text-xs text-muted-foreground mt-0.5">{MONTH_NAMES[month - 1]} {year} · Review and approve submissions</p>
+            <p className="text-xs text-muted-foreground mt-0.5">{MONTH_NAMES[month - 1]} {year} Â· Review and approve submissions</p>
           </div>
         </div>
 
         {loading ? (
           <div className="flex flex-col items-center justify-center py-24 gap-4 text-muted-foreground">
             <Spinner className="size-6" />
-            <p className="text-sm font-medium">Loading team timesheets…</p>
+            <p className="text-sm font-medium">Loading team timesheetsâ€¦</p>
           </div>
         ) : approvals.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-24 gap-4 text-muted-foreground">
@@ -556,7 +559,7 @@ export function LeadApprovals() {
                       </td>
                       {/* Department */}
                       <td className="px-6 py-4">
-                        <span className="text-sm text-muted-foreground">{member.department || "—"}</span>
+                        <span className="text-sm text-muted-foreground">{member.department || "â€”"}</span>
                       </td>
                       {/* Days logged */}
                       <td className="px-6 py-4">
@@ -565,7 +568,7 @@ export function LeadApprovals() {
                       </td>
                       {/* Total hours */}
                       <td className="px-6 py-4">
-                        <span className="text-sm font-semibold tabular-nums">{totalMins > 0 ? formatHours(totalMins) : "—"}</span>
+                        <span className="text-sm font-semibold tabular-nums">{totalMins > 0 ? formatHours(totalMins) : "â€”"}</span>
                       </td>
                       {/* Status */}
                       <td className="px-6 py-4">
@@ -609,7 +612,7 @@ export function LeadApprovals() {
         )}
       </div>
 
-      {/* ── Timesheet modal ── */}
+      {/* â”€â”€ Timesheet modal â”€â”€ */}
       {selectedMember && (
         <TimesheetModal
           open={!!selectedMember}
@@ -623,7 +626,7 @@ export function LeadApprovals() {
         />
       )}
 
-      {/* ── Review dialog ── */}
+      {/* â”€â”€ Review dialog â”€â”€ */}
       <ReviewDialog
         open={!!reviewTarget}
         employeeName={reviewTarget?.employeeName ?? ""}
@@ -635,3 +638,4 @@ export function LeadApprovals() {
     </div>
   );
 }
+
