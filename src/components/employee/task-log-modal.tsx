@@ -41,6 +41,7 @@ interface TaskLink {
 
 interface TaskLog {
   id?: string;
+  taskId?: string;
   startTime: string;
   endTime: string;
   subject: string;
@@ -87,11 +88,13 @@ export function TaskLogModal({ isOpen, onClose, entry, onSave }: TaskLogModalPro
       if (entry.tasks && entry.tasks.length > 0) {
         setTasks(entry.tasks.map((t: any) => ({
           ...t,
+          taskId: t.taskId || "",
           description: t.description || "",
           links: Array.isArray(t.links) ? t.links : []
         })));
       } else {
         setTasks([{
+          taskId: "",
           startTime: "09:00",
           endTime: "10:00",
           subject: "",
@@ -123,6 +126,7 @@ export function TaskLogModal({ isOpen, onClose, entry, onSave }: TaskLogModalPro
   function addTask() {
     const lastTask = tasks[tasks.length - 1];
     setTasks([...tasks, {
+      taskId: "",
       startTime: lastTask?.endTime || "09:00",
       endTime: "",
       subject: "",
@@ -136,6 +140,7 @@ export function TaskLogModal({ isOpen, onClose, entry, onSave }: TaskLogModalPro
   function removeTask(index: number) {
     if (tasks.length === 1) {
       setTasks([{
+        taskId: "",
         startTime: "09:00",
         endTime: "10:00",
         subject: "",
@@ -329,6 +334,19 @@ export function TaskLogModal({ isOpen, onClose, entry, onSave }: TaskLogModalPro
                             ))}
                           </optgroup>
                         </select>
+                      </Field>
+
+                      <Field>
+                        <FieldLabel className="text-[11px] font-semibold text-muted-foreground mb-1.5 ml-1 flex items-center justify-between">
+                          <span>Task ID / Ticket #</span>
+                          <span className="text-[10px] text-muted-foreground/60 font-normal">Optional</span>
+                        </FieldLabel>
+                        <Input
+                          placeholder="e.g. TSK-102, PROJ-45, #123"
+                          value={task.taskId || ""}
+                          onChange={(e) => updateTask(index, { taskId: e.target.value })}
+                          className="h-11 rounded-xl border-border/60 bg-muted/20 focus:ring-4 focus:ring-primary/10 font-mono text-xs"
+                        />
                       </Field>
                     </div>
 

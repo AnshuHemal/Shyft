@@ -40,7 +40,6 @@ import {
   ChevronUpIcon,
 } from "lucide-react";
 
-// â”€â”€ Types â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 type DayType = "WORKING" | "HOLIDAY" | "LEAVE" | "HALF_DAY" | "WEEKEND";
 type TimesheetStatus = "DRAFT" | "SUBMITTED" | "APPROVED" | "REJECTED";
@@ -49,6 +48,7 @@ interface TimesheetTask {
   id: string;
   startTime: string;
   endTime: string;
+  taskId?: string | null;
   subject: string;
   description: string | null;
   isLearning: boolean;
@@ -86,7 +86,6 @@ interface TeamMember {
   timesheets: TeamTimesheet[];
 }
 
-// â”€â”€ Config â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const STATUS_CONFIG: Record<TimesheetStatus | "NONE", { label: string; color: string; dot: string }> = {
   NONE:      { label: "Not submitted",    color: "bg-muted text-muted-foreground border-border",                              dot: "bg-muted-foreground" },
@@ -104,7 +103,6 @@ const DAY_TYPE_CONFIG: Record<DayType, { label: string; rowClass: string; badgeC
   HALF_DAY: { label: "Half day", rowClass: "bg-purple-500/5",     badgeClass: "bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20" },
 };
 
-// â”€â”€ Read-only timesheet row (mirrors RowDisplay in timesheet-view.tsx) â”€â”€â”€â”€â”€â”€â”€â”€
 
 interface ReadOnlyRowProps {
   entry: TimesheetEntry;
@@ -147,6 +145,21 @@ function ReadOnlyRow({ entry, holidayName }: ReadOnlyRowProps) {
           </span>
         )}
       </td>
+      {/* Net hours / Productivity */}
+      <td className="px-4 py-4 w-28">
+        {netMinutes > 0 ? (
+          <div className="space-y-1">
+            <span className="text-sm font-black text-foreground tabular-nums">{formatHours(netMinutes)}</span>
+            {entry.breakMinutes > 0 && (
+              <p className="text-[11px] text-amber-600 font-bold flex items-center gap-1">
+                <CoffeeIcon className="size-3" />{entry.breakMinutes}m
+              </p>
+            )}
+          </div>
+        ) : (
+          <span className="text-muted-foreground/30 text-sm font-mono">&mdash;</span>
+        )}
+      </td>
       {/* Timeline */}
       <td className="px-4 py-4 w-64">
         {entry.tasks.length > 0 ? (
@@ -177,16 +190,21 @@ function ReadOnlyRow({ entry, holidayName }: ReadOnlyRowProps) {
           <span className="text-muted-foreground/30 text-sm font-mono">&mdash;</span>
         )}
       </td>
-      {/* Net hours */}
-      <td className="px-4 py-4 w-28">
-        {netMinutes > 0 ? (
-          <div className="space-y-1">
-            <span className="text-sm font-black text-foreground tabular-nums">{formatHours(netMinutes)}</span>
-            {entry.breakMinutes > 0 && (
-              <p className="text-[11px] text-amber-600 font-bold flex items-center gap-1">
-                <CoffeeIcon className="size-3" />{entry.breakMinutes}m
-              </p>
-            )}
+      {/* Task ID */}
+      <td className="px-4 py-4 w-28 whitespace-nowrap">
+        {entry.tasks.length > 0 ? (
+          <div className="space-y-1.5">
+            {entry.tasks.map((task, i) => (
+              <div key={i} className="flex items-center">
+                {task.taskId ? (
+                  <span className="inline-flex items-center px-2 py-0.5 rounded-md bg-muted/80 border border-border/80 text-[11px] font-mono font-bold text-foreground tracking-tight shadow-2xs">
+                    {task.taskId}
+                  </span>
+                ) : (
+                  <span className="text-muted-foreground/30 text-xs font-mono">&mdash;</span>
+                )}
+              </div>
+            ))}
           </div>
         ) : (
           <span className="text-muted-foreground/30 text-sm font-mono">&mdash;</span>
@@ -232,7 +250,6 @@ function ReadOnlyRow({ entry, holidayName }: ReadOnlyRowProps) {
   );
 }
 
-// â”€â”€ Review dialog â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 interface ReviewDialogProps {
   open: boolean;
@@ -306,7 +323,6 @@ function ReviewDialog({ open, employeeName, action, loading, onClose, onConfirm 
   );
 }
 
-// â”€â”€ Main component â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 import { TimesheetModal } from "@/components/dashboard/timesheets/timesheet-modal";
 
@@ -409,7 +425,6 @@ export function LeadApprovals() {
   return (
     <div className={cn("space-y-6 transition-all duration-500", mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
 
-      {/* â”€â”€ Header â”€â”€ */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">Team Approvals</h1>
@@ -467,7 +482,6 @@ export function LeadApprovals() {
         </div>
       </div>
 
-      {/* â”€â”€ Summary stats â”€â”€ */}
       <div className={cn("grid grid-cols-2 lg:grid-cols-4 gap-4 transition-all duration-500", mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
         {[
           { label: "Team members",  value: counts.total,    icon: UsersIcon,         color: "text-primary bg-primary/10" },
@@ -485,7 +499,6 @@ export function LeadApprovals() {
         ))}
       </div>
 
-      {/* â”€â”€ Main table â”€â”€ */}
       <div className="rounded-3xl border border-border/50 bg-card overflow-hidden shadow-sm">
         {/* Table header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-border/60 bg-muted/20">
@@ -559,7 +572,7 @@ export function LeadApprovals() {
                       </td>
                       {/* Department */}
                       <td className="px-6 py-4">
-                        <span className="text-sm text-muted-foreground">{member.department || "â€”"}</span>
+                        <span className="text-sm text-muted-foreground">{member.department || "-"}</span>
                       </td>
                       {/* Days logged */}
                       <td className="px-6 py-4">
@@ -568,7 +581,7 @@ export function LeadApprovals() {
                       </td>
                       {/* Total hours */}
                       <td className="px-6 py-4">
-                        <span className="text-sm font-semibold tabular-nums">{totalMins > 0 ? formatHours(totalMins) : "â€”"}</span>
+                        <span className="text-sm font-semibold tabular-nums">{totalMins > 0 ? formatHours(totalMins) : "-"}</span>
                       </td>
                       {/* Status */}
                       <td className="px-6 py-4">
@@ -612,7 +625,6 @@ export function LeadApprovals() {
         )}
       </div>
 
-      {/* â”€â”€ Timesheet modal â”€â”€ */}
       {selectedMember && (
         <TimesheetModal
           open={!!selectedMember}
@@ -626,7 +638,6 @@ export function LeadApprovals() {
         />
       )}
 
-      {/* â”€â”€ Review dialog â”€â”€ */}
       <ReviewDialog
         open={!!reviewTarget}
         employeeName={reviewTarget?.employeeName ?? ""}

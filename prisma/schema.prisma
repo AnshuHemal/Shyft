@@ -315,6 +315,7 @@ model TimesheetTask {
   id               String         @id @default(cuid())
   startTime        String
   endTime          String
+  taskId           String?        // e.g. "TSK-102", "PROJ-45", "#123"
   subject          String
   description      String?
   isLearning       Boolean        @default(false)

@@ -38,7 +38,6 @@ import {
   FileTextIcon,
 } from "lucide-react";
 
-// â”€â”€ Types â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 type DayType = "WORKING" | "HOLIDAY" | "LEAVE" | "HALF_DAY" | "WEEKEND";
 type TimesheetStatus = "DRAFT" | "SUBMITTED" | "APPROVED" | "REJECTED" | "HR_SUBMITTED" | "HR_APPROVED";
@@ -47,6 +46,7 @@ interface TimesheetTask {
   id: string;
   startTime: string;
   endTime: string;
+  taskId?: string | null;
   subject: string;
   description: string | null;
   isLearning: boolean;
@@ -99,7 +99,6 @@ interface TimesheetModalProps {
   onReject?: (timesheetId: string) => void;
 }
 
-// â”€â”€ Config â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const STATUS_CONFIG: Record<TimesheetStatus, { label: string; color: string; dot: string }> = {
   DRAFT: { label: "Draft", color: "bg-muted text-muted-foreground border-border", dot: "bg-muted-foreground" },
@@ -118,7 +117,6 @@ const DAY_TYPE_CONFIG: Record<DayType, { label: string; rowClass: string; badgeC
   HALF_DAY: { label: "Half day", rowClass: "bg-purple-500/5", badgeClass: "bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20" },
 };
 
-// â”€â”€ Read-only row â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function ReadOnlyRow({ entry, holidayName }: { entry: TimesheetEntry; holidayName?: string }) {
   const date = new Date(entry.date);
@@ -156,6 +154,19 @@ function ReadOnlyRow({ entry, holidayName }: { entry: TimesheetEntry; holidayNam
           </span>
         )}
       </td>
+      {/* Net hours / Productivity */}
+      <td className="px-4 py-4 w-28">
+        {netMinutes > 0 ? (
+          <div className="space-y-1">
+            <span className="text-sm font-black text-foreground tabular-nums">{formatHours(netMinutes)}</span>
+            {entry.breakMinutes > 0 && (
+              <p className="text-[11px] text-amber-600 font-bold flex items-center gap-1">
+                <CoffeeIcon className="size-3" />{entry.breakMinutes}m
+              </p>
+            )}
+          </div>
+        ) : <span className="text-muted-foreground/30 text-sm font-mono">&mdash;</span>}
+      </td>
       {/* Timeline */}
       <td className="px-4 py-4 w-64">
         {entry.tasks.length > 0 ? (
@@ -184,16 +195,21 @@ function ReadOnlyRow({ entry, holidayName }: { entry: TimesheetEntry; holidayNam
           </div>
         ) : <span className="text-muted-foreground/30 text-sm font-mono">&mdash;</span>}
       </td>
-      {/* Net hours */}
-      <td className="px-4 py-4 w-28">
-        {netMinutes > 0 ? (
-          <div className="space-y-1">
-            <span className="text-sm font-black text-foreground tabular-nums">{formatHours(netMinutes)}</span>
-            {entry.breakMinutes > 0 && (
-              <p className="text-[11px] text-amber-600 font-bold flex items-center gap-1">
-                <CoffeeIcon className="size-3" />{entry.breakMinutes}m
-              </p>
-            )}
+      {/* Task ID */}
+      <td className="px-4 py-4 w-28 whitespace-nowrap">
+        {entry.tasks.length > 0 ? (
+          <div className="space-y-1.5">
+            {entry.tasks.map((task, i) => (
+              <div key={i} className="flex items-center">
+                {task.taskId ? (
+                  <span className="inline-flex items-center px-2 py-0.5 rounded-md bg-muted/80 border border-border/80 text-[11px] font-mono font-bold text-foreground tracking-tight shadow-2xs">
+                    {task.taskId}
+                  </span>
+                ) : (
+                  <span className="text-muted-foreground/30 text-xs font-mono">&mdash;</span>
+                )}
+              </div>
+            ))}
           </div>
         ) : <span className="text-muted-foreground/30 text-sm font-mono">&mdash;</span>}
       </td>
@@ -233,7 +249,6 @@ function ReadOnlyRow({ entry, holidayName }: { entry: TimesheetEntry; holidayNam
   );
 }
 
-// â”€â”€ Main modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export function TimesheetModal({
   open, onClose, employee, month, year, holidays, orgName, onApprove, onReject,
@@ -275,7 +290,7 @@ export function TimesheetModal({
         status,
         orgName,
       });
-      toast.success(`PDF downloaded â€” ${fullName} Timesheet Format '${shortYear} - ${monthName}`);
+      toast.success(`PDF downloaded - ${fullName} Timesheet Format '${shortYear} - ${monthName}`);
     } catch (err) {
       console.error(err);
       toast.error("Failed to generate PDF.");
@@ -288,7 +303,6 @@ export function TimesheetModal({
     <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
       <DialogContent showCloseButton={false} className="max-w-[100vw] sm:max-w-[100vw] w-full h-screen sm:h-screen flex flex-col p-0 overflow-hidden border border-border/60 shadow-2xl gap-0">
 
-        {/* â”€â”€ Modal header â”€â”€ */}
         <div className="relative shrink-0 overflow-hidden">
           {/* Gradient background */}
           <div className="absolute inset-0 bg-linear-to-br from-primary/90 to-primary pointer-events-none" />
@@ -408,12 +422,11 @@ export function TimesheetModal({
           )}
         </div>
 
-        {/* â”€â”€ Timesheet table â”€â”€ */}
         <div className="flex-1 overflow-auto no-scrollbar bg-background">
           <table className="w-full text-sm">
             <thead className="sticky top-0 z-10">
               <tr className="border-b border-border/50 bg-muted/60 backdrop-blur-sm">
-                {["Date", "Day", "Status", "Timeline", "Productivity", "Activity & Projects", "Documentation"].map((h) => (
+                {["Date", "Day", "Status", "Productivity", "Timeline", "Task ID", "Activity & Projects", "Documentation"].map((h) => (
                   <th key={h} className="px-4 py-3.5 text-left text-[11px] font-black text-muted-foreground/70 uppercase tracking-[0.1em] whitespace-nowrap">
                     {h}
                   </th>
@@ -436,7 +449,6 @@ export function TimesheetModal({
           </table>
         </div>
 
-        {/* â”€â”€ Footer â”€â”€ */}
         <div className="shrink-0 flex items-center justify-between px-6 py-3 border-t border-border/60 bg-muted/20">
           <p className="text-xs text-muted-foreground">
             {fullName} Â· {monthName} {year} Â· {daysLogged} days Â· {formatHours(totalMins)}

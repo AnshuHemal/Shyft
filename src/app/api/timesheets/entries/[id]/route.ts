@@ -91,6 +91,7 @@ export async function PATCH(
         create: tasks.map((t: any) => ({
           startTime: t.startTime,
           endTime: t.endTime,
+          taskId: t.taskId ? String(t.taskId).trim() : null,
           subject: t.subject,
           description: t.description,
           isLearning: !!t.isLearning,

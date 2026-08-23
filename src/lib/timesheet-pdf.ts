@@ -13,6 +13,7 @@ type DayType = "WORKING" | "HOLIDAY" | "LEAVE" | "HALF_DAY" | "WEEKEND";
 interface TimesheetTask {
   startTime: string;
   endTime: string;
+  taskId?: string | null;
   subject: string;
   description: string | null;
   isLearning: boolean;
@@ -41,7 +42,6 @@ interface TimesheetPDFOptions {
   orgName?: string;
 }
 
-// â”€â”€ Colour palette (matches the app's design) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const COLORS = {
   primary:    [99,  102, 241] as [number, number, number],  // indigo-500
   dark:       [15,  23,  42]  as [number, number, number],  // slate-900
@@ -98,7 +98,6 @@ export function generateTimesheetPDF(opts: TimesheetPDFOptions): void {
   const monthName = MONTH_NAMES[month - 1];
   const shortYear = String(year).slice(2);
 
-  // â”€â”€ Filename: "Hemal Katariya Timesheet Format '26 - April.pdf" â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const filename = `${fullName} Timesheet Format '${shortYear} - ${monthName}.pdf`;
 
   const doc = new jsPDF({ orientation: "landscape", unit: "mm", format: "a4" });
@@ -106,7 +105,6 @@ export function generateTimesheetPDF(opts: TimesheetPDFOptions): void {
   const pageH = doc.internal.pageSize.getHeight();
   const margin = 14;
 
-  // â”€â”€ Header bar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   doc.setFillColor(...COLORS.primary);
   doc.rect(0, 0, pageW, 22, "F");
 
@@ -125,7 +123,6 @@ export function generateTimesheetPDF(opts: TimesheetPDFOptions): void {
   doc.setFontSize(10);
   doc.text(`${monthName} ${year}`, pageW - margin, 14, { align: "right" });
 
-  // â”€â”€ Employee info block â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   doc.setFillColor(...COLORS.headerBg);
   doc.rect(0, 22, pageW, 18, "F");
   doc.setDrawColor(...COLORS.border);
@@ -160,7 +157,6 @@ export function generateTimesheetPDF(opts: TimesheetPDFOptions): void {
   doc.setFont("helvetica", "bold");
   doc.text(statusLabel, pageW - margin - statusBadgeW / 2, 31.5, { align: "center" });
 
-  // â”€â”€ Summary row â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const workingEntries = entries.filter((e) => e.tasks.length > 0);
   const totalMins = workingEntries.reduce((acc, e) => {
     const taskMins = e.tasks.reduce((tAcc, t) => tAcc + calcNetMinutes(t.startTime, t.endTime, 0), 0);
@@ -195,7 +191,6 @@ export function generateTimesheetPDF(opts: TimesheetPDFOptions): void {
   doc.setDrawColor(...COLORS.border);
   doc.line(margin, 58, pageW - margin, 58);
 
-  // â”€â”€ Table â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const holidayMap = new Map(holidays.map((h) => [h.date.split("T")[0], h.name]));
 
   const tableRows = entries.map((entry) => {
@@ -217,35 +212,40 @@ export function generateTimesheetPDF(opts: TimesheetPDFOptions): void {
           const lrn  = (t.project?.isLearning || t.isLearning) ? " [Lrn]" : "—";
           return `${formatTimeRange12h(t.startTime, t.endTime)}${proj}${lrn}`;
         }).join("\n")
-      : "â€”";
+      : "-";
+
+    // Task ID
+    const taskIds = entry.tasks.length > 0
+      ? entry.tasks.map((t) => t.taskId || "—").join("\n")
+      : "—";
 
     // Net hours
     const taskMins = entry.tasks.reduce((acc, t) => acc + calcNetMinutes(t.startTime, t.endTime, 0), 0);
     const net = Math.max(0, taskMins - (entry.breakMinutes || 0));
     const hoursCell = net > 0
       ? `${formatHours(net)}${entry.breakMinutes ? `\n(${entry.breakMinutes}m break)` : ""}`
-      : "â€”";
+      : "-";
 
     // Activity
     const activity = entry.tasks.length > 0
       ? entry.tasks.map((t) => {
           const desc = t.description ? `\n  ${t.description}` : "—";
-          return `â€¢ ${t.subject}${desc}`;
+          return `• ${t.subject}${desc}`;
         }).join("\n")
-      : "â€”";
+      : "-";
 
     // Links: Show only labels with professional styling
     const links = entry.tasks.flatMap((t) => t.links ?? []);
     const linksCell = links.length > 0
       ? links.map((l) => l.label || "Link").join("\n")
-      : "â€”";
+      : "-";
 
-    return [dateStr, dayName, statusCell, timeline, hoursCell, activity, linksCell];
+    return [dateStr, dayName, statusCell, hoursCell, timeline, taskIds, activity, linksCell];
   });
 
   autoTable(doc, {
     startY: 61,
-    head: [["Date", "Day", "Status", "Timeline", "Hours", "Activity & Projects", "Documentation"]],
+    head: [["Date", "Day", "Status", "Hours", "Timeline", "Task ID", "Activity & Projects", "Documentation"]],
     body: tableRows,
     margin: { left: margin, right: margin },
     styles: {
@@ -267,13 +267,14 @@ export function generateTimesheetPDF(opts: TimesheetPDFOptions): void {
       cellPadding: { top: 5, bottom: 5, left: 3, right: 3 },
     },
     columnStyles: {
-      0: { cellWidth: 24, halign: "center", fontStyle: "bold" }, // Date
-      1: { cellWidth: 14, halign: "center", textColor: COLORS.muted }, // Day
-      2: { cellWidth: 24 }, // Status
-      3: { cellWidth: 42 }, // Timeline
-      4: { cellWidth: 22, halign: "center", fontStyle: "bold" }, // Hours
-      5: { cellWidth: "auto" }, // Activity
-      6: { cellWidth: 40, textColor: COLORS.primary, fontStyle: "bold" }, // Documentation (Links)
+      0: { cellWidth: 22, halign: "center", fontStyle: "bold" }, // Date
+      1: { cellWidth: 12, halign: "center", textColor: COLORS.muted }, // Day
+      2: { cellWidth: 20 }, // Status
+      3: { cellWidth: 20, halign: "center", fontStyle: "bold" }, // Hours
+      4: { cellWidth: 38 }, // Timeline
+      5: { cellWidth: 18, fontStyle: "bold" }, // Task ID
+      6: { cellWidth: "auto" }, // Activity
+      7: { cellWidth: 36, textColor: COLORS.primary, fontStyle: "bold" }, // Documentation (Links)
     },
     didParseCell: (data) => {
       if (data.section === "body") {
@@ -282,14 +283,14 @@ export function generateTimesheetPDF(opts: TimesheetPDFOptions): void {
           data.cell.styles.fillColor = getRowBg(entry.dayType);
         }
         // If it's the documentation column and has content, make it look like a link
-        if (data.column.index === 6 && data.cell.text[0] !== "â€”") {
+        if (data.column.index === 7 && data.cell.text[0] !== "-") {
           data.cell.styles.textColor = COLORS.primary;
         }
       }
     },
     didDrawCell: (data) => {
       // Add actual clickable links to the PDF
-      if (data.section === "body" && data.column.index === 6 && data.cell.text[0] !== "â€”") {
+      if (data.section === "body" && data.column.index === 7 && data.cell.text[0] !== "-") {
         const entry = entries[data.row.index];
         const links = entry.tasks.flatMap((t) => t.links ?? []);
         
@@ -317,7 +318,6 @@ export function generateTimesheetPDF(opts: TimesheetPDFOptions): void {
     alternateRowStyles: { fillColor: undefined },
   });
 
-  // â”€â”€ Footer â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const totalPages = (doc.internal as unknown as { getNumberOfPages: () => number }).getNumberOfPages();
   for (let i = 1; i <= totalPages; i++) {
     doc.setPage(i);

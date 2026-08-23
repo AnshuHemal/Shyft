@@ -31,6 +31,7 @@ import {
   CalendarClockIcon,
   Building2Icon,
   PartyPopperIcon,
+  ArrowDownIcon,
 } from "lucide-react";
 import { TaskLogModal } from "./task-log-modal";
 import { SubmissionModal } from "./submission-modal";
@@ -43,7 +44,16 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 
-// â”€â”€ Types â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// Helper to determine if date is today
+function isTodayDate(entryDateStr: string): boolean {
+  const d = new Date(entryDateStr);
+  const now = new Date();
+  return (
+    d.getUTCFullYear() === now.getFullYear() &&
+    d.getUTCMonth() === now.getMonth() &&
+    d.getUTCDate() === now.getDate()
+  );
+}
 
 type DayType = "WORKING" | "HOLIDAY" | "LEAVE" | "HALF_DAY" | "WEEKEND";
 type TimesheetStatus = "DRAFT" | "SUBMITTED" | "APPROVED" | "REJECTED" | "HR_SUBMITTED" | "HR_APPROVED";
@@ -52,6 +62,7 @@ interface TimesheetTask {
   id: string;
   startTime: string;
   endTime: string;
+  taskId?: string | null;
   subject: string;
   description: string | null;
   isLearning: boolean;
@@ -79,13 +90,11 @@ interface Timesheet {
   entries: TimesheetEntry[];
 }
 
-// â”€â”€ Status config â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-
 const STATUS_CONFIG: Record<TimesheetStatus, { label: string; color: string }> = {
   DRAFT:        { label: "Draft",                    color: "bg-muted text-muted-foreground border-border" },
   SUBMITTED:    { label: "Submitted for review",     color: "bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20" },
   APPROVED:     { label: "Approved by lead",         color: "bg-green-500/10 text-green-600 dark:text-green-400 border-green-500/20" },
-  REJECTED:     { label: "Rejected â€” please revise", color: "bg-destructive/10 text-destructive border-destructive/20" },
+  REJECTED:     { label: "Rejected - please revise", color: "bg-destructive/10 text-destructive border-destructive/20" },
   HR_SUBMITTED: { label: "Submitted to HR",          color: "bg-violet-500/10 text-violet-600 dark:text-violet-400 border-violet-500/20" },
   HR_APPROVED:  { label: "HR Approved",              color: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20" },
 };
@@ -98,19 +107,28 @@ const DAY_TYPE_CONFIG: Record<DayType, { label: string; rowClass: string; badgeC
   HALF_DAY: { label: "Half day", rowClass: "bg-purple-500/5", badgeClass: "bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20" },
 };
 
-// Saturday badge variant â€” distinct from Sunday
+// Saturday badge variant - distinct from Sunday
 const SATURDAY_BADGE_CLASS = "bg-primary/10 text-primary border-primary/20";
-
-// â”€â”€ Row display component â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 interface RowDisplayProps {
   entry: TimesheetEntry;
   onEdit: (entry: TimesheetEntry) => void;
   readOnly: boolean;
   holidayName?: string;
+  isHighlighted?: boolean;
+  isLatestLogged?: boolean;
+  isToday?: boolean;
 }
 
-function RowDisplay({ entry, onEdit, readOnly, holidayName }: RowDisplayProps) {
+function RowDisplay({
+  entry,
+  onEdit,
+  readOnly,
+  holidayName,
+  isHighlighted,
+  isLatestLogged,
+  isToday,
+}: RowDisplayProps) {
   const date = new Date(entry.date);
   const dayName = DAY_NAMES[date.getUTCDay()];
   const dateStr = date.toLocaleDateString("en-IN", {
@@ -145,10 +163,30 @@ function RowDisplay({ entry, onEdit, readOnly, holidayName }: RowDisplayProps) {
   const netMinutes = Math.max(0, totalTaskMinutes - (entry.breakMinutes || 0));
 
   return (
-    <tr className={cn("border-b border-border/60 transition-colors group/row", cfg.rowClass)}>
+    <tr
+      id={`timesheet-row-${entry.id}`}
+      className={cn(
+        "border-b border-border/60 transition-all duration-700 group/row",
+        cfg.rowClass,
+        isHighlighted && "bg-primary/10 ring-2 ring-primary/40 relative z-10 shadow-sm",
+        isToday && !isHighlighted && "bg-primary/4 border-l-2 border-l-primary"
+      )}
+    >
       {/* Date */}
-      <td className="px-4 py-4 text-[14px] font-mono font-medium text-muted-foreground whitespace-nowrap w-28">
-        {dateStr}
+      <td className="px-4 py-4 text-[14px] font-mono font-medium text-muted-foreground whitespace-nowrap w-36">
+        <div className="flex items-center gap-2">
+          <span className={cn(isToday && "font-bold text-foreground")}>{dateStr}</span>
+          {isToday && (
+            <span className="px-1.5 py-0.5 rounded-md bg-primary/15 border border-primary/25 text-[10px] font-extrabold uppercase tracking-tight text-primary">
+              Today
+            </span>
+          )}
+          {!isToday && isLatestLogged && (
+            <span className="px-1.5 py-0.5 rounded-md bg-emerald-500/15 border border-emerald-500/25 text-[10px] font-extrabold uppercase tracking-tight text-emerald-600 dark:text-emerald-400">
+              Latest
+            </span>
+          )}
+        </div>
       </td>
       {/* Day */}
       <td className="px-4 py-4 text-sm text-muted-foreground w-16">{dayName}</td>
@@ -182,7 +220,23 @@ function RowDisplay({ entry, onEdit, readOnly, holidayName }: RowDisplayProps) {
           )}
         </div>
       </td>
-      {/* Time duration summary */}
+      {/* Productivity / Net hours */}
+      <td className="px-4 py-4 w-32">
+        {netMinutes > 0 ? (
+          <div className="space-y-1">
+            <span className="text-base font-black text-foreground tabular-nums">{formatHours(netMinutes)}</span>
+            {entry.breakMinutes > 0 && (
+              <p className="text-[12px] text-amber-600 font-bold flex items-center gap-1">
+                <CoffeeIcon className="size-3" />
+                {entry.breakMinutes}m break
+              </p>
+            )}
+          </div>
+        ) : (
+          <span className="text-muted-foreground/30 text-sm font-mono">&mdash;</span>
+        )}
+      </td>
+      {/* Time duration summary / Timeline */}
       <td className="px-4 py-4 w-72">
         {entry.tasks.length > 0 ? (
           <div className="space-y-1.5">
@@ -212,17 +266,21 @@ function RowDisplay({ entry, onEdit, readOnly, holidayName }: RowDisplayProps) {
           <span className="text-muted-foreground/30 text-sm font-mono">&mdash;</span>
         )}
       </td>
-      {/* Net hours */}
-      <td className="px-4 py-4 w-32">
-        {netMinutes > 0 ? (
-          <div className="space-y-1">
-            <span className="text-base font-black text-foreground tabular-nums">{formatHours(netMinutes)}</span>
-            {entry.breakMinutes > 0 && (
-              <p className="text-[12px] text-amber-600 font-bold flex items-center gap-1">
-                <CoffeeIcon className="size-3" />
-                {entry.breakMinutes}m break
-              </p>
-            )}
+      {/* Task ID */}
+      <td className="px-4 py-4 w-32 whitespace-nowrap">
+        {entry.tasks.length > 0 ? (
+          <div className="space-y-1.5">
+            {entry.tasks.map((task, i) => (
+              <div key={i} className="flex items-center">
+                {task.taskId ? (
+                  <span className="inline-flex items-center px-2 py-0.5 rounded-md bg-muted/80 border border-border/80 text-[11px] font-mono font-bold text-foreground tracking-tight shadow-2xs">
+                    {task.taskId}
+                  </span>
+                ) : (
+                  <span className="text-muted-foreground/30 text-xs font-mono">&mdash;</span>
+                )}
+              </div>
+            ))}
           </div>
         ) : (
           <span className="text-muted-foreground/30 text-sm font-mono">&mdash;</span>
@@ -296,8 +354,6 @@ function RowDisplay({ entry, onEdit, readOnly, holidayName }: RowDisplayProps) {
   );
 }
 
-// â”€â”€ Main component â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-
 export function TimesheetView() {
   const now = new Date();
   const [month, setMonth] = React.useState(now.getMonth() + 1);
@@ -311,6 +367,7 @@ export function TimesheetView() {
   const [mounted, setMounted] = React.useState(false);
   const [isPickerOpen, setIsPickerOpen] = React.useState(false);
   const [isSubmissionModalOpen, setIsSubmissionModalOpen] = React.useState(false);
+  const [highlightedRowId, setHighlightedRowId] = React.useState<string | null>(null);
   const pickerRef = React.useRef<HTMLDivElement>(null);
 
   // Close picker on click outside
@@ -334,6 +391,30 @@ export function TimesheetView() {
     return () => clearTimeout(t);
   }, []);
 
+  const scrollToLatest = React.useCallback((smooth = true) => {
+    if (!timesheet || !timesheet.entries || timesheet.entries.length === 0) return;
+
+    const entriesWithTasks = timesheet.entries.filter(e => e.tasks && e.tasks.length > 0);
+    const lastLogged = entriesWithTasks.length > 0 ? entriesWithTasks[entriesWithTasks.length - 1] : null;
+    const today = timesheet.entries.find(e => isTodayDate(e.date));
+    const target = lastLogged || today || timesheet.entries[0];
+
+    if (!target) return;
+
+    const element = document.getElementById(`timesheet-row-${target.id}`);
+    if (element) {
+      element.scrollIntoView({
+        behavior: smooth ? "smooth" : "auto",
+        block: "center",
+      });
+
+      setHighlightedRowId(target.id);
+      setTimeout(() => {
+        setHighlightedRowId(null);
+      }, 2400);
+    }
+  }, [timesheet]);
+
   async function fetchTimesheet() {
     setLoading(true);
     try {
@@ -353,6 +434,15 @@ export function TimesheetView() {
   React.useEffect(() => {
     fetchTimesheet();
   }, [month, year]);
+
+  React.useEffect(() => {
+    if (!loading && timesheet && timesheet.entries.length > 0) {
+      const timer = setTimeout(() => {
+        scrollToLatest(true);
+      }, 350);
+      return () => clearTimeout(timer);
+    }
+  }, [loading, timesheet?.id, scrollToLatest]);
 
   async function handleSaveEntry(id: string, data: any) {
     const res = await fetch(`/api/timesheets/entries/${id}`, {
@@ -442,7 +532,10 @@ export function TimesheetView() {
     0
   ) ?? 0;
 
-  const daysWithTasks = timesheet?.entries.filter(e => e.tasks.length > 0).length ?? 0;
+  const entriesWithTasks = timesheet?.entries.filter(e => e.tasks.length > 0) || [];
+  const lastLoggedEntry = entriesWithTasks.length > 0 ? entriesWithTasks[entriesWithTasks.length - 1] : null;
+  const todayEntry = timesheet?.entries.find(e => isTodayDate(e.date));
+  const daysWithTasks = entriesWithTasks.length;
   const status = (timesheet?.status ?? "DRAFT") as TimesheetStatus;
   const statusCfg = STATUS_CONFIG[status];
   const canEdit = status === "DRAFT" || status === "REJECTED";
@@ -559,7 +652,7 @@ export function TimesheetView() {
               <span className="text-primary font-bold">{timesheet.reportingLead.firstName} {timesheet.reportingLead.lastName}</span>
             </div>
           )}
-          <div className="flex items-center gap-6 text-sm text-muted-foreground ml-2">
+          <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground ml-2">
             <span className="flex items-center gap-2">
               <CalendarDaysIcon className="size-4 text-primary/60" />
               <span className="font-medium text-foreground">{daysWithTasks}</span> days logged
@@ -568,15 +661,30 @@ export function TimesheetView() {
               <ClockIcon className="size-4 text-primary/60" />
               <span className="font-medium text-foreground">{formatHours(totalMins)}</span> total duration
             </span>
+            {lastLoggedEntry && (
+              <button
+                onClick={() => scrollToLatest(true)}
+                className="hidden md:inline-flex items-center gap-1.5 px-3 py-1 rounded-xl border border-border/60 bg-muted/30 hover:bg-muted/70 text-xs font-semibold text-muted-foreground hover:text-foreground transition-all duration-200 shadow-2xs group"
+                title="Jump to latest logged entry"
+              >
+                <ArrowDownIcon className="size-3 text-primary group-hover:translate-y-0.5 transition-transform" />
+                <span>Jump to latest log</span>
+              </button>
+            )}
           </div>
           <div className="sm:ml-auto flex items-center gap-3">
-            {/* Month not complete yet â€” show locked state with days remaining */}
-            {canEdit && daysWithTasks > 0 && !monthComplete && (
+            {/* Month not complete yet — show locked state with days remaining */}
+            {canEdit && !monthComplete && (
               <Tooltip>
                 <TooltipTrigger render={
-                  <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-amber-500/8 border border-amber-500/20 text-amber-600 dark:text-amber-400 cursor-not-allowed select-none">
-                    <LockIcon className="size-3.5 shrink-0" />
-                    <span className="text-xs font-bold">Submit for review</span>
+                  <div className="group flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/15 border border-amber-500/25 text-amber-700 dark:text-amber-400 text-xs font-semibold shadow-xs transition-all duration-200 cursor-default select-none">
+                    <div className="flex size-4 items-center justify-center rounded-md bg-amber-500/20 text-amber-700 dark:text-amber-300">
+                      <LockIcon className="size-2.5" />
+                    </div>
+                    <span>Submit for review</span>
+                    <span className="ml-0.5 px-1.5 py-0.5 rounded-md bg-amber-500/20 text-[10px] font-bold tracking-tight text-amber-700 dark:text-amber-300">
+                      {daysLeft}d left
+                    </span>
                   </div>
                 } />
                 <TooltipContent side="top" className="max-w-xs">
@@ -595,14 +703,14 @@ export function TimesheetView() {
                 </TooltipContent>
               </Tooltip>
             )}
-            {/* Month complete â€” show active submit button */}
+            {/* Month complete - show active submit button */}
             {canSubmit && (
               <Button size="sm" className="gap-2 px-4 shadow-lg shadow-primary/20 animate-in fade-in zoom-in-95 duration-300" onClick={handleSubmit} disabled={submitting}>
                 {submitting ? <Spinner className="size-4" /> : <SendIcon className="size-4" />}
-                {submitting ? "Submittingâ€¦" : "Submit for review"}
+                {submitting ? "Submitting…" : "Submit for review"}
               </Button>
             )}
-            {/* Lead approved â€” show Submit to HR button */}
+            {/* Lead approved - show Submit to HR button */}
             {canSubmitToHR && (
               <Button
                 size="sm"
@@ -613,7 +721,7 @@ export function TimesheetView() {
                 Submit to HR
               </Button>
             )}
-            {/* HR submitted â€” waiting */}
+            {/* HR submitted - waiting */}
             {status === "HR_SUBMITTED" && (
               <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 text-violet-600 dark:text-violet-400 text-sm font-bold border border-violet-500/20 animate-in fade-in duration-300">
                 <Building2Icon className="size-4" />
@@ -631,7 +739,7 @@ export function TimesheetView() {
         </div>
       )}
 
-      {/* Month-in-progress notice â€” shown when viewing current month in DRAFT */}
+      {/* Month-in-progress notice - shown when viewing current month in DRAFT */}
       {timesheet && canEdit && !monthComplete && (
         <div className={cn(
           "flex items-start gap-4 rounded-2xl border border-amber-500/20 bg-amber-500/5 px-5 py-4 transition-all duration-500",
@@ -642,7 +750,7 @@ export function TimesheetView() {
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-bold text-amber-700 dark:text-amber-400">
-              Month in progress â€” {daysLeft} {daysLeft === 1 ? "day" : "days"} remaining
+              Month in progress — {daysLeft} {daysLeft === 1 ? "day" : "days"} remaining
             </p>
             <p className="text-xs text-amber-600/80 dark:text-amber-500/80 mt-0.5 leading-relaxed">
               Keep logging your daily tasks. The <span className="font-bold">Submit for review</span> button will unlock automatically once {MONTH_NAMES[month - 1]} is complete.
@@ -680,7 +788,7 @@ export function TimesheetView() {
         </div>
       )}
 
-      {/* HR Approved â€” final celebration banner */}
+      {/* HR Approved — final celebration banner */}
       {status === "HR_APPROVED" && (
         <div className={cn(
           "flex items-start gap-4 rounded-2xl border border-emerald-500/20 bg-emerald-500/5 px-5 py-4 transition-all duration-500",
@@ -712,7 +820,7 @@ export function TimesheetView() {
             <table className="w-full text-md">
               <thead>
                 <tr className="border-b border-border/50 bg-muted/30">
-                  {["Date", "Day", "Status", "Timeline", "Productivity", "Activity & Projects", "Documentation", ""].map((h) => (
+                  {["Date", "Day", "Status", "Productivity", "Timeline", "Task ID", "Activity & Projects", "Documentation", ""].map((h) => (
                     <th key={h} className="px-4 py-4 text-left text-[12px] font-black text-muted-foreground/80 uppercase tracking-[0.1em] whitespace-nowrap">
                       {h}
                     </th>
@@ -726,6 +834,9 @@ export function TimesheetView() {
                     entry={entry}
                     onEdit={setEditingEntry}
                     readOnly={!canEdit}
+                    isHighlighted={highlightedRowId === entry.id}
+                    isLatestLogged={lastLoggedEntry?.id === entry.id}
+                    isToday={todayEntry?.id === entry.id}
                     holidayName={
                       entry.dayType === "HOLIDAY"
                         ? holidays.find((h) => {
