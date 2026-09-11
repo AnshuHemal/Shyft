@@ -6,7 +6,7 @@ import { NextResponse } from "next/server";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { isWithinEditWindow, isFutureDate } from "@/lib/timesheet-utils";
+import { isWithinEditWindow, isFutureDate, calcNetMinutes } from "@/lib/timesheet-utils";
 
 export async function PATCH(
   request: Request,
@@ -73,6 +73,31 @@ export async function PATCH(
 
   const body = await request.json();
   const { dayType, tasks, breakMinutes } = body;
+
+  // Validate task times: End time must strictly exceed Start time
+  if (dayType !== "LEAVE" && Array.isArray(tasks)) {
+    for (let i = 0; i < tasks.length; i++) {
+      const t = tasks[i];
+      if (!t.startTime || !t.endTime) {
+        return NextResponse.json(
+          { error: `Task #${i + 1}: Both Start time and End time are required.` },
+          { status: 400 }
+        );
+      }
+      if (calcNetMinutes(t.startTime, t.endTime, 0) <= 0) {
+        return NextResponse.json(
+          { error: `Task #${i + 1}: End time must be after start time.` },
+          { status: 400 }
+        );
+      }
+      if (!t.subject || !String(t.subject).trim()) {
+        return NextResponse.json(
+          { error: `Task #${i + 1}: Task subject is required.` },
+          { status: 400 }
+        );
+      }
+    }
+  }
 
   const updated = await prisma.timesheetEntry.update({
     where: { id },

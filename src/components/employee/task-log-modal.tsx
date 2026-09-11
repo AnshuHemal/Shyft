@@ -26,10 +26,20 @@ import {
   CalendarCheckIcon,
   MoonIcon,
   SunIcon,
-  ActivityIcon
+  ActivityIcon,
+  AlertCircleIcon
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { TIME_OPTIONS, BREAK_OPTIONS, calcNetMinutes, formatHours } from "@/lib/timesheet-utils";
+import {
+  TIME_OPTIONS,
+  BREAK_OPTIONS,
+  calcNetMinutes,
+  formatHours,
+  getEndTimeOptions,
+  timeToMinutes,
+  minutesToTime,
+  formatTime12h
+} from "@/lib/timesheet-utils";
 import { Spinner } from "@/components/ui/spinner";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -125,10 +135,18 @@ export function TaskLogModal({ isOpen, onClose, entry, onSave }: TaskLogModalPro
 
   function addTask() {
     const lastTask = tasks[tasks.length - 1];
+    let nextStartTime = "09:00";
+    if (lastTask?.endTime && lastTask.endTime !== "24:00") {
+      nextStartTime = lastTask.endTime;
+    }
+    const nextStartMins = timeToMinutes(nextStartTime);
+    const nextEndMins = Math.min(1440, nextStartMins + 60);
+    const nextEndTime = minutesToTime(nextEndMins);
+
     setTasks([...tasks, {
       taskId: "",
-      startTime: lastTask?.endTime || "09:00",
-      endTime: "",
+      startTime: nextStartTime,
+      endTime: nextEndTime,
       subject: "",
       description: "",
       projectId: "",
@@ -154,6 +172,33 @@ export function TaskLogModal({ isOpen, onClose, entry, onSave }: TaskLogModalPro
     }
   }
 
+  function handleStartTimeChange(index: number, newStartTime: string) {
+    const task = tasks[index];
+    const prevStartMins = timeToMinutes(task.startTime);
+    const prevEndMins = task.endTime ? timeToMinutes(task.endTime) : null;
+    const newStartMins = timeToMinutes(newStartTime);
+
+    let newEndTime = task.endTime;
+    // If the task previously had a valid duration, preserve it
+    if (prevEndMins && prevEndMins > prevStartMins) {
+      const duration = prevEndMins - prevStartMins;
+      const shiftedEndMins = Math.min(1440, newStartMins + duration);
+      newEndTime = minutesToTime(shiftedEndMins);
+    } else {
+      // Default to 60 mins after start time
+      const defaultEndMins = Math.min(1440, newStartMins + 60);
+      newEndTime = minutesToTime(defaultEndMins);
+    }
+
+    // Safety check: ensure newEndTime is strictly greater than newStartMins
+    if (timeToMinutes(newEndTime) <= newStartMins) {
+      const minEndMins = Math.min(1440, newStartMins + 30);
+      newEndTime = minutesToTime(minEndMins);
+    }
+
+    updateTask(index, { startTime: newStartTime, endTime: newEndTime });
+  }
+
   function updateTask(index: number, data: Partial<TaskLog>) {
     const newTasks = [...tasks];
     newTasks[index] = { ...newTasks[index], ...data };
@@ -161,12 +206,31 @@ export function TaskLogModal({ isOpen, onClose, entry, onSave }: TaskLogModalPro
   }
 
   async function handleSave() {
-    // Basic validation for working days
+    // Validation for working days
     if (dayType !== "LEAVE") {
-      const invalid = tasks.some(t => !t.startTime || !t.endTime || !t.subject);
-      if (invalid) {
-        toast.error("Please fill in all required fields (Times and Subject)");
+      if (tasks.length === 0) {
+        toast.error("Please add at least one task log");
         return;
+      }
+
+      for (let i = 0; i < tasks.length; i++) {
+        const t = tasks[i];
+        if (!t.startTime || !t.endTime) {
+          toast.error(`Task #${i + 1}: Please select both start and end time`);
+          return;
+        }
+
+        const startMins = timeToMinutes(t.startTime);
+        const endMins = timeToMinutes(t.endTime);
+        if (endMins <= startMins) {
+          toast.error(`Task #${i + 1}: End time must be after start time`);
+          return;
+        }
+
+        if (!t.subject.trim()) {
+          toast.error(`Task #${i + 1}: Please enter an activity subject`);
+          return;
+        }
       }
     }
 
@@ -286,29 +350,81 @@ export function TaskLogModal({ isOpen, onClose, entry, onSave }: TaskLogModalPro
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div className="space-y-5">
-                      <div className="grid grid-cols-2 gap-4">
-                        <Field>
-                          <FieldLabel className="text-[11px] font-semibold text-muted-foreground mb-1.5 ml-1">Start Time</FieldLabel>
-                          <select
-                            value={task.startTime}
-                            onChange={(e) => updateTask(index, { startTime: e.target.value })}
-                            className="w-full h-11 rounded-xl border border-border/60 bg-muted/20 px-4 text-sm font-medium focus:ring-4 focus:ring-primary/10 outline-none transition-all"
-                          >
-                            {TIME_OPTIONS.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
-                          </select>
-                        </Field>
-                        <Field>
-                          <FieldLabel className="text-[11px] font-semibold text-muted-foreground mb-1.5 ml-1">End Time</FieldLabel>
-                          <select
-                            value={task.endTime}
-                            onChange={(e) => updateTask(index, { endTime: e.target.value })}
-                            className="w-full h-11 rounded-xl border border-border/60 bg-muted/20 px-4 text-sm font-medium focus:ring-4 focus:ring-primary/10 outline-none transition-all"
-                          >
-                            <option value="">Select End</option>
-                            {TIME_OPTIONS.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
-                          </select>
-                        </Field>
-                      </div>
+                      {(() => {
+                        const startMins = timeToMinutes(task.startTime);
+                        const endMins = task.endTime ? timeToMinutes(task.endTime) : 0;
+                        const isInvalidDecreasing = Boolean(task.endTime && endMins <= startMins);
+                        const durationMins = (!isInvalidDecreasing && task.endTime) ? (endMins - startMins) : 0;
+                        const endTimeOptions = getEndTimeOptions(task.startTime);
+
+                        return (
+                          <div className="grid grid-cols-2 gap-4">
+                            <Field>
+                              <div className="flex items-center justify-between mb-1.5 ml-1">
+                                <FieldLabel className="text-[11px] font-semibold text-muted-foreground">Start Time</FieldLabel>
+                              </div>
+                              <div className="relative">
+                                <select
+                                  value={task.startTime}
+                                  onChange={(e) => handleStartTimeChange(index, e.target.value)}
+                                  className="w-full h-11 rounded-xl border border-border/60 bg-muted/20 pl-3.5 pr-8 text-sm font-medium focus:ring-4 focus:ring-primary/10 focus:border-primary/50 outline-none transition-all appearance-none cursor-pointer"
+                                >
+                                  {TIME_OPTIONS.map(opt => (
+                                    <option key={opt.value} value={opt.value}>{opt.label}</option>
+                                  ))}
+                                </select>
+                                <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-muted-foreground/50">
+                                  <ClockIcon className="size-3.5" />
+                                </div>
+                              </div>
+                            </Field>
+
+                            <Field>
+                              <div className="flex items-center justify-between mb-1.5 ml-1">
+                                <FieldLabel className="text-[11px] font-semibold text-muted-foreground">End Time</FieldLabel>
+                                {durationMins > 0 ? (
+                                  <span className="inline-flex items-center gap-1 text-[10px] font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-md border border-primary/20 animate-in fade-in duration-200">
+                                    <ClockIcon className="size-2.5" />
+                                    {formatHours(durationMins)}
+                                  </span>
+                                ) : isInvalidDecreasing ? (
+                                  <span className="inline-flex items-center gap-1 text-[10px] font-bold text-destructive bg-destructive/10 px-2 py-0.5 rounded-md border border-destructive/20 animate-in fade-in duration-200">
+                                    <AlertCircleIcon className="size-2.5" />
+                                    Must be after start
+                                  </span>
+                                ) : null}
+                              </div>
+                              <div className="relative">
+                                <select
+                                  value={task.endTime}
+                                  onChange={(e) => updateTask(index, { endTime: e.target.value })}
+                                  className={cn(
+                                    "w-full h-11 rounded-xl border pl-3.5 pr-8 text-sm font-medium focus:ring-4 outline-none transition-all appearance-none cursor-pointer",
+                                    isInvalidDecreasing
+                                      ? "border-destructive/80 bg-destructive/5 text-destructive focus:ring-destructive/20"
+                                      : "border-border/60 bg-muted/20 text-foreground focus:ring-primary/10 focus:border-primary/50"
+                                  )}
+                                >
+                                  <option value="" disabled>Select End Time</option>
+                                  {isInvalidDecreasing && task.endTime && (
+                                    <option value={task.endTime} disabled className="text-destructive font-semibold">
+                                      ⚠️ {formatTime12h(task.endTime)} (Invalid: before start)
+                                    </option>
+                                  )}
+                                  {endTimeOptions.map(opt => (
+                                    <option key={opt.value} value={opt.value}>
+                                      {opt.label}
+                                    </option>
+                                  ))}
+                                </select>
+                                <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-muted-foreground/50">
+                                  <ClockIcon className="size-3.5" />
+                                </div>
+                              </div>
+                            </Field>
+                          </div>
+                        );
+                      })()}
 
                       <Field>
                         <FieldLabel className="text-[11px] font-semibold text-muted-foreground mb-1.5 ml-1">Project Assignment</FieldLabel>

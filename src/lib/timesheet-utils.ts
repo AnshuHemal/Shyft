@@ -53,6 +53,7 @@ export function formatHours(minutes: number): string {
   if (minutes <= 0) return "0h";
   const h = Math.floor(minutes / 60);
   const m = minutes % 60;
+  if (h === 0) return `${m}m`;
   return m > 0 ? `${h}h ${m}m` : `${h}h`;
 }
 
@@ -66,6 +67,7 @@ export function formatTime12h(timeStr: string, padZero: boolean = true): string 
   const h = parseInt(hStr, 10);
   const m = mStr ? mStr.padStart(2, "0") : "00";
   if (isNaN(h)) return timeStr;
+  if (h === 24) return "12:00 AM";
   const hour12 = h === 0 ? 12 : h > 12 ? h - 12 : h;
   const ampm = h < 12 ? "AM" : "PM";
   const displayHour = padZero ? String(hour12).padStart(2, "0") : String(hour12);
@@ -152,6 +154,61 @@ export function getTimeOptions(): { value: string; label: string }[] {
 }
 
 export const TIME_OPTIONS = getTimeOptions();
+
+/**
+ * Converts a "HH:MM" string to total minutes since 00:00.
+ * e.g. "09:30" -> 570, "24:00" -> 1440
+ */
+export function timeToMinutes(timeStr: string): number {
+  if (!timeStr || !timeStr.includes(":")) return 0;
+  const [h, m] = timeStr.split(":").map(Number);
+  if (isNaN(h) || isNaN(m)) return 0;
+  return h * 60 + m;
+}
+
+/**
+ * Converts total minutes into a "HH:MM" 24h string.
+ * e.g. 570 -> "09:30", 1440 -> "24:00"
+ */
+export function minutesToTime(mins: number): string {
+  const clamped = Math.max(0, Math.min(1440, mins));
+  const h = Math.floor(clamped / 60);
+  const m = clamped % 60;
+  return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
+}
+
+export interface EndTimeOption {
+  value: string;
+  label: string;
+  durationMins: number;
+}
+
+/**
+ * Generate valid end-time options strictly AFTER the given start time in 30-min increments.
+ * Each option displays its 12h time and duration (e.g. "10:00 AM (1h)", "10:30 AM (1h 30m)").
+ */
+export function getEndTimeOptions(startTime?: string): EndTimeOption[] {
+  if (!startTime) return [];
+  const startMins = timeToMinutes(startTime);
+  const options: EndTimeOption[] = [];
+
+  // Minimum end time is startMins + 30 minutes, aligned to next 30-minute block
+  const firstEndMins = Math.max(30, Math.floor(startMins / 30) * 30 + 30);
+
+  for (let mins = firstEndMins; mins <= 1440; mins += 30) {
+    const value = minutesToTime(mins);
+    const duration = mins - startMins;
+    const timeLabel = formatTime12h(value);
+    const durationLabel = formatHours(duration);
+    options.push({
+      value,
+      label: `${timeLabel} (${durationLabel})`,
+      durationMins: duration,
+    });
+  }
+
+  return options;
+}
 
 export const BREAK_OPTIONS = [
   { value: "0", label: "No break" },
