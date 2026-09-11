@@ -205,7 +205,7 @@ export function generateTimesheetPDF(opts: TimesheetPDFOptions): void {
       : "—";
     const statusCell = holidayName ? `${dayTypeLabel}\n(${holidayName})` : dayTypeLabel;
 
-    // Timeline: "10:00â€“19:00 | ProjectName"
+    // Timeline: "10:00–19:00 | ProjectName"
     const timeline = entry.tasks.length > 0
       ? entry.tasks.map((t) => {
           const proj = t.project ? ` [${t.project.name}]` : "—";

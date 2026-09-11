@@ -28,8 +28,9 @@ async function requireEmployee() {
 
 // ── GET — fetch timesheet (auto-create if missing) ────────────────────────────
 export async function GET(request: Request) {
-  const ctx = await requireEmployee();
-  if (!ctx) return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+  try {
+    const ctx = await requireEmployee();
+    if (!ctx) return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
 
   const { searchParams } = new URL(request.url);
   const now = new Date();
@@ -193,4 +194,14 @@ export async function GET(request: Request) {
   }
 
   return NextResponse.json({ timesheet, holidays });
+  } catch (err) {
+    console.error("GET /api/timesheets error:", err);
+    return NextResponse.json(
+      {
+        error: "Failed to fetch timesheet",
+        details: err instanceof Error ? err.message : "Unknown error",
+      },
+      { status: 500 }
+    );
+  }
 }

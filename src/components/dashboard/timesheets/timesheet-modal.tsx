@@ -395,7 +395,7 @@ export function TimesheetModal({
                 className="gap-2 h-9 px-5 rounded-xl font-bold bg-white/15 hover:bg-white/25 text-white border border-white/20 backdrop-blur-sm transition-all"
               >
                 {downloading ? <Spinner className="size-3.5" /> : <DownloadIcon className="size-3.5" />}
-                {downloading ? "Generatingâ€¦" : "Download PDF"}
+                {downloading ? "Generating…" : "Download PDF"}
               </Button>
 
               {/* Close */}

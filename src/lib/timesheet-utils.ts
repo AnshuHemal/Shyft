@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Timesheet utility functions shared between employee and HR views.
  */
 

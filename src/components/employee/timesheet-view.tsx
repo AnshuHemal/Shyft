@@ -387,8 +387,7 @@ export function TimesheetView() {
   const [editingEntry, setEditingEntry] = React.useState<TimesheetEntry | null>(null);
 
   React.useEffect(() => {
-    const t = setTimeout(() => setMounted(true), 50);
-    return () => clearTimeout(t);
+    setMounted(true);
   }, []);
 
   const scrollToLatest = React.useCallback((smooth = true) => {
@@ -543,6 +542,25 @@ export function TimesheetView() {
   const daysLeft = daysRemainingInMonth(month, year);
   const canSubmit = canEdit && daysWithTasks > 0 && monthComplete;
   const canSubmitToHR = status === "APPROVED";
+
+  if (!mounted) {
+    return (
+      <div className="space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <h1 className="text-2xl font-semibold tracking-tight">My Timesheet</h1>
+            <p className="text-md text-muted-foreground mt-1">
+              Log your daily project tasks and activities.
+            </p>
+          </div>
+        </div>
+        <div className="flex flex-col items-center justify-center py-24 gap-4 text-muted-foreground bg-muted/5 rounded-3xl border border-dashed">
+          <Spinner className="size-6" />
+          <p className="text-sm font-medium">Preparing your work logs...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <TooltipProvider>
@@ -936,7 +954,7 @@ export function TimesheetView() {
                 className="h-11 px-8 rounded-xl font-black uppercase tracking-widest shadow-lg bg-violet-600 hover:bg-violet-700 text-white shadow-violet-500/20 gap-2 transition-all active:scale-95"
               >
                 {hrSubmitting ? <Spinner className="size-4" /> : <Building2Icon className="size-4" />}
-                {hrSubmitting ? "Submittingâ€¦" : "Confirm & Submit"}
+                {hrSubmitting ? "Submitting…" : "Confirm & Submit"}
               </Button>
             </DialogFooter>
           </div>

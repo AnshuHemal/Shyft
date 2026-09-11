@@ -292,7 +292,7 @@ function ReviewDialog({ open, employeeName, action, loading, onClose, onConfirm 
             </FieldLabel>
             <textarea
               rows={4}
-              placeholder={action === "approve" ? "Add a note of encouragementâ€¦" : "Explain what needs to be correctedâ€¦"}
+              placeholder={action === "approve" ? "Add a note of encouragement…" : "Explain what needs to be corrected…"}
               value={note}
               onChange={(e) => setNote(e.target.value)}
               className={cn(
@@ -511,7 +511,7 @@ export function LeadApprovals() {
         {loading ? (
           <div className="flex flex-col items-center justify-center py-24 gap-4 text-muted-foreground">
             <Spinner className="size-6" />
-            <p className="text-sm font-medium">Loading team timesheetsâ€¦</p>
+            <p className="text-sm font-medium">Loading team timesheets…</p>
           </div>
         ) : approvals.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-24 gap-4 text-muted-foreground">
